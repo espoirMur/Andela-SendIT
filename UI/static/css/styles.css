@@ -9,6 +9,12 @@ div {
   margin-right: auto;
   margin-left: auto;
 }
+.wrapper {
+	padding: 5px;
+	max-width: 960px;
+	width: 95%;
+	margin: 20px auto;
+}
 h4 {
   text-align: center;
 }
@@ -121,4 +127,38 @@ form {
     table td:last-child {
       border-bottom: 0;
     }
+  }
+
+  /*
+* code for orders status
+*/
+  .columns {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    margin: 5px 0;
+  }
+  
+  .column {
+    flex: 1;
+    border: 1px solid gray;
+    margin: 2px;
+    padding: 10px;
+    &:first-child { margin-left: 0;}
+    &:last-child { margin-right: 0;}
+  }
+
+  .title-center{
+    text-align: center;
+    font-size: 1.5em;
+
+  }
+  .delivered{
+    background-color: darkseagreen
+  }
+  .pending{
+    background-color: burlywood;
+  }
+  .canceled{
+    background-color: indianred;
   }
