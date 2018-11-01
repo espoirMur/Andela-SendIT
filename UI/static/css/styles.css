@@ -170,3 +170,19 @@ form {
 .delete-order{
   color: indianred;
 }
+
+/**
+css for button create order
+**/
+
+.btn{
+  width: 250px;
+  height: 50px;
+  margin: 0 auto;
+  padding: 0;
+  display: table-cell;
+  vertical-align: middle;
+  background-color: darkseagreen;
+  font-size: 0.95em;
+  text-decoration: black;
+}
