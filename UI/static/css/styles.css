@@ -18,6 +18,10 @@ div {
 h4 {
   text-align: center;
 }
+
+a{
+  color: black;
+}
 form {
     margin:0 auto;
     width:300px
@@ -162,3 +166,7 @@ form {
   .canceled{
     background-color: indianred;
   }
+
+.delete-order{
+  color: indianred;
+}
