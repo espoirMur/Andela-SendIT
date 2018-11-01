@@ -82,9 +82,31 @@
                     <tfoot>
                     </tfoot>
                   </table>
-                  <p  align="left"><button class="btn">CREATE NEW ORDER</button></p>
+                  <p  align="left"><button class="btn action-button"  id="button-new-order">CREATE NEW ORDER</button></p>
         
     </div>
+    <!-- The new order modal -->
+<div id="new-order" class="modal">
+        <!-- content -->
+<div class="modal-content">
+<span class="close">&times;</span>
+<div class="wrapper" >
+        <h1 class="title-center"> Create a new delivery order </h1>
+        <form id='new-order-form' action="" method='post'>
+            <input type="text" class="new-order-input" placeholder="Origin" required>
+            <i class="material-icons location-picker" id="origin-location-picker">edit_location</i>
+            <input type="text" class="new-order-input" placeholder="Desination" required>
+            <i class="material-icons location-picker" id="destination-location-picker">edit_location</i>
+            <textarea rows="4" class="new-order-input" cols="41" name="comment" form="new-order-form" placeholder="Additional informations">
+                    Additionals informations
+            </textarea>
+            <button id='new-order-button' class="action-button" type='submit'>Submit</button>
+        </form>
+</div>
+
+</div>
+      
+      </div>
        
   <script src="static/js/scripts.js"></script>
 </body>
