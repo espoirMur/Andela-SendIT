@@ -19,9 +19,6 @@ h4 {
   text-align: center;
 }
 
-a{
-  color: black;
-}
 form {
     margin:0 auto;
     width:300px
@@ -253,4 +250,12 @@ new order input
   margin-top: -50px;
   position: relative;
   z-index: 2;
+}
+
+/*
+edit order button
+*/
+
+.delete-order, .edit-order{
+  cursor: pointer
 }
