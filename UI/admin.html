@@ -1,0 +1,113 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Admin dashboard</title>
+  <meta name="description" content="view orders">
+  <meta name="author" content="Espoir Mur">
+  <link rel="stylesheet" href="static/css/styles.css">
+  <!-- use only for icons other technics doesn't works-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+
+<body>
+    <div class="wrapper" >
+            <h1 class="title-center"> Admin Dashboard </h1>
+            <br>
+            <section class="columns">
+                    <div class="column delivered">
+                        <h2>12 Parcels</h2>
+                        <p>Delivered</p>
+                    </div>
+                    
+                    <div class="column pending">
+                        <h2>6 Parcels</h2>
+                        <p>In Transit</p>
+                    </div>
+                  
+                  <div class="column canceled">
+                        <h2>3 Parcels</h2>
+                        <p> Canceled</p>
+                    </div>
+                    
+                </section>	
+            <table id="admin-order-table">
+                    <caption>Customers Orders Summary</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Order Id</th>
+                        <th scope="col">Order Date</th>
+                        <th scope="col">Client Email</th>
+                        <th scope="col">Client Phone</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Pick Up Location</th>
+                        <th scope="col">Destination</th>
+                        <th scope="col">Current Location</th>
+                        <th scope="col">Tracking Number</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-id="01">
+                        <td data-label="Order Id">Espy-001</td>
+                        <td data-label="Order Date">04/01/2016</td>
+                        <td data-label="Client Name">an@email.com</td>
+                        <td data-label="Client phone">25088898889</td>
+                        <td data-label="Price">$1,190</td>
+                        <td data-label="Pick Up Location"> Gisozi </td>
+                        <td data-label="Destination"> Gisenyi </td>
+                        <td data-label="Current Location">Musanze</td>
+                        <td data-label="Tracking Number"> RBOOOOVFR</td>
+                        <td data-label="Status"> Pending</td>
+                        <td data-label="Action"><span class="edit-order"><i class="material-icons">edit</i></span> </td>
+                      </tr>
+                    </tbody>
+                    <tr data-id="02">
+                        <td data-label="Order Id">Espy-001</td>
+                        <td data-label="Order Date">04/01/2016</td>
+                        <td data-label="Client Name">an@email.com</td>
+                        <td data-label="Client phone">25088898889</td>
+                        <td data-label="Price">$1,190</td>
+                        <td data-label="Pick Up Location"> Gisozi </td>
+                        <td data-label="Destination"> Gisenyi </td>
+                        <td data-label="Current Location">Musanze</td>
+                        <td data-label="Tracking Number"> RBOOOOVFR</td>
+                        <td data-label="Status"> Pending</td>
+                        <td data-label="Action"><span class="edit-order"><i class="material-icons">edit</i></span> </td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                  </table>
+    </div>
+    <!-- The new order modal -->
+<div id="edit-order-modal" class="modal">
+        <!-- content -->
+<div class="modal-content">
+<span class="close">&times;</span>
+<div class="wrapper" >
+        <h1 class="title-center" id="edit-order-form-title"> Update delivery Order </h1>
+        <form id='edit-order-form' action="#" method='post'>
+            <input type="text" id ="order-input-current-location" class="new-order-input" placeholder="Current Location" required>
+            <i class="material-icons location-picker" id="current-location-picker">edit_location</i>
+            <select name="status" form="edit-order-form" id ="order-input-status" class="new-order-input">
+                <option value="pending">Pending</option>
+                <option value="delivered">Delivered</option>
+              </select>
+            <textarea id ="order-input-comments" rows="4" class="new-order-input" cols="41" name="comment" form="new-order-form" placeholder="Additionals notes">
+                    Additionals notes
+            </textarea>
+            <button id='edit-order-button' class="action-button" type='submit'>Submit</button>
+        </form>
+</div>
+
+</div>
+      
+      </div>
+       
+  <script src="static/js/adminScripts.js"></script>
+</body>
+</html>

@@ -23,7 +23,7 @@ form {
     margin:0 auto;
     width:300px
   }
-  input, textarea {
+  input, textarea, select {
     margin-bottom:3px;
     padding:10px;
     width: 100%;
@@ -71,6 +71,8 @@ form {
     background-color: #f8f8f8;
     border: 1px solid #ddd;
     padding: .35em;
+    /*break content in the cell width*/
+    word-break: break-all;
   }
   
   table th,
@@ -83,6 +85,8 @@ form {
     font-size: .85em;
     letter-spacing: .1em;
     text-transform: uppercase;
+    /*break content in the cell width*/
+    word-break: break-all;
   }
   
   @media screen and (max-width: 600px) {
@@ -116,6 +120,7 @@ form {
       display: block;
       font-size: .8em;
       text-align: right;
+      
     }
     
     table td::before {
@@ -258,4 +263,12 @@ edit order button
 
 .delete-order, .edit-order{
   cursor: pointer
+}
+
+/*
+status select 
+*/
+
+#order-input-status{
+  width: 108%
 }
