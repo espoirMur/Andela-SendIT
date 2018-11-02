@@ -75,7 +75,6 @@ const editOrder = function() {
     }
 };
 
-
 const deleteOrder = function(){
     const row = this.closest('tr');
     const status = row.cells[6].innerHTML;
