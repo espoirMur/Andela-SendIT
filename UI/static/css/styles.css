@@ -24,7 +24,7 @@ form {
     width:300px
   }
   input, textarea, select {
-    margin-bottom:3px;
+    margin-bottom: 26px;
     padding:10px;
     width: 100%;
     border:1px solid #CCC;
@@ -271,4 +271,26 @@ status select
 
 #order-input-status{
   width: 108%
+}
+
+/*
+the navigation bar
+*/
+
+
+.topnav {
+  overflow: hidden;
+}
+
+.topnav a {
+  float: left;
+  color:back;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav-right {
+  float: right;
 }

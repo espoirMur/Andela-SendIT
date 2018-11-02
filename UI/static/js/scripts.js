@@ -3,7 +3,6 @@ window.onload = function() {
 const modal = document.getElementById('new-order');
 
 
-
 // Get the button that opens the modal
 const btn = document.getElementById("button-new-order");
 
@@ -22,6 +21,7 @@ btn.onclick = function() {
     // renable the origin and destination
     let originInput = document.getElementById('new-order-input-origin');
     let destinationInput = document.getElementById('new-order-input-destination');
+    let submitButton = document.getElementById('new-order-button');
     originInput.disabled = false;
     destinationInput.disabled = false;
     submitButton.disabled = false;
