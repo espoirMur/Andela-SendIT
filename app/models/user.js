@@ -52,3 +52,6 @@ class User {
     this._orders.push(order);
   }
 }
+// export the module and make them avialable
+
+export { allUsers, User };

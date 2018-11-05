@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const allOrders = new Map();
 
-class Orders {
+class Order {
   constructor(origin, destination, recipientPhone, initiator, comments) {
     this._id = allOrders.values.length() + 1;
     this._origin = origin;
@@ -65,3 +65,5 @@ class Orders {
     return this.initiator.name;
   }
 }
+
+export { allOrders, Order };

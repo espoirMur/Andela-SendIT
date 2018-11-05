@@ -1,6 +1,6 @@
 // eslint-disable-next-line prefer-destructuring
-const expect = require('chai').expect;
-const request = require('request');
+import { expect } from 'chai';
+import request from 'request';
 
 const homeUrl = 'http://localhost:3000';
 
