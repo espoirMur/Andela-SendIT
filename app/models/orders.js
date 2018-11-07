@@ -3,7 +3,7 @@ const allOrders = new Map();
 
 class Order {
   constructor(origin, destination, recipientPhone, initiator, comments) {
-    this._id = allOrders.values.length() + 1;
+    this._id = allOrders.values.length + 1;
     this._origin = origin;
     this._destination = destination;
     this._orderDate = Date.now();
