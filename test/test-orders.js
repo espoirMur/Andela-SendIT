@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { Order, allOrders } from '../app/models/orders';
+import { Order, orders } from '../app/models/orders';
 import { User } from '../app/models/user';
 import app from '../app/server';
 
@@ -19,7 +19,7 @@ const returnAllOrders = (done) => {
     .end((error, response) => {
       response.should.have.status(200);
       response.type.should.be.eql('application/json');
-      response.body.should.be.eql([...allOrders]);
+      response.body.should.be.eql(orders);
       done();
     });
 };
@@ -28,8 +28,7 @@ const createOrder = (done) => {
   /**
    * test if we can create a new order
    * */
-  const initiator = new User('espoir', 'esp@fg.com', '25078000');
-  const order = new Order('Kigali', 'Gisenyi', '2507800000', initiator, 'call the recipient');
+  const order = new Order('Kigali', 'Gisenyi', '2507800000', 1, 'call the recipient');
   chai
     .request(app)
     .post('/parcels')
@@ -48,8 +47,7 @@ const cannotCreateOrderOrigin = (done) => {
   /**
    * cannot create an order if  pick-up location is missing
    *  */
-  const initiator = new User('espoir', 'esp@fg.com', '25078000');
-  const order = new Order('', 'Gisenyi', '25609888', initiator, 'call the recipient');
+  const order = new Order('', 'Gisenyi', '25609888', 1, 'call the recipient');
 
   chai
     .request(app)
@@ -69,8 +67,7 @@ const cannotCreateOrderDestination = (done) => {
   /**
    * cannot create an order if  destination is missing
    *  */
-  const initiator = new User('espoir', 'esp@fg.com', '25078000');
-  const order = new Order('Gisenyi', '', '25609888', initiator, 'call the recipient');
+  const order = new Order('Gisenyi', '', '25609888', 1, 'call the recipient');
 
   chai
     .request(app)
@@ -90,8 +87,7 @@ const cannotCreateOrderRecipientPhone = (done) => {
   /**
    * cannot create an order if  destination is missing
    *  */
-  const initiator = new User('espoir', 'esp@fg.com', '25078000');
-  const order = new Order('Gisenyi', 'Kigali', '', initiator, 'call the recipient');
+  const order = new Order('Gisenyi', 'Kigali', '', 1, 'call the recipient');
 
   chai
     .request(app)
@@ -111,8 +107,7 @@ const cannotCreateOrderBadContent = (done) => {
   /**
    * should return 406 if  the content type is not json
    *  */
-  const initiator = new User('espoir', 'esp@fg.com', '25078000');
-  const order = new Order('', '', '', initiator, 'call the recipient');
+  const order = new Order('', '', '', 1, 'call the recipient');
 
   chai
     .request(app)

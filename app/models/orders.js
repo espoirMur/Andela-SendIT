@@ -1,17 +1,35 @@
 /* eslint-disable no-underscore-dangle */
-const allOrders = new Map();
+import fs from 'fs';
+import path from 'path';
+import orders from './orders.json';
 
 class Order {
-  constructor(origin, destination, recipientPhone, initiator, comments) {
-    this._id = allOrders.values.length + 1;
+  constructor(origin, destination, recipientPhone, initiatorId, comments) {
+    const lengthOrders = Object.keys(orders).length;
+    this._id = lengthOrders + 1;
     this._origin = origin;
     this._destination = destination;
     this._orderDate = Date.now();
     this._recipientPhone = recipientPhone;
-    this._initiator = initiator;
+    this._initiatorId = initiatorId;
     this._deliveryDate = '';
     this._comments = comments;
     this._status = 'Created';
+    this._weight = 0;
+  }
+
+  save() {
+    /**
+     *  save the object to the file */
+    const id_ = this.id.toString();
+    // adding the file to the prrevious one
+    orders[id_] = this;
+
+    const data = JSON.stringify(orders, null, 2);
+    const Orderpath = path.join(__dirname, 'orders.json');
+    fs.writeFile(Orderpath, data, (err) => {
+      if (err) throw err;
+    });
   }
 
   get id() {
@@ -64,6 +82,14 @@ class Order {
   get initiator() {
     return this.initiator.name;
   }
+
+  get weigh() {
+    return this._weight;
+  }
+
+  set weigh(weight) {
+    this._weight = weight;
+  }
 }
 
-export { allOrders, Order };
+export { Order, orders };

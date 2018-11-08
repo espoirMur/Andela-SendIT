@@ -2,13 +2,13 @@
 /* eslint-disable no-else-return */
 import { Router } from 'express';
 import bodyParser from 'body-parser';
-import { allOrders, Order } from '../models/orders';
+import { orders, Order } from '../models/orders';
 import { User } from '../models/user';
 
 const router = Router();
 
 router.get('/', (req, res) => {
-  res.status(200).json([...allOrders]);
+  res.status(200).json(orders);
 });
 
 router.post('/', (req, res) => {
@@ -35,16 +35,16 @@ router.post('/', (req, res) => {
     });
   }
   const orderDetails = req.body;
-  // should retrieve initiator by his id
-  const initiator = new User('espoir', 'esp@fg.com', '25078000');
+  // should retrieve initiator by his id and implement
+
   const order = new Order(
     orderDetails._origin,
     orderDetails._destination,
     orderDetails._recipientPhone,
-    initiator,
+    orderDetails._initiatorId,
     orderDetails._comment,
   );
-  allOrders.set(order.id, order);
+  order.save();
   return res.status(201).send({
     success: true,
     message: 'delivery order successfully created!',
