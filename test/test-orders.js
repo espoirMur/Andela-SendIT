@@ -33,18 +33,83 @@ const createOrder = (done) => {
   chai
     .request(app)
     .post('/parcels')
+    .type('application/json')
     .send(order)
     .end((request, response) => {
       response.should.have.status(201);
       response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(true);
       response.body.should.have.property('message').eql('delivery order successfully created!');
       done();
     });
 };
 
-const cannotCreateOrder = (done) => {
+const cannotCreateOrderOrigin = (done) => {
   /**
-   * cannot create an order if  pick-up location, recipient  and recipient phone are missing
+   * cannot create an order if  pick-up location is missing
+   *  */
+  const initiator = new User('espoir', 'esp@fg.com', '25078000');
+  const order = new Order('', 'Gisenyi', '25609888', initiator, 'call the recipient');
+
+  chai
+    .request(app)
+    .post('/parcels')
+    .send(order)
+    .type('application/json')
+    .end((request, response) => {
+      response.should.have.status(400);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have.property('message').eql('pickup location is required');
+      done();
+    });
+};
+
+const cannotCreateOrderDestination = (done) => {
+  /**
+   * cannot create an order if  destination is missing
+   *  */
+  const initiator = new User('espoir', 'esp@fg.com', '25078000');
+  const order = new Order('Gisenyi', '', '25609888', initiator, 'call the recipient');
+
+  chai
+    .request(app)
+    .post('/parcels')
+    .send(order)
+    .type('application/json')
+    .end((request, response) => {
+      response.should.have.status(400);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have.property('message').eql('destination is required');
+      done();
+    });
+};
+
+const cannotCreateOrderRecipientPhone = (done) => {
+  /**
+   * cannot create an order if  destination is missing
+   *  */
+  const initiator = new User('espoir', 'esp@fg.com', '25078000');
+  const order = new Order('Gisenyi', 'Kigali', '', initiator, 'call the recipient');
+
+  chai
+    .request(app)
+    .post('/parcels')
+    .send(order)
+    .type('application/json')
+    .end((request, response) => {
+      response.should.have.status(400);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have.property('message').eql('recipient phone is required');
+      done();
+    });
+};
+
+const cannotCreateOrderBadContent = (done) => {
+  /**
+   * should return 406 if  the content type is not json
    *  */
   const initiator = new User('espoir', 'esp@fg.com', '25078000');
   const order = new Order('', '', '', initiator, 'call the recipient');
@@ -53,12 +118,12 @@ const cannotCreateOrder = (done) => {
     .request(app)
     .post('/parcels')
     .send(order)
+    .type('form')
     .end((request, response) => {
-      response.should.have.status(401);
+      response.should.have.status(406);
       response.body.should.be.a('object');
-      response.body.should.have
-        .property('message')
-        .eql('{"pickupLocation": "Please enter a pickuplocation"}');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have.property('message').eql('invalid content type');
       done();
     });
 };
@@ -68,6 +133,9 @@ const cannotCreateOrder = (done) => {
   */
 describe('/POST book', () => {
   it('create all orders', createOrder);
-  it('cannot create order if field missing', cannotCreateOrder);
+  it('cannot create order if  pickup location missing', cannotCreateOrderOrigin);
+  it('return 400 if content type is not json', cannotCreateOrderBadContent);
+  it('cannot create order if destination is missing ', cannotCreateOrderDestination);
+  it('cannot create order if recipient phone is missing', cannotCreateOrderRecipientPhone);
 });
 it('return all orders as json', returnAllOrders);
