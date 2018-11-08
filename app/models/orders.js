@@ -22,12 +22,31 @@ class Order {
     /**
      *  save the object to the file */
     const id_ = this.id.toString();
-    // adding the file to the prrevious one
+    // adding the file to the previous one
     orders[id_] = this;
+    // disable saving to the file
+    // const data = JSON.stringify(orders, null, 2);
+    // const orderPath = path.join(__dirname, 'orders.json');
+    // fs.writeFile(orderPath, data, (err) => {
+    // if (err) throw err;
+    // });
+  }
 
+  remove() {
+    /**
+     *  remove the object from the file */
+    const id_ = this.id.toString();
+
+    if (orders[id_]) {
+      // delete if exist
+      delete orders[id_];
+    } else {
+      throw new Error(`Order with id ${id_} was not found`);
+    }
     const data = JSON.stringify(orders, null, 2);
-    const Orderpath = path.join(__dirname, 'orders.json');
-    fs.writeFile(Orderpath, data, (err) => {
+    // save
+    const orderPath = path.join(__dirname, 'orders.json');
+    fs.writeFile(orderPath, data, (err) => {
       if (err) throw err;
     });
   }

@@ -123,14 +123,61 @@ const cannotCreateOrderBadContent = (done) => {
     });
 };
 
+const canGetOrderById = (done) => {
+  /**
+   * test if we can get a delivery order by id
+   *
+   */
+  const id = 1;
+  const order = orders[id.toString()];
+  chai
+    .request(app)
+    .get(`/parcels/${id}`)
+    .end((request, response) => {
+      response.should.have.status(200);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(true);
+      response.body.should.have.property('message').eql('delivery order  retrieved successfully');
+      response.body.should.have.property('order').eql(order);
+      done();
+    });
+};
+
+const cannotGetOrderById = (done) => {
+  /**
+   * test if we can return 404 if the id is invalid and not found
+   *
+   */
+  const id = '1STFF';
+  chai
+    .request(app)
+    .get(`/parcels/${id}`)
+    .end((request, response) => {
+      response.should.have.status(404);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have
+        .property('message')
+        .eql(`delivery order with id ${id} does not exist`);
+      done();
+    });
+};
+
 /*
   * Test the /POST route for creating new book
   */
-describe('/POST book', () => {
+describe.skip('create orders', () => {
   it('create all orders', createOrder);
   it('cannot create order if  pickup location missing', cannotCreateOrderOrigin);
   it('return 400 if content type is not json', cannotCreateOrderBadContent);
   it('cannot create order if destination is missing ', cannotCreateOrderDestination);
   it('cannot create order if recipient phone is missing', cannotCreateOrderRecipientPhone);
 });
+
+// test get order
+describe('get order by id', () => {
+  it('can get order by id', canGetOrderById);
+  it('cannot get order if  id invalid', cannotGetOrderById);
+});
+
 it('return all orders as json', returnAllOrders);

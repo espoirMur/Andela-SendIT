@@ -52,4 +52,21 @@ router.post('/', (req, res) => {
   });
 });
 
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+  const order = orders[id];
+  if (order) {
+    return res.status(200).send({
+      success: true,
+      message: 'delivery order  retrieved successfully',
+      order,
+    });
+  } else {
+    return res.status(404).send({
+      success: false,
+      message: `delivery order with id ${id} does not exist`,
+    });
+  }
+});
+
 export default router;
