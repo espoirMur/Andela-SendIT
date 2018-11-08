@@ -1,7 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { Order, orders } from '../app/models/orders';
-import { User } from '../app/models/user';
 import app from '../app/server';
 
 /** setting up the test server */
@@ -15,7 +14,7 @@ const returnAllOrders = (done) => {
    */
   chai
     .request(app)
-    .get('/parcels')
+    .get('/api/v1/parcels')
     .end((error, response) => {
       response.should.have.status(200);
       response.type.should.be.eql('application/json');
@@ -31,7 +30,7 @@ const createOrder = (done) => {
   const order = new Order('Kigali', 'Gisenyi', '2507800000', 1, 'call the recipient');
   chai
     .request(app)
-    .post('/parcels')
+    .post('/api/v1/parcels')
     .type('application/json')
     .send(order)
     .end((request, response) => {
@@ -51,7 +50,7 @@ const cannotCreateOrderOrigin = (done) => {
 
   chai
     .request(app)
-    .post('/parcels')
+    .post('/api/v1/parcels')
     .send(order)
     .type('application/json')
     .end((request, response) => {
@@ -71,7 +70,7 @@ const cannotCreateOrderDestination = (done) => {
 
   chai
     .request(app)
-    .post('/parcels')
+    .post('/api/v1/parcels')
     .send(order)
     .type('application/json')
     .end((request, response) => {
@@ -91,7 +90,7 @@ const cannotCreateOrderRecipientPhone = (done) => {
 
   chai
     .request(app)
-    .post('/parcels')
+    .post('/api/v1/parcels')
     .send(order)
     .type('application/json')
     .end((request, response) => {
@@ -111,7 +110,7 @@ const cannotCreateOrderBadContent = (done) => {
 
   chai
     .request(app)
-    .post('/parcels')
+    .post('/api/v1/parcels')
     .send(order)
     .type('form')
     .end((request, response) => {
@@ -132,7 +131,7 @@ const canGetOrderById = (done) => {
   const order = orders[id.toString()];
   chai
     .request(app)
-    .get(`/parcels/${id}`)
+    .get(`/api/v1/parcels/${id}`)
     .end((request, response) => {
       response.should.have.status(200);
       response.body.should.be.a('object');
@@ -151,7 +150,7 @@ const cannotGetOrderById = (done) => {
   const id = '1STFF';
   chai
     .request(app)
-    .get(`/parcels/${id}`)
+    .get(`/api/v1/parcels/${id}`)
     .end((request, response) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
@@ -162,11 +161,10 @@ const cannotGetOrderById = (done) => {
       done();
     });
 };
-
 /*
   * Test the /POST route for creating new book
   */
-describe.skip('create orders', () => {
+describe('create orders', () => {
   it('create all orders', createOrder);
   it('cannot create order if  pickup location missing', cannotCreateOrderOrigin);
   it('return 400 if content type is not json', cannotCreateOrderBadContent);

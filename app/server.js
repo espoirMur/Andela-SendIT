@@ -12,7 +12,7 @@ const orders = require('../app/routes/orders').default;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/parcels', orders);
+app.use('/api/v1/parcels', orders);
 
 app.listen(process.env.PORT || 3000);
 

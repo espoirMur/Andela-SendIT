@@ -1,0 +1,24 @@
+{
+  "1": {
+    "_id": 1,
+    "_name": "espoir",
+    "_email": "Murhabazi",
+    "_phone": "2507849",
+    "_isAdmin": "false",
+    "_registrationDate": 1541678854894,
+    "_orders": [
+      {
+        "_id": 4,
+        "_origin": "Kigali",
+        "_destination": "Gisenyi",
+        "_orderDate": 1541716090931,
+        "_recipientPhone": "2507800000",
+        "_initiatorId": 1,
+        "_deliveryDate": "",
+        "_status": "Created",
+        "_weight": 0
+      }
+    ],
+    "_password": "Hard to guess string"
+  }
+}

@@ -1,8 +1,9 @@
-const allUsers = new Map();
+import users from './users.json';
 /* eslint-disable no-underscore-dangle */
 class User {
   constructor(name, email, phone) {
-    this._id = allUsers.values.length + 1;
+    const lengthUsers = Object.keys(users).length;
+    this._id = lengthUsers + 1;
     this._name = name;
     this._email = email;
     this._phone = phone;
@@ -54,4 +55,4 @@ class User {
 }
 // export the module and make them avialable
 
-export { allUsers, User };
+export { users, User };

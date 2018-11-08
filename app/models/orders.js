@@ -1,7 +1,8 @@
 /* eslint-disable no-underscore-dangle */
-import fs from 'fs';
-import path from 'path';
+// import fs from 'fs';
+// import path from 'path';
 import orders from './orders.json';
+import users from './users.json';
 
 class Order {
   constructor(origin, destination, recipientPhone, initiatorId, comments) {
@@ -24,9 +25,15 @@ class Order {
     const id_ = this.id.toString();
     // adding the file to the previous one
     orders[id_] = this;
+    // save to user
+
+    const user = users[this._initiatorId];
+    user._orders.push(this);
+    users[this._initiatorId] = user;
+
     // disable saving to the file
-    // const data = JSON.stringify(orders, null, 2);
-    // const orderPath = path.join(__dirname, 'orders.json');
+    // const data = JSON.stringify(users, null, 2);
+    // const orderPath = path.join(__dirname, 'users.json');
     // fs.writeFile(orderPath, data, (err) => {
     // if (err) throw err;
     // });
@@ -43,12 +50,13 @@ class Order {
     } else {
       throw new Error(`Order with id ${id_} was not found`);
     }
-    const data = JSON.stringify(orders, null, 2);
-    // save
-    const orderPath = path.join(__dirname, 'orders.json');
-    fs.writeFile(orderPath, data, (err) => {
-      if (err) throw err;
-    });
+    /*
+    *const data = JSON.stringify(orders, null, 2);
+    * save
+    * const orderPath = path.join(__dirname, 'orders.json');
+    *fs.writeFile(orderPath, data, (err) => {
+     * if (err) throw err;
+    *}); */
   }
 
   get id() {
