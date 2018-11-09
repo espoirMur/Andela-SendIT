@@ -69,4 +69,21 @@ router.get('/:id', (req, res) => {
   }
 });
 
+router.put('/:id/cancel', (req, res) => {
+  const id = req.params.id;
+  const order = orders[id];
+  if (order._status !== 'delivered') {
+    order._status = 'canceled';
+    return res.status(200).send({
+      success: true,
+      message: 'delivery order has been canceled',
+    });
+  } else {
+    return res.status(401).send({
+      success: false,
+      message: 'cannot cancel a delivered order',
+    });
+  }
+});
+
 export default router;
