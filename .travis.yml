@@ -11,6 +11,4 @@ deploy:
   on:
     repo: espoirMur/Andela-SendIT
     tags: false
-    branches:
-    only:
-      - develop
+    branches: develop
