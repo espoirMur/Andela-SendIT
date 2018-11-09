@@ -11,3 +11,6 @@ deploy:
   app: andela-send-it
   on:
     repo: espoirMur/Andela-SendIT
+    branches: # ← new!
+      only: # ← new!
+        - develop # ← new!
