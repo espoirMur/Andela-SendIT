@@ -1,6 +1,10 @@
 language: node_js
 node_js:
-  - "stable"
+- stable
 after_success:
-  - npm run coveralls
-  - npm run code-climate
+- npm run coveralls
+- npm run code-climate
+deploy:
+  provider: heroku
+  api_key:
+    secure: ZZ8mWHLJemv+AHmouSaiOpCDnB1NyYOvsd+RXqdlGnHL1Zyv9wff94fgzgIvmXvkNGZc0s2f5S5x6CqKFaANJaZ0vIBo3aw83BpYXZ61DXTi64KtLFq/qA+a285qV/3sX1EHsw5CnxBCAfK1FEGUJ81vSOKhVPW8VA8bkiyEyzX8v1wvVfTZvPCVUlfXA5NEJzSX0XfCRcvzenGj+RRxgglcLN9sD+nqx2AIWzQ5xXqS/C1jLaFvMV+BxxFRgu3byfi2vb89a/mQJtBHAr32li/G3FYJYhgXrhcT3EiLtX7ghnlk2iP+vJtVPFKwlp9dZxG/qYyMpDkktkpjig9cmUU3TS7tO5c5E2fIKCoBu/z/Nw5T6aG4bYnDBpWyiuVyZ6GY6mqdCxSctu7dSUrUrCu03nWB5IyeMWxET6d1Vb9Oib+nohttYzsO0F4dVHnZ0b5FsxTUZgl0cpOlaVW1dj8+dlnqptm2E4UgaN179jx6PVMlKB+hXOLo6OjH+J6EEd6WcfVbvYAMD7mREqQXDkp4afGY6HvTp0L6gawWBOLxiSsakIVWOQsvCGDsD8Gl2QrpWBhW+fvSTMu5XU8+QCwWRMHLvnpzZaPKea/IfiN25jFFri9DPxPx7XD/Beg93+My0v7aUMF7ixnbZIuL7zYfHf1UB7clVmq2vvOPZ2g=
