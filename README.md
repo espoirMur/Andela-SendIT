@@ -1,4 +1,8 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/9e7b46a32f9fa04d5ee3/maintainability)](https://codeclimate.com/github/espoirMur/Andela-SendIT/maintainability)[![Test Coverage](https://api.codeclimate.com/v1/badges/9e7b46a32f9fa04d5ee3/test_coverage)](https://codeclimate.com/github/espoirMur/Andela-SendIT/test_coverage)[![Build Status](https://travis-ci.org/espoirMur/Andela-SendIT.svg?branch=develop)](https://travis-ci.org/espoirMur/Andela-SendIT)[![Coverage Status](https://coveralls.io/repos/github/espoirMur/Andela-SendIT/badge.svg?branch=develop)](https://coveralls.io/github/espoirMur/Andela-SendIT?branch=develop)
+
 ## Andela-SendIT
+
+
 SendIT is a courier service that helps users deliver parcels to different destinations. SendIT
 provides courier quotes based on weight categories.
 
