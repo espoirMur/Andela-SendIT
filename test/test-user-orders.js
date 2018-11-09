@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { users } from '../app/models/user';
@@ -27,7 +28,8 @@ const canGetUserOrderById = (done) => {
       response.body.should.have
         .property('message')
         .eql('user delivery orders  retrieved successfully');
-      response.body.should.have.property('orders').eql(orders);
+      response.body.should.have.property('orders');
+      response.body.orders.length.should.be.eql(orders.length);
       done();
     });
 };

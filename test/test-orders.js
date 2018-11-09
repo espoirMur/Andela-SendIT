@@ -6,7 +6,6 @@ import app from '../app/server';
 /** setting up the test server */
 chai.use(chaiHttp);
 const should = chai.should();
-// close the sever after running our tests
 
 const returnAllOrders = (done) => {
   /**
