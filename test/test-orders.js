@@ -160,6 +160,48 @@ const cannotGetOrderById = (done) => {
       done();
     });
 };
+
+const canCannotCancelOrder = (done) => {
+  /**
+   * test if we cannot cancel a delivery order if the status
+   * marked as delivered
+   * in the future we need to allow only admin or a person who create order to implement
+   */
+  const id = 1;
+  const order = orders[id.toString()];
+  order._status = 'delivered';
+  chai
+    .request(app)
+    .put(`/api/v1/parcels/${id}/cancel `)
+    .end((request, response) => {
+      response.should.have.status(401);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have.property('message').eql('cannot cancel a delivered order');
+      done();
+    });
+};
+
+const canCancelOrder = (done) => {
+  /**
+   * test if we cancel a delivery order if the status
+   * marked is not  delivered
+   */
+  const id = 1;
+  const order = orders[id.toString()];
+  order._status = 'canceled';
+  chai
+    .request(app)
+    .put(`/api/v1/parcels/${id}/cancel `)
+    .end((request, response) => {
+      response.should.have.status(200);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(true);
+      response.body.should.have.property('message').eql('delivery order has been canceled');
+      done();
+    });
+};
+
 /*
   * Test the /POST route for creating new book
   */
@@ -175,6 +217,12 @@ describe('create orders', () => {
 describe('get order by id', () => {
   it('can get order by id', canGetOrderById);
   it('cannot get order if  id invalid', cannotGetOrderById);
+});
+
+// test cancel order
+describe('can cancel order', () => {
+  it('can cancel order by id', canCancelOrder);
+  it('cannot cancel if delivered', canCannotCancelOrder);
 });
 
 it('return all orders as json', returnAllOrders);
