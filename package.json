@@ -7,6 +7,7 @@
     "test": "mocha --compilers js:babel-core/register ./test/test*.js --exit",
     "start": "nodemon app/server.js --exec babel-node --",
     "nyc": "nyc npm test",
+    "code-climate": "codeclimate-test-reporter < ./coverage/lcov.info",
     "coveralls": "npm run nyc -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
@@ -24,6 +25,7 @@
     "babel-preset-es2015": "^6.24.1",
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
+    "codeclimate-test-reporter": "^0.5.1",
     "coveralls": "^3.0.2",
     "eslint": "^5.8.0",
     "eslint-config-airbnb-base": "^13.1.0",
