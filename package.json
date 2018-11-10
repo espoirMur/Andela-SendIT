@@ -66,7 +66,7 @@
     "exclude": [
       "wdio.conf.js",
       "coverage/**/*.js",
-      "./test/test*.js",
+      "app/models/user.js",
       "UI/",
       "config.js",
       "config.sample.js"
