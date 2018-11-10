@@ -1,35 +1,35 @@
 {
   "2": {
-    "_id": 2,
-    "_origin": "Kigali",
-    "_destination": "Gisenyi",
-    "_orderDate": 1541679113347,
-    "_recipientPhone": "2507800000",
-    "_initiatorId": 1,
-    "_deliveryDate": "",
-    "_status": "Created",
-    "_weight": 0
+    "id": 2,
+    "origin": "Kigali",
+    "destination": "Gisenyi",
+    "orderDate": 1541679113347,
+    "recipientPhone": "2507800000",
+    "initiatorId": 1,
+    "deliveryDate": "",
+    "status": "Created",
+    "weight": 0
   },
   "3": {
-    "_id": 3,
-    "_origin": "Kigali",
-    "_destination": "Gisenyi 69 Rubavu",
-    "_orderDate": 1541679138909,
-    "_recipientPhone": "250784834836",
-    "_initiatorId": 1,
-    "_deliveryDate": "",
-    "_status": "Created",
-    "_weight": 0
+    "id": 3,
+    "origin": "Kigali",
+    "destination": "Gisenyi 69 Rubavu",
+    "orderDate": 1541679138909,
+    "recipientPhone": "250784834836",
+    "initiatorId": 1,
+    "deliveryDate": "",
+    "status": "Created",
+    "weight": 0
   },
   "1": {
-    "_id": 1,
-    "_origin": "Kigali",
-    "_destination": "Gisenyi 69 Rubavu",
-    "_orderDate": 1541678854894,
-    "_recipientPhone": "250784834836",
-    "_initiatorId": 1,
-    "_deliveryDate": "",
-    "_status": "delivered",
-    "_weight": 0
+    "id": 1,
+    "origin": "Kigali",
+    "destination": "Gisenyi 69 Rubavu",
+    "orderDate": 1541678854894,
+    "recipientPhone": "250784834836",
+    "initiatorId": 1,
+    "deliveryDate": "",
+    "status": "delivered",
+    "weight": 0
   }
 }

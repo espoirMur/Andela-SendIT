@@ -16,8 +16,7 @@ const canGetUserOrderById = (done) => {
    */
   const id = 1;
   const user = users[id.toString()];
-  // eslint-disable-next-line no-underscore-dangle
-  const orders = user._orders;
+  const orders = user.orders;
   chai
     .request(app)
     .get(`/api/v1/user/${id}/parcels`)

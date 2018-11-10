@@ -1,8 +1,10 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 // import fs from 'fs';
 // import path from 'path';
 import orders from './orders.json';
 import users from './users.json';
+import { User } from './user.js';
 
 class Order {
   constructor(origin, destination, recipientPhone, initiatorId, comments) {
@@ -26,10 +28,9 @@ class Order {
     // adding the file to the previous one
     orders[id_] = this;
     // save to user
-
-    const user = users[this._initiatorId];
-    user._orders.push(this);
-    users[this._initiatorId] = user;
+    const user = users[this.initiatorId.toString()];
+    user.orders.push(this.toJSON());
+    users[this.initiatorId.toString()] = user;
 
     // disable saving to the file
     // const data = JSON.stringify(users, null, 2);
@@ -106,8 +107,12 @@ class Order {
     this.comments = comments;
   }
 
-  get initiator() {
-    return this.initiator.name;
+  get initiatorId() {
+    return this._initiatorId;
+  }
+
+  set initiatorId(initiatorId) {
+    throw new Error(`cannot change initiator ${this._initiatorId} to ${initiatorId}`);
   }
 
   get weigh() {
@@ -116,6 +121,13 @@ class Order {
 
   set weigh(weight) {
     this._weight = weight;
+  }
+
+  toJSON() {
+    return Object.getOwnPropertyNames(this).reduce((a, b) => {
+      a[b.replace('_', '')] = this[b];
+      return a;
+    }, {});
   }
 }
 
