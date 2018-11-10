@@ -18,17 +18,17 @@ router.post('/', (req, res) => {
       success: false,
       message: 'invalid content type',
     });
-  } else if (!req.body._origin) {
+  } else if (!req.body.origin) {
     return res.status(400).send({
       success: false,
       message: 'pickup location is required',
     });
-  } else if (!req.body._destination) {
+  } else if (!req.body.destination) {
     return res.status(400).send({
       success: false,
       message: 'destination is required',
     });
-  } else if (!req.body._recipientPhone) {
+  } else if (!req.body.recipientPhone) {
     return res.status(400).send({
       success: false,
       message: 'recipient phone is required',
@@ -38,11 +38,11 @@ router.post('/', (req, res) => {
   // should retrieve initiator by his id and implement
 
   const order = new Order(
-    orderDetails._origin,
-    orderDetails._destination,
-    orderDetails._recipientPhone,
-    orderDetails._initiatorId,
-    orderDetails._comment,
+    orderDetails.origin,
+    orderDetails.destination,
+    orderDetails.recipientPhone,
+    orderDetails.initiatorId,
+    orderDetails.comment,
   );
   order.save();
   return res.status(201).send({
@@ -72,16 +72,23 @@ router.get('/:id', (req, res) => {
 router.put('/:id/cancel', (req, res) => {
   const id = req.params.id;
   const order = orders[id];
-  if (order._status !== 'delivered') {
-    order._status = 'canceled';
-    return res.status(200).send({
-      success: true,
-      message: 'delivery order has been canceled',
-    });
+  if (order) {
+    if (order.status !== 'delivered') {
+      order.status = 'canceled';
+      return res.status(200).send({
+        success: true,
+        message: 'delivery order has been canceled',
+      });
+    } else {
+      return res.status(401).send({
+        success: false,
+        message: 'cannot cancel a delivered order',
+      });
+    }
   } else {
-    return res.status(401).send({
+    return res.status(404).send({
       success: false,
-      message: 'cannot cancel a delivered order',
+      message: `delivery order with id ${id} does not exist`,
     });
   }
 });

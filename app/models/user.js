@@ -52,7 +52,16 @@ class User {
   set orders(order) {
     this._orders.push(order);
   }
+
+  toJSON() {
+    return Object.getOwnPropertyNames(this).reduce((a, b) => {
+      // eslint-disable-next-line no-param-reassign
+      a[b.replace('_', '')] = this[b];
+      return a;
+    }, {});
+  }
 }
+
 // export the module and make them avialable
 
 export { users, User };

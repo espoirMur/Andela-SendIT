@@ -1,12 +1,12 @@
 {
   "1": {
-    "_id": 1,
-    "_name": "espoir",
-    "_email": "Murhabazi",
-    "_phone": "2507849",
-    "_isAdmin": "false",
-    "_registrationDate": 1541678854894,
-    "_orders": [],
-    "_password": "Hard to guess string"
+    "id": 1,
+    "name": "espoir",
+    "email": "Murhabazi",
+    "phone": "2507849",
+    "isAdmin": "false",
+    "registrationDate": 1541678854894,
+    "orders": [],
+    "password": "Hard to guess string"
   }
 }

@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/v1/parcels', orders);
-app.use('/api/v1/user', userOrdersRouter);
+app.use('/api/v1/users', userOrdersRouter);
 app.listen(process.env.PORT || 3000);
 
 export default app;

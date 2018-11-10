@@ -31,7 +31,7 @@ const createOrder = (done) => {
     .request(app)
     .post('/api/v1/parcels')
     .type('application/json')
-    .send(order)
+    .send(order.toJSON())
     .end((request, response) => {
       response.should.have.status(201);
       response.body.should.be.a('object');
@@ -50,7 +50,7 @@ const cannotCreateOrderOrigin = (done) => {
   chai
     .request(app)
     .post('/api/v1/parcels')
-    .send(order)
+    .send(order.toJSON())
     .type('application/json')
     .end((request, response) => {
       response.should.have.status(400);
@@ -70,7 +70,7 @@ const cannotCreateOrderDestination = (done) => {
   chai
     .request(app)
     .post('/api/v1/parcels')
-    .send(order)
+    .send(order.toJSON())
     .type('application/json')
     .end((request, response) => {
       response.should.have.status(400);
@@ -90,7 +90,7 @@ const cannotCreateOrderRecipientPhone = (done) => {
   chai
     .request(app)
     .post('/api/v1/parcels')
-    .send(order)
+    .send(order.toJSON())
     .type('application/json')
     .end((request, response) => {
       response.should.have.status(400);
@@ -110,7 +110,7 @@ const cannotCreateOrderBadContent = (done) => {
   chai
     .request(app)
     .post('/api/v1/parcels')
-    .send(order)
+    .send(order.toJSON())
     .type('form')
     .end((request, response) => {
       response.should.have.status(406);
@@ -169,7 +169,7 @@ const canCannotCancelOrder = (done) => {
    */
   const id = 1;
   const order = orders[id.toString()];
-  order._status = 'delivered';
+  order.status = 'delivered';
   chai
     .request(app)
     .put(`/api/v1/parcels/${id}/cancel `)
@@ -189,7 +189,7 @@ const canCancelOrder = (done) => {
    */
   const id = 1;
   const order = orders[id.toString()];
-  order._status = 'canceled';
+  order.status = 'canceled';
   chai
     .request(app)
     .put(`/api/v1/parcels/${id}/cancel `)
@@ -198,6 +198,26 @@ const canCancelOrder = (done) => {
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(true);
       response.body.should.have.property('message').eql('delivery order has been canceled');
+      done();
+    });
+};
+
+const canCannotCancelNoExistOrder = (done) => {
+  /**
+   * if we cannot cancel and order if it doesn't exist
+   */
+  const id = '56YYYT';
+  const order = orders[id.toString()];
+  chai
+    .request(app)
+    .put(`/api/v1/parcels/${id}/cancel `)
+    .end((request, response) => {
+      response.should.have.status(404);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have
+        .property('message')
+        .eql(`delivery order with id ${id} does not exist`);
       done();
     });
 };
@@ -223,6 +243,7 @@ describe('get order by id', () => {
 describe('can cancel order', () => {
   it('can cancel order by id', canCancelOrder);
   it('cannot cancel if delivered', canCannotCancelOrder);
+  it('cannot cancel non existant order', canCannotCancelNoExistOrder);
 });
 
 it('return all orders as json', returnAllOrders);
