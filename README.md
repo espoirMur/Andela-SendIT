@@ -15,10 +15,6 @@ This project was given as a learning project for andela kigali bootcamp preparat
 
 We will be using Airbnb code style for javascript
 
-## Screenshots
-
-**Coming soon**
-
 ## Tech/framework used
 
 <b>Built with</b>
@@ -59,11 +55,21 @@ We will be using Airbnb code style for javascript
 
 ## Installation
 
-Here are the step to install :
+    $ git clone https://github.com/espoirMur/Andela-SendIT.git
+    $ cd Andela-SendIT
+    $ npm install
+
+### Start & watch
+
+    $ npm start
+
+### Run test
+
+    $ npm test
 
 ## API Reference
 
-## API Endpoints
+### API Endpoints
 
 | Resource URL                                    | Methods   | Description                                               |
 | ----------------------------------------------- | --------- | --------------------------------------------------------- |
@@ -74,9 +80,11 @@ Here are the step to install :
 | `/api/v1/parcels/<string:id>/cancel`            | PUT       | cancel the specific parcel delivery order                 |
 | `/api/v1/users/<string:id>/parcels/<string:id>` | GET, PUT  | View , edit a specific parcel delivery order for a user   |
 
-## Tests
+### Running the APIS
 
-The test was runned using chai and mocha framework
+Use postman to run this collection
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/075ef216dc0bdf5584c3)
 
 ## Credits
 
