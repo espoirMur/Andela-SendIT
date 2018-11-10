@@ -202,6 +202,26 @@ const canCancelOrder = (done) => {
     });
 };
 
+const canCannotCancelNoExistOrder = (done) => {
+  /**
+   * if we cannot cancel and order if it doesn't exist
+   */
+  const id = '56YYYT';
+  const order = orders[id.toString()];
+  chai
+    .request(app)
+    .put(`/api/v1/parcels/${id}/cancel `)
+    .end((request, response) => {
+      response.should.have.status(404);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have
+        .property('message')
+        .eql(`delivery order with id ${id} does not exist`);
+      done();
+    });
+};
+
 /*
   * Test the /POST route for creating new book
   */
@@ -223,6 +243,7 @@ describe('get order by id', () => {
 describe('can cancel order', () => {
   it('can cancel order by id', canCancelOrder);
   it('cannot cancel if delivered', canCannotCancelOrder);
+  it('cannot cancel non existant order', canCannotCancelNoExistOrder);
 });
 
 it('return all orders as json', returnAllOrders);

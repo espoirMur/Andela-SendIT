@@ -19,7 +19,7 @@ const canGetUserOrderById = (done) => {
   const orders = user.orders;
   chai
     .request(app)
-    .get(`/api/v1/user/${id}/parcels`)
+    .get(`/api/v1/users/${id}/parcels`)
     .end((request, response) => {
       response.should.have.status(200);
       response.body.should.be.a('object');
@@ -42,7 +42,7 @@ const cannotGetUserOrderById = (done) => {
   const id = '1STFF';
   chai
     .request(app)
-    .get(`/api/v1/user/${id}/parcels`)
+    .get(`/api/v1/users/${id}/parcels`)
     .end((request, response) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
