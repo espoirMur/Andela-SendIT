@@ -207,7 +207,6 @@ const canCannotCancelNoExistOrder = (done) => {
    * if we cannot cancel and order if it doesn't exist
    */
   const id = '56YYYT';
-  const order = orders[id.toString()];
   chai
     .request(app)
     .put(`/api/v1/parcels/${id}/cancel `)
