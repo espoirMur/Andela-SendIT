@@ -8,7 +8,8 @@
     "start": "nodemon app/server.js --exec babel-node --",
     "nyc": "nyc npm test",
     "code-climate": "codeclimate-test-reporter < ./coverage/lcov.info",
-    "coveralls": "npm run nyc -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "npm run nyc -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
+    "codecov": "codecov"
   },
   "repository": {
     "type": "git",
@@ -66,7 +67,6 @@
     "exclude": [
       "wdio.conf.js",
       "coverage/**/*.js",
-      "app/models/user.js",
       "UI/",
       "config.js",
       "config.sample.js"

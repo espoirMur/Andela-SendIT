@@ -4,6 +4,7 @@ node_js:
 after_success:
   - npm run coveralls
   - npm run code-climate
+  - npm run codecov
 deploy:
   provider: heroku
   api_key:
