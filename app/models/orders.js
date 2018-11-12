@@ -124,6 +124,9 @@ class Order {
   }
 
   toJSON() {
+    /**
+     *  convert the object to json
+     * */
     return Object.getOwnPropertyNames(this).reduce((a, b) => {
       a[b.replace('_', '')] = this[b];
       return a;
