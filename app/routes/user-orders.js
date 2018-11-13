@@ -7,7 +7,7 @@ const userOrdersRouter = Router();
 
 userOrdersRouter.get('/:id/parcels', (req, res) => {
   const id = req.params.id;
-  const user = users[id.toString()];
+  const user = users.get(id.toString());
   if (user) {
     const orders = user.orders;
     return res.status(200).send({

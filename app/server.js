@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import orders from './routes/orders';
 import userOrdersRouter from './routes/user-orders';
 import { error5OOHandler, error4O4Handler } from './middlewares/errors';
+import jsonReplacer from './utils/jsonReplacer';
 
 const app = express();
 
@@ -20,7 +21,7 @@ app.get('/test/errors/', (req, resp, error) => {
 // support parsing of application/json type post data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.set('json replacer', jsonReplacer);
 app.use('/api/v1/parcels', orders);
 app.use('/api/v1/users', userOrdersRouter);
 app.use(error5OOHandler);

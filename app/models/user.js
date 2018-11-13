@@ -1,16 +1,20 @@
-import users from './users.json';
+const users = new Map();
 /* eslint-disable no-underscore-dangle */
 class User {
   constructor(name, email, phone) {
-    const lengthUsers = Object.keys(users).length;
+    const lengthUsers = users.size;
     this._id = lengthUsers + 1;
     this._name = name;
     this._email = email;
     this._phone = phone;
     this._isAdmin = false;
     this._registrationDate = Date.now();
-    this._orders = [];
+    this._orders = new Map();
     this._password = 'Hard to guess string';
+  }
+
+  get id() {
+    return this._id;
   }
 
   get name() {
@@ -50,7 +54,7 @@ class User {
   }
 
   set orders(order) {
-    this._orders.push(order);
+    this._orders.set(order.id.toString(), order);
   }
 
   toJSON() {
@@ -62,6 +66,8 @@ class User {
   }
 }
 
+const user = new User('Espoir', 'espy_mur@gmail.com', '25078000');
+users.set(user.id.toString(), user);
 // export the module and make them avialable
 
 export { users, User };

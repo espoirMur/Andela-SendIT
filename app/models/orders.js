@@ -1,14 +1,13 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
-// import fs from 'fs';
-// import path from 'path';
-import orders from './orders.json';
-import users from './users.json';
-import { User } from './user.js';
+
+import { users, User } from './user';
+
+const orders = new Map();
 
 class Order {
   constructor(origin, destination, recipientPhone, initiatorId, comments) {
-    const lengthOrders = Object.keys(orders).length;
+    const lengthOrders = orders.size;
     this._id = lengthOrders + 1;
     this._origin = origin;
     this._destination = destination;
@@ -16,7 +15,12 @@ class Order {
     this._recipientPhone = recipientPhone;
     this._initiatorId = initiatorId;
     this._deliveryDate = '';
-    this._comments = comments;
+    if (typeof comments === 'undefined') {
+      /** saving null for undefined comment for validation */
+      this._comments = null;
+    } else {
+      this._comments = comments;
+    }
     this._status = 'Created';
     this._weight = 0;
   }
@@ -26,18 +30,10 @@ class Order {
      *  save the object to the file */
     const id_ = this.id.toString();
     // adding the file to the previous one
-    orders[id_] = this;
+    orders.set(id_, this.toJSON());
     // save to user
-    const user = users[this.initiatorId.toString()];
-    user.orders.push(this.toJSON());
-    users[this.initiatorId.toString()] = user;
-
-    // disable saving to the file
-    // const data = JSON.stringify(users, null, 2);
-    // const orderPath = path.join(__dirname, 'users.json');
-    // fs.writeFile(orderPath, data, (err) => {
-    // if (err) throw err;
-    // });
+    const user = users.get(this.initiatorId.toString());
+    user.orders = this;
   }
 
   remove() {
@@ -45,9 +41,9 @@ class Order {
      *  remove the object from the file */
     const id_ = this.id.toString();
 
-    if (orders[id_]) {
+    if (orders.delete(id_)) {
       // delete if exist
-      delete orders[id_];
+      console.log('delete');
     } else {
       throw new Error(`Order with id ${id_} was not found`);
     }
@@ -100,11 +96,14 @@ class Order {
   }
 
   get comments() {
-    return this.comments;
+    if (this._comments) {
+      return this._comments;
+    }
+    return '';
   }
 
   set comments(comments) {
-    this.comments = comments;
+    this._comments = comments;
   }
 
   get initiatorId() {
@@ -131,6 +130,14 @@ class Order {
       a[b.replace('_', '')] = this[b];
       return a;
     }, {});
+  }
+
+  static OrderMapToJson(allOrders) {
+    const OrderJson = {};
+    allOrders.forEach((v, k) => {
+      OrderJson[k] = v;
+    });
+    return OrderJson;
   }
 }
 

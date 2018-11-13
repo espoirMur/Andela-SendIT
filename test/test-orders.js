@@ -17,7 +17,7 @@ const returnAllOrders = (done) => {
     .end((error, response) => {
       response.should.have.status(200);
       response.type.should.be.eql('application/json');
-      response.body.should.be.eql(orders);
+      response.body.should.be.eql(Order.OrderMapToJson(orders));
       done();
     });
 };
@@ -127,7 +127,7 @@ const canGetOrderById = (done) => {
    *
    */
   const id = 1;
-  const order = orders[id.toString()];
+  const order = orders.get(id.toString());
   chai
     .request(app)
     .get(`/api/v1/parcels/${id}`)
@@ -168,7 +168,7 @@ const canCannotCancelOrder = (done) => {
    * in the future we need to allow only admin or a person who create order to implement
    */
   const id = 1;
-  const order = orders[id.toString()];
+  const order = orders.get(id.toString());
   order.status = 'delivered';
   chai
     .request(app)
@@ -188,7 +188,7 @@ const canCancelOrder = (done) => {
    * marked is not  delivered
    */
   const id = 1;
-  const order = orders[id.toString()];
+  const order = orders.get(id.toString());
   order.status = 'canceled';
   chai
     .request(app)

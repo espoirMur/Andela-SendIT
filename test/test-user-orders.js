@@ -16,7 +16,12 @@ const canGetUserOrderById = (done) => {
    */
   const id = 1;
   const user = users[id.toString()];
-  const orders = user.orders;
+  let orders;
+  if (user) {
+    orders = user.orders;
+  } else {
+    orders = {};
+  }
   chai
     .request(app)
     .get(`/api/v1/users/${id}/parcels`)
@@ -28,7 +33,7 @@ const canGetUserOrderById = (done) => {
         .property('message')
         .eql('user delivery orders  retrieved successfully');
       response.body.should.have.property('orders');
-      response.body.orders.length.should.be.eql(orders.length);
+      response.body.should.have.property('orders').eql(orders);
       done();
     });
 };

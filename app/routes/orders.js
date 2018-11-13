@@ -1,14 +1,15 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-else-return */
 import { Router } from 'express';
 import bodyParser from 'body-parser';
 import { orders, Order } from '../models/orders';
-import { User } from '../models/user';
 
 const router = Router();
 
 router.get('/', (req, res) => {
-  res.status(200).json(orders);
+  const allOders = Order.OrderMapToJson(orders);
+  res.status(200).json(allOders);
 });
 
 router.post('/', (req, res) => {
@@ -54,8 +55,10 @@ router.post('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const id = req.params.id;
-  const order = orders[id];
+  const order = orders.get(id);
   if (order) {
+    console.log('==================')
+    console.log(order.comments);
     return res.status(200).send({
       success: true,
       message: 'delivery order  retrieved successfully',
@@ -71,7 +74,7 @@ router.get('/:id', (req, res) => {
 
 router.put('/:id/cancel', (req, res) => {
   const id = req.params.id;
-  const order = orders[id];
+  const order = orders.get(id);
   if (order) {
     if (order.status !== 'delivered') {
       order.status = 'canceled';
