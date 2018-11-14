@@ -222,7 +222,7 @@ const canCannotCancelNoExistOrder = (done) => {
 };
 
 /*
-  * Test the /POST route for creating new book
+  * Test the /POST route for creating new order
   */
 describe('create orders', () => {
   it('create all orders', createOrder);

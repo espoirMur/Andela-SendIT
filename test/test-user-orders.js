@@ -4,6 +4,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { users } from '../app/models/user';
 import app from '../app/server';
+import { Order } from '../app/models/orders';
 
 /** setting up the test server */
 chai.use(chaiHttp);
@@ -198,19 +199,99 @@ const canCancelOrder = (done) => {
     });
 };
 
+const cannotChangeDestinationOrder = (done) => {
+  /**
+   * test if we cannot change destination a delivery order if the status
+   * marked as delivered
+   */
+  const userId = '1';
+  const user = users.get(userId);
+  const orderId = '1';
+  let order;
+  if (user) {
+    order = user.orders.get(orderId);
+  } else {
+    order = {};
+  }
+  order.status = 'delivered';
+  chai
+    .request(app)
+    .put(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .send(order.toJSON())
+    .end((request, response) => {
+      response.should.have.status(401);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have
+        .property('message')
+        .eql('cannot change the destination of  a delivered order');
+      done();
+    });
+};
+
+const canChangeDestinationOrder = (done) => {
+  /**
+   * test if we can change the destination if the status
+   * marked is not  delivered
+   */
+  const userId = '1';
+  const orderId = '1';
+  const destinationData = { destination: 'kamembe' };
+  chai
+    .request(app)
+    .put(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .send(destinationData)
+    .end((request, response) => {
+      response.should.have.status(200);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(true);
+      response.body.should.have
+        .property('message')
+        .eql('delivery order  destination has been changed');
+      done();
+    });
+};
+
+const cannotChangeDesinationOrderMissing = (done) => {
+  /**
+   * cannot update the destination if it missing in payload
+   *  */
+  const order = {};
+  const userId = '1';
+  const orderId = '1';
+  chai
+    .request(app)
+    .put(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .send(order)
+    .type('application/json')
+    .end((request, response) => {
+      response.should.have.status(400);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have.property('message').eql('new destination is required');
+      done();
+    });
+};
+
 // check if we can update a given order for a given user
 describe('get user orders by id', () => {
-  it('can get user orders by id', canGetUserOrders);
   it('cannot get user if  id invalid', cannotGetUserOrderById);
+  it('can get user orders by id', canGetUserOrders);
 });
 
-describe('can cancel a delivery order', () => {
+describe('can cancel or change', () => {
   it('can cancel if not delivered', canCancelOrder);
+  it('can change destination if not delivered', canChangeDestinationOrder);
+});
+
+describe('cannot change destination update if order delivered', () => {
+  it('cannot change destination if bad content', cannotChangeDesinationOrderMissing);
   it('cannot cancel a delivery order if it is delivered', canCannotCancelOrder);
+  it('cannot change destination if delivered', cannotChangeDestinationOrder);
 });
 
 describe('get one order for a given user', () => {
-  it('can get one order', canGetUserOrdersByid);
   it('cannot get order for if orderId not found', cannotGetUserByIdOrdersByid);
   it('cannot get order if userId not found', cannotGetUserOrdersByid);
+  it('can get one order', canGetUserOrdersByid);
 });
