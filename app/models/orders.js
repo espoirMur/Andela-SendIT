@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 
-import { users, User } from './user';
+import { users } from './user';
 
 const orders = new Map();
 
@@ -15,6 +15,7 @@ class Order {
     this._recipientPhone = recipientPhone;
     this._initiatorId = initiatorId;
     this._deliveryDate = '';
+    this._presentLocation = '';
     if (typeof comments === 'undefined') {
       /** saving null for undefined comment for validation */
       this._comments = null;
@@ -34,26 +35,6 @@ class Order {
     // save to user
     const user = users.get(this.initiatorId.toString());
     user.orders = this;
-  }
-
-  remove() {
-    /**
-     *  remove the object from the file */
-    const id_ = this.id.toString();
-
-    if (orders.delete(id_)) {
-      // delete if exist
-      console.log('delete');
-    } else {
-      throw new Error(`Order with id ${id_} was not found`);
-    }
-    /*
-    *const data = JSON.stringify(orders, null, 2);
-    * save
-    * const orderPath = path.join(__dirname, 'orders.json');
-    *fs.writeFile(orderPath, data, (err) => {
-     * if (err) throw err;
-    *}); */
   }
 
   get id() {
@@ -120,6 +101,14 @@ class Order {
 
   set weigh(weight) {
     this._weight = weight;
+  }
+
+  set presentLocation(presentLocation) {
+    this._presentLocation = presentLocation;
+  }
+
+  get presentLocation() {
+    return this._presentLocation;
   }
 
   toJSON() {

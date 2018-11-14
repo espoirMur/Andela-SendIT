@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-underscore-dangle */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
@@ -9,9 +10,9 @@ chai.use(chaiHttp);
 const should = chai.should();
 // close the sever after running our tests
 
-const canGetUserOrderById = (done) => {
+const canGetUserOrders = (done) => {
   /**
-   * test if we can get a delivery order by id
+   * test if we can all users delivery orders
    *
    */
   const id = 1;
@@ -56,8 +57,101 @@ const cannotGetUserOrderById = (done) => {
       done();
     });
 };
+// check if you can get a given order for a given user
 
+const canGetUserOrdersByid = (done) => {
+  /**
+   * test if we can retrieve a user order by it id
+   *
+   */
+  const userId = '1';
+  const user = users.get(userId);
+  const orderId = '1';
+  let order;
+  if (user) {
+    order = user.orders.get(orderId);
+    order = order.toJSON();
+  } else {
+    order = {};
+  }
+  chai
+    .request(app)
+    .get(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .end((request, response) => {
+      response.should.have.status(200);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(true);
+      response.body.should.have
+        .property('message')
+        .eql('user delivery order retrieved successfully');
+      response.body.should.have.property('order');
+      response.body.should.have.property('order').eql(order);
+      done();
+    });
+};
+
+const cannotGetUserOrdersByid = (done) => {
+  /**
+   * test if we 404 if an order is not found for the given user
+   *
+   */
+  const userId = '1';
+  const user = users.get(userId);
+  const orderId = '33332ER';
+  let order;
+  if (user) {
+    order = user.orders.get(orderId);
+  } else {
+    order = {};
+  }
+  chai
+    .request(app)
+    .get(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .end((request, response) => {
+      response.should.have.status(404);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have.property('message').eql(`order with  id ${orderId} does not exist`);
+      done();
+    });
+};
+
+const cannotGetUserByIdOrdersByid = (done) => {
+  /**
+   * test if we 404 if an order is the user id is invalid for this endpoint
+   *
+   */
+  const userId = '2222EEE';
+  const user = users.get(userId);
+  const orderId = '1';
+  let order;
+  if (user) {
+    order = user.orders.get(orderId);
+  } else {
+    order = {};
+  }
+  chai
+    .request(app)
+    .get(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .end((request, response) => {
+      response.should.have.status(404);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have
+        .property('message')
+        .equals(`user with id ${userId} cannot be found`);
+      done();
+    });
+};
+
+// check if we can update a given order for a given user
 describe('get user orders by id', () => {
-  it('can get user orders by id', canGetUserOrderById);
+  it('can get user orders by id', canGetUserOrders);
   it('cannot get user if  id invalid', cannotGetUserOrderById);
+});
+
+describe('get one order for a given user', () => {
+  it('can get one order', canGetUserOrdersByid);
+  it('cannot get order for if orderId not found', cannotGetUserByIdOrdersByid);
+  it('cannot get order if userId not found', cannotGetUserOrdersByid);
 });
