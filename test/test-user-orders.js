@@ -144,10 +144,69 @@ const cannotGetUserByIdOrdersByid = (done) => {
     });
 };
 
+const canCannotCancelOrder = (done) => {
+  /**
+   * test if we cannot cancel a delivery order if the status
+   * marked as delivered
+   */
+  const userId = '1';
+  const user = users.get(userId);
+  const orderId = '1';
+  let order;
+  if (user) {
+    order = user.orders.get(orderId);
+  } else {
+    order = {};
+  }
+  order.status = 'delivered';
+  chai
+    .request(app)
+    .put(`/api/v1/users/${userId}/parcels/${orderId}/cancel`)
+    .end((request, response) => {
+      response.should.have.status(401);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have.property('message').eql('cannot cancel a delivered order');
+      done();
+    });
+};
+
+const canCancelOrder = (done) => {
+  /**
+   * test if we cancel a delivery order if the status
+   * marked is not  delivered
+   */
+  const userId = '1';
+  const user = users[userId];
+  const orderId = '1';
+  let order;
+  if (user) {
+    order = user.orders.get(orderId);
+  } else {
+    order = {};
+  }
+  order.status = 'canceled';
+  chai
+    .request(app)
+    .put(`/api/v1/users/${userId}/parcels/${orderId}/cancel `)
+    .end((request, response) => {
+      response.should.have.status(200);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(true);
+      response.body.should.have.property('message').eql('delivery order has been canceled');
+      done();
+    });
+};
+
 // check if we can update a given order for a given user
 describe('get user orders by id', () => {
   it('can get user orders by id', canGetUserOrders);
   it('cannot get user if  id invalid', cannotGetUserOrderById);
+});
+
+describe('can cancel a delivery order', () => {
+  it('can cancel if not delivered', canCancelOrder);
+  it('cannot cancel a delivery order if it is delivered', canCannotCancelOrder);
 });
 
 describe('get one order for a given user', () => {

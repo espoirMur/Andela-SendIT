@@ -51,4 +51,37 @@ userOrdersRouter.get('/:userId/parcels/:orderId', (req, res) => {
   }
 });
 
+userOrdersRouter.put('/:userId/parcels/:orderId/cancel', (req, res) => {
+  const userId = req.params.userId;
+  const orderId = req.params.orderId;
+  const user = users.get(userId);
+  if (user) {
+    const order = user.orders.get(orderId);
+    if (order) {
+      if (order.status !== 'delivered') {
+        order.status = 'canceled';
+        return res.status(200).send({
+          success: true,
+          message: 'delivery order has been canceled',
+        });
+      } else {
+        return res.status(401).send({
+          success: false,
+          message: 'cannot cancel a delivered order',
+        });
+      }
+    } else {
+      return res.status(404).send({
+        success: false,
+        message: `delivery order with id ${id} does not exist`,
+      });
+    }
+  } else {
+    return res.status(404).send({
+      success: false,
+      message: `user with id ${userId} cannot be found`,
+    });
+  }
+});
+
 export default userOrdersRouter;

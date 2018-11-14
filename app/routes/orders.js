@@ -57,8 +57,6 @@ router.get('/:id', (req, res) => {
   const id = req.params.id;
   const order = orders.get(id);
   if (order) {
-    console.log('==================')
-    console.log(order.comments);
     return res.status(200).send({
       success: true,
       message: 'delivery order  retrieved successfully',
