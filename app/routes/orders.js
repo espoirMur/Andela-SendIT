@@ -1,14 +1,15 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-else-return */
 import { Router } from 'express';
 import bodyParser from 'body-parser';
 import { orders, Order } from '../models/orders';
-import { User } from '../models/user';
 
 const router = Router();
 
 router.get('/', (req, res) => {
-  res.status(200).json(orders);
+  const allOders = Order.OrderMapToJson(orders);
+  res.status(200).json(allOders);
 });
 
 router.post('/', (req, res) => {
@@ -54,7 +55,7 @@ router.post('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const id = req.params.id;
-  const order = orders[id];
+  const order = orders.get(id);
   if (order) {
     return res.status(200).send({
       success: true,
@@ -71,7 +72,7 @@ router.get('/:id', (req, res) => {
 
 router.put('/:id/cancel', (req, res) => {
   const id = req.params.id;
-  const order = orders[id];
+  const order = orders.get(id);
   if (order) {
     if (order.status !== 'delivered') {
       order.status = 'canceled';
@@ -83,6 +84,55 @@ router.put('/:id/cancel', (req, res) => {
       return res.status(401).send({
         success: false,
         message: 'cannot cancel a delivered order',
+      });
+    }
+  } else {
+    return res.status(404).send({
+      success: false,
+      message: `delivery order with id ${id} does not exist`,
+    });
+  }
+});
+
+router.put('/:id', (req, res) => {
+  const id = req.params.id;
+  const order = orders.get(id);
+  const presentLocation = req.body.presentLocation;
+  const status = req.body.status;
+  if (order) {
+    if (order.status !== 'delivered') {
+      if (typeof status === 'undefined' && typeof presentLocation === 'undefined') {
+        return res.status(400).send({
+          success: false,
+          message: 'either present location or status is required',
+        });
+      } else if (status && typeof presentLocation === 'undefined') {
+        order.status = status;
+        return res.status(200).send({
+          success: true,
+          message: 'delivery order status has been changed',
+          order,
+        });
+      } else if (presentLocation && typeof status === 'undefined') {
+        order.presentLocation = presentLocation;
+        return res.status(200).send({
+          success: true,
+          message: 'delivery order  present location has been changed',
+          order,
+        });
+      } else if (presentLocation && status) {
+        order.status = status;
+        order.presentLocation = presentLocation;
+        return res.status(200).send({
+          success: true,
+          message: 'order status and present location have been changed',
+          order,
+        });
+      }
+    } else {
+      return res.status(401).send({
+        success: false,
+        message: 'cannot change the present location or status  of  a delivered order',
       });
     }
   } else {
