@@ -98,31 +98,47 @@ router.put('/:id', (req, res) => {
   const id = req.params.id;
   const order = orders.get(id);
   const presentLocation = req.body.presentLocation;
-  if (presentLocation) {
-    if (order) {
-      if (order.status !== 'delivered') {
+  const status = req.body.status;
+  if (order) {
+    if (order.status !== 'delivered') {
+      if (typeof status === 'undefined' && typeof presentLocation === 'undefined') {
+        return res.status(400).send({
+          success: false,
+          message: 'either present location or status is required',
+        });
+      } else if (status && typeof presentLocation === 'undefined') {
+        order.status = status;
+        return res.status(200).send({
+          success: true,
+          message: 'delivery order status has been changed',
+          order,
+        });
+      } else if (presentLocation && typeof status === 'undefined') {
         order.presentLocation = presentLocation;
         return res.status(200).send({
           success: true,
           message: 'delivery order  present location has been changed',
           order,
         });
-      } else {
-        return res.status(401).send({
-          success: false,
-          message: 'cannot change the present location of  a delivered order',
+      } else if (presentLocation && status) {
+        order.status = status;
+        order.presentLocation = presentLocation;
+        return res.status(200).send({
+          success: true,
+          message: 'order status and present location have been changed',
+          order,
         });
       }
     } else {
-      return res.status(404).send({
+      return res.status(401).send({
         success: false,
-        message: `delivery order with id ${id} does not exist`,
+        message: 'cannot change the present location or status  of  a delivered order',
       });
     }
   } else {
-    return res.status(400).send({
+    return res.status(404).send({
       success: false,
-      message: 'present location is required',
+      message: `delivery order with id ${id} does not exist`,
     });
   }
 });

@@ -41,8 +41,16 @@ class Order {
     return this._id;
   }
 
+  set id(id) {
+    this._id = id;
+  }
+
   get origin() {
     return this._origin;
+  }
+
+  set origin(origin) {
+    this._origin = origin;
   }
 
   get destination() {
@@ -92,14 +100,14 @@ class Order {
   }
 
   set initiatorId(initiatorId) {
-    throw new Error(`cannot change initiator ${this._initiatorId} to ${initiatorId}`);
+    this._initiatorId = initiatorId;
   }
 
-  get weigh() {
+  get weight() {
     return this._weight;
   }
 
-  set weigh(weight) {
+  set weight(weight) {
     this._weight = weight;
   }
 

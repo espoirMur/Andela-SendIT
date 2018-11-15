@@ -239,7 +239,7 @@ const cannotChangepresentLocationDelivered = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('cannot change the present location of  a delivered order');
+        .eql('cannot change the present location or status  of  a delivered order');
       done();
     });
 };
@@ -270,18 +270,45 @@ const cannotChangePresentLocationOrderMissing = (done) => {
   /**
    * cannot update the present location if it missing in payload
    *  */
-  const order = {};
-  const orderId = '1';
+  const order = new Order();
+
+  order.origin = 'Goma';
+  order.weight = 500;
+  order.presentLocation = undefined;
+  order.initiatorId = 1;
+  order.status = undefined;
+  order.save();
   chai
     .request(app)
-    .put(`/api/v1/parcels/${orderId}`)
-    .send(order)
+    .put(`/api/v1/parcels/${order.id}`)
+    .send(order.toJSON())
     .type('application/json')
     .end((request, response) => {
       response.should.have.status(400);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql('present location is required');
+      response.body.should.have
+        .property('message')
+        .eql('either present location or status is required');
+      done();
+    });
+};
+
+const canChangeStatusOrder = (done) => {
+  /**
+   * test if we can change the status of an order
+   */
+  const orderId = '1';
+  const statusData = { status: 'en route for delivery' };
+  chai
+    .request(app)
+    .put(`/api/v1/parcels/${orderId}`)
+    .send(statusData)
+    .end((request, response) => {
+      response.should.have.status(200);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(true);
+      response.body.should.have.property('message').eql('delivery order status has been changed');
       done();
     });
 };
@@ -306,14 +333,15 @@ describe('get order by id', () => {
 describe('can change cancel, update parcel', () => {
   it('can cancel order by id', canCancelOrder);
   it('can change present location', canChangepresentLocation);
+  it('can change status of a parcel delivery', canChangeStatusOrder);
 });
 
 // test cancel order
-describe('can cancel order', () => {
+describe('cannot update order', () => {
   it('cannot  change present location if delivered', cannotChangepresentLocationDelivered);
   it('cannot cancel if delivered', canCannotCancelOrder);
-  it('cannot change if order missing ', cannotChangePresentLocationOrderMissing);
   it('cannot cancel non existant order', canCannotCancelNoExistOrder);
+  it('cannot change if present location is missing ', cannotChangePresentLocationOrderMissing);
 });
 
 it('return all orders as json', returnAllOrders);
