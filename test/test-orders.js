@@ -221,6 +221,71 @@ const canCannotCancelNoExistOrder = (done) => {
     });
 };
 
+const cannotChangepresentLocationDelivered = (done) => {
+  /**
+   * test if we cannot change present location a delivery order if the status
+   * marked as delivered
+   */
+  const orderId = '1';
+  const order = orders.get(orderId);
+  order.status = 'delivered';
+  chai
+    .request(app)
+    .put(`/api/v1/parcels/${orderId}`)
+    .send(order)
+    .end((request, response) => {
+      response.should.have.status(401);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have
+        .property('message')
+        .eql('cannot change the present location of  a delivered order');
+      done();
+    });
+};
+
+const canChangepresentLocation = (done) => {
+  /**
+   * test if we can change the present location if the status
+   * marked is not  delivered
+   */
+  const orderId = '1';
+  const presentLocationData = { presentLocation: 'kamembe' };
+  chai
+    .request(app)
+    .put(`/api/v1/parcels/${orderId}`)
+    .send(presentLocationData)
+    .end((request, response) => {
+      response.should.have.status(200);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(true);
+      response.body.should.have
+        .property('message')
+        .eql('delivery order  present location has been changed');
+      done();
+    });
+};
+
+const cannotChangePresentLocationOrderMissing = (done) => {
+  /**
+   * cannot update the present location if it missing in payload
+   *  */
+  const order = {};
+  const orderId = '1';
+  chai
+    .request(app)
+    .put(`/api/v1/parcels/${orderId}`)
+    .send(order)
+    .type('application/json')
+    .end((request, response) => {
+      response.should.have.status(400);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have.property('message').eql('present location is required');
+      done();
+    });
+};
+
 /*
   * Test the /POST route for creating new order
   */
@@ -238,10 +303,16 @@ describe('get order by id', () => {
   it('cannot get order if  id invalid', cannotGetOrderById);
 });
 
+describe('can change cancel, update parcel', () => {
+  it('can cancel order by id', canCancelOrder);
+  it('can change present location', canChangepresentLocation);
+});
+
 // test cancel order
 describe('can cancel order', () => {
-  it('can cancel order by id', canCancelOrder);
+  it('cannot  change present location if delivered', cannotChangepresentLocationDelivered);
   it('cannot cancel if delivered', canCannotCancelOrder);
+  it('cannot change if order missing ', cannotChangePresentLocationOrderMissing);
   it('cannot cancel non existant order', canCannotCancelNoExistOrder);
 });
 

@@ -94,4 +94,37 @@ router.put('/:id/cancel', (req, res) => {
   }
 });
 
+router.put('/:id', (req, res) => {
+  const id = req.params.id;
+  const order = orders.get(id);
+  const presentLocation = req.body.presentLocation;
+  if (presentLocation) {
+    if (order) {
+      if (order.status !== 'delivered') {
+        order.presentLocation = presentLocation;
+        return res.status(200).send({
+          success: true,
+          message: 'delivery order  present location has been changed',
+          order,
+        });
+      } else {
+        return res.status(401).send({
+          success: false,
+          message: 'cannot change the present location of  a delivered order',
+        });
+      }
+    } else {
+      return res.status(404).send({
+        success: false,
+        message: `delivery order with id ${id} does not exist`,
+      });
+    }
+  } else {
+    return res.status(400).send({
+      success: false,
+      message: 'present location is required',
+    });
+  }
+});
+
 export default router;
