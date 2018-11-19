@@ -7,7 +7,7 @@ import app from '../app/server';
 chai.use(chaiHttp);
 const should = chai.should();
 
-const returnAllOrders = (done) => {
+const returnAllOrders = done => {
   /**
    * test if We  can return all orders in json format
    */
@@ -22,11 +22,17 @@ const returnAllOrders = (done) => {
     });
 };
 
-const createOrder = (done) => {
+const createOrder = done => {
   /**
    * test if we can create a new order
    * */
-  const order = new Order('Kigali', 'Gisenyi', '2507800000', 1, 'call the recipient');
+  const order = new Order(
+    'Kigali',
+    'Gisenyi',
+    '2507800000',
+    1,
+    'call the recipient'
+  );
   chai
     .request(app)
     .post('/api/v1/parcels')
@@ -36,12 +42,14 @@ const createOrder = (done) => {
       response.should.have.status(201);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(true);
-      response.body.should.have.property('message').eql('delivery order successfully created!');
+      response.body.should.have
+        .property('message')
+        .eql('delivery order successfully created!');
       done();
     });
 };
 
-const cannotCreateOrderOrigin = (done) => {
+const cannotCreateOrderOrigin = done => {
   /**
    * cannot create an order if  pick-up location is missing
    *  */
@@ -56,12 +64,14 @@ const cannotCreateOrderOrigin = (done) => {
       response.should.have.status(400);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql('pickup location is required');
+      response.body.should.have
+        .property('message')
+        .eql('pickup location is required');
       done();
     });
 };
 
-const cannotCreateOrderDestination = (done) => {
+const cannotCreateOrderDestination = done => {
   /**
    * cannot create an order if  destination is missing
    *  */
@@ -76,12 +86,14 @@ const cannotCreateOrderDestination = (done) => {
       response.should.have.status(400);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql('destination is required');
+      response.body.should.have
+        .property('message')
+        .eql('destination is required');
       done();
     });
 };
 
-const cannotCreateOrderRecipientPhone = (done) => {
+const cannotCreateOrderRecipientPhone = done => {
   /**
    * cannot create an order if  destination is missing
    *  */
@@ -96,12 +108,14 @@ const cannotCreateOrderRecipientPhone = (done) => {
       response.should.have.status(400);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql('recipient phone is required');
+      response.body.should.have
+        .property('message')
+        .eql('recipient phone is required');
       done();
     });
 };
 
-const cannotCreateOrderBadContent = (done) => {
+const cannotCreateOrderBadContent = done => {
   /**
    * should return 406 if  the content type is not json
    *  */
@@ -121,7 +135,7 @@ const cannotCreateOrderBadContent = (done) => {
     });
 };
 
-const canGetOrderById = (done) => {
+const canGetOrderById = done => {
   /**
    * test if we can get a delivery order by id
    *
@@ -135,13 +149,15 @@ const canGetOrderById = (done) => {
       response.should.have.status(200);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(true);
-      response.body.should.have.property('message').eql('delivery order  retrieved successfully');
+      response.body.should.have
+        .property('message')
+        .eql('delivery order  retrieved successfully');
       response.body.should.have.property('order').eql(order);
       done();
     });
 };
 
-const cannotGetOrderById = (done) => {
+const cannotGetOrderById = done => {
   /**
    * test if we can return 404 if the id is invalid and not found
    *
@@ -161,7 +177,7 @@ const cannotGetOrderById = (done) => {
     });
 };
 
-const canCannotCancelOrder = (done) => {
+const canCannotCancelOrder = done => {
   /**
    * test if we cannot cancel a delivery order if the status
    * marked as delivered
@@ -177,12 +193,14 @@ const canCannotCancelOrder = (done) => {
       response.should.have.status(401);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql('cannot cancel a delivered order');
+      response.body.should.have
+        .property('message')
+        .eql('cannot cancel a delivered order');
       done();
     });
 };
 
-const canCancelOrder = (done) => {
+const canCancelOrder = done => {
   /**
    * test if we cancel a delivery order if the status
    * marked is not  delivered
@@ -197,12 +215,14 @@ const canCancelOrder = (done) => {
       response.should.have.status(200);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(true);
-      response.body.should.have.property('message').eql('delivery order has been canceled');
+      response.body.should.have
+        .property('message')
+        .eql('delivery order has been canceled');
       done();
     });
 };
 
-const canCannotCancelNoExistOrder = (done) => {
+const canCannotCancelNoExistOrder = done => {
   /**
    * if we cannot cancel and order if it doesn't exist
    */
@@ -221,7 +241,7 @@ const canCannotCancelNoExistOrder = (done) => {
     });
 };
 
-const cannotChangepresentLocationDelivered = (done) => {
+const cannotChangepresentLocationDelivered = done => {
   /**
    * test if we cannot change present location a delivery order if the status
    * marked as delivered
@@ -239,12 +259,14 @@ const cannotChangepresentLocationDelivered = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('cannot change the present location or status  of  a delivered order');
+        .eql(
+          'cannot change the present location or status  of  a delivered order'
+        );
       done();
     });
 };
 
-const canChangepresentLocation = (done) => {
+const canChangepresentLocation = done => {
   /**
    * test if we can change the present location if the status
    * marked is not  delivered
@@ -266,7 +288,7 @@ const canChangepresentLocation = (done) => {
     });
 };
 
-const cannotChangePresentLocationOrderMissing = (done) => {
+const cannotChangePresentLocationOrderMissing = done => {
   /**
    * cannot update the present location if it missing in payload
    *  */
@@ -294,7 +316,7 @@ const cannotChangePresentLocationOrderMissing = (done) => {
     });
 };
 
-const canChangeStatusOrder = (done) => {
+const canChangeStatusOrder = done => {
   /**
    * test if we can change the status of an order
    */
@@ -308,20 +330,54 @@ const canChangeStatusOrder = (done) => {
       response.should.have.status(200);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(true);
-      response.body.should.have.property('message').eql('delivery order status has been changed');
+      response.body.should.have
+        .property('message')
+        .eql('delivery order status has been changed');
+      done();
+    });
+};
+
+const canChangeStatusOrderDate = done => {
+  /**
+   * test if when updating the status of an order to delivered the date is changed and it's not empty
+   */
+  const orderId = '1';
+  const statusData = { status: 'delivered' };
+  chai
+    .request(app)
+    .put(`/api/v1/parcels/${orderId}`)
+    .send(statusData)
+    .end((request, response) => {
+      console.log(response.body.order);
+      response.should.have.status(200);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(true);
+      response.body.should.have
+        .property('message')
+        .eql('delivery order status has been changed');
+      response.body.order.deliveryDate.should.be.a('string');
       done();
     });
 };
 
 /*
-  * Test the /POST route for creating new order
-  */
+ * Test the /POST route for creating new order
+ */
 describe('create orders', () => {
   it('create all orders', createOrder);
-  it('cannot create order if  pickup location missing', cannotCreateOrderOrigin);
+  it(
+    'cannot create order if  pickup location missing',
+    cannotCreateOrderOrigin
+  );
   it('return 400 if content type is not json', cannotCreateOrderBadContent);
-  it('cannot create order if destination is missing ', cannotCreateOrderDestination);
-  it('cannot create order if recipient phone is missing', cannotCreateOrderRecipientPhone);
+  it(
+    'cannot create order if destination is missing ',
+    cannotCreateOrderDestination
+  );
+  it(
+    'cannot create order if recipient phone is missing',
+    cannotCreateOrderRecipientPhone
+  );
 });
 
 // test get order
@@ -334,14 +390,24 @@ describe('can change cancel, update parcel', () => {
   it('can cancel order by id', canCancelOrder);
   it('can change present location', canChangepresentLocation);
   it('can change status of a parcel delivery', canChangeStatusOrder);
+  it(
+    'test date is update when status is changed to delivered',
+    canChangeStatusOrderDate
+  );
 });
 
 // test cancel order
 describe('cannot update order', () => {
-  it('cannot  change present location if delivered', cannotChangepresentLocationDelivered);
+  it(
+    'cannot  change present location if delivered',
+    cannotChangepresentLocationDelivered
+  );
   it('cannot cancel if delivered', canCannotCancelOrder);
   it('cannot cancel non existant order', canCannotCancelNoExistOrder);
-  it('cannot change if present location is missing ', cannotChangePresentLocationOrderMissing);
+  it(
+    'cannot change if present location is missing ',
+    cannotChangePresentLocationOrderMissing
+  );
 });
 
 it('return all orders as json', returnAllOrders);
