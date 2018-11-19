@@ -224,8 +224,7 @@ const canCancelOrder = done => {
 const canCannotCancelOrderCanceled = done => {
   /**
    * test if we cannot cancel a delivery order if the status
-   * cannot cancel an already canceled order
-   *
+   * cannot cancel an already canceled orders
    */
   const id = 1;
   const order = orders.get(id.toString());
