@@ -11,12 +11,10 @@ class Order {
     this._id = lengthOrders + 1;
     this._origin = origin;
     this._destination = destination;
-    this._orderDate = Date.now();
+    this._orderDate = new Date().toJSON();
     this._recipientPhone = recipientPhone;
     this._initiatorId = initiatorId;
-    this._deliveryDate = '';
-    this._presentLocation = '';
-    if (typeof comments === 'undefined') {
+    if (typeof this._comments === 'undefined') {
       /** saving null for undefined comment for validation */
       this._comments = null;
     } else {
@@ -68,7 +66,11 @@ class Order {
 
   set status(status) {
     // only changed if not delivered
-    this._status = status;
+    if (this._status !== 'delivered') {
+      this._status = status;
+    } else {
+      // do nothing logic is handle in the api
+    }
   }
 
   get orderDate() {
@@ -85,10 +87,12 @@ class Order {
   }
 
   get comments() {
-    if (this._comments) {
-      return this._comments;
+    if (typeof this._comments === 'undefined') {
+      /** saving null for undefined comment for validation */
+      this._comments = null;
+    } else {
+      this._comments = comments;
     }
-    return '';
   }
 
   set comments(comments) {

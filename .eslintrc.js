@@ -1,5 +1,5 @@
 module.exports = {
-  extends: "airbnb-base",
+  extends: 'airbnb-base',
   globals: {
     /* MOCHA */
     describe: false,
@@ -7,6 +7,10 @@ module.exports = {
     before: false,
     beforeEach: false,
     after: false,
-    afterEach: false
-  }
+    afterEach: false,
+  },
+  plugins: ['prettier'],
+  rules: {
+    'prettier/prettier': 'error',
+  },
 };

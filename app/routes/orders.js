@@ -43,7 +43,7 @@ router.post('/', (req, res) => {
     orderDetails.destination,
     orderDetails.recipientPhone,
     orderDetails.initiatorId,
-    orderDetails.comment,
+    orderDetails.comment
   );
   order.save();
   return res.status(201).send({
@@ -101,13 +101,19 @@ router.put('/:id', (req, res) => {
   const status = req.body.status;
   if (order) {
     if (order.status !== 'delivered') {
-      if (typeof status === 'undefined' && typeof presentLocation === 'undefined') {
+      if (
+        typeof status === 'undefined' &&
+        typeof presentLocation === 'undefined'
+      ) {
         return res.status(400).send({
           success: false,
           message: 'either present location or status is required',
         });
       } else if (status && typeof presentLocation === 'undefined') {
         order.status = status;
+        if (status === 'delivered') {
+          order.deliveryDate = new Date().toJSON();
+        }
         return res.status(200).send({
           success: true,
           message: 'delivery order status has been changed',
@@ -132,7 +138,8 @@ router.put('/:id', (req, res) => {
     } else {
       return res.status(401).send({
         success: false,
-        message: 'cannot change the present location or status  of  a delivered order',
+        message:
+          'cannot change the present location or status  of  a delivered order',
       });
     }
   } else {
