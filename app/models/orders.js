@@ -14,8 +14,6 @@ class Order {
     this._orderDate = new Date().toJSON();
     this._recipientPhone = recipientPhone;
     this._initiatorId = initiatorId;
-    this._deliveryDate = null;
-    this._presentLocation = null;
     if (typeof this._comments === 'undefined') {
       /** saving null for undefined comment for validation */
       this._comments = null;
