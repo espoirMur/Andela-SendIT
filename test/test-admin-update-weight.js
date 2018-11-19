@@ -111,7 +111,7 @@ const canCannotUpdateWeightNoExistOrder = done => {
     });
 };
 
-describe('update weight of a parel', () => {
+describe.skip('update weight of a parel', () => {
   before('create an order', createNewOrder);
   it('can update order weight ', canChangeOrderWeight);
   it('cannot change if invalid payload', cannotChangeOrderWeightInvalidData);

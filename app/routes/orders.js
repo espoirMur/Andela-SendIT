@@ -75,11 +75,18 @@ router.put('/:id/cancel', (req, res) => {
   const order = orders.get(id);
   if (order) {
     if (order.status !== 'delivered') {
-      order.status = 'canceled';
-      return res.status(200).send({
-        success: true,
-        message: 'delivery order has been canceled',
-      });
+      if (order.status === 'canceled') {
+        return res.status(401).send({
+          success: false,
+          message: 'order has already been canceled',
+        });
+      } else {
+        order.status = 'canceled';
+        return res.status(200).send({
+          success: true,
+          message: 'delivery order has been canceled',
+        });
+      }
     } else {
       return res.status(401).send({
         success: false,

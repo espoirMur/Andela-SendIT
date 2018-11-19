@@ -207,7 +207,6 @@ const canCancelOrder = done => {
    */
   const id = 1;
   const order = orders.get(id.toString());
-  order.status = 'canceled';
   chai
     .request(app)
     .put(`/api/v1/parcels/${id}/cancel `)
@@ -218,6 +217,29 @@ const canCancelOrder = done => {
       response.body.should.have
         .property('message')
         .eql('delivery order has been canceled');
+      done();
+    });
+};
+
+const canCannotCancelOrderCanceled = done => {
+  /**
+   * test if we cannot cancel a delivery order if the status
+   * cannot cancel an already canceled order
+   *
+   */
+  const id = 1;
+  const order = orders.get(id.toString());
+  order.status = 'canceled';
+  chai
+    .request(app)
+    .put(`/api/v1/parcels/${id}/cancel`)
+    .end((request, response) => {
+      response.should.have.status(401);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(false);
+      response.body.should.have
+        .property('message')
+        .eql('order has already been canceled');
       done();
     });
 };
@@ -394,6 +416,7 @@ describe('can change cancel, update parcel', () => {
     'test date is update when status is changed to delivered',
     canChangeStatusOrderDate
   );
+  it('cannot cancel if already canceled', canCannotCancelOrderCanceled);
 });
 
 // test cancel order
