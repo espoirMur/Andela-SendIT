@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import bodyParser from 'body-parser';
 import { users, User } from '../models/user';
-import { registerSchema } from '../models/userSchemas';
+import { registerSchema, loginSchema } from '../models/userSchemas';
 import { celebrate } from 'celebrate';
 import { encodeToken, decodeToken } from '../utils/authentification';
 
@@ -33,5 +33,35 @@ authRouter.post('/signup', celebrate({ body: registerSchema }), (req, res) => {
     });
   }
 });
+
+authRouter.post(
+  '/signin',
+  celebrate({ body: loginSchema }),
+  (req, res, next) => {
+    const { email, password } = req.body;
+    const user = User.findByEmail(email);
+    if (typeof user !== 'undefined') {
+      validpassword = user.verifyPassword();
+      if (validpassword) {
+        const token = encodeToken(user.toJSON());
+        res.status(200).send({
+          token: token,
+          success: true,
+          userId: user.id,
+        });
+      } else {
+        res.status(401).send({
+          success: false,
+          message: 'Invalid credentials',
+        });
+      }
+    } else {
+      res.status(404).send({
+        success: false,
+        message: 'User not found , please create an account',
+      });
+    }
+  }
+);
 
 export default authRouter;

@@ -20,4 +20,13 @@ const registerSchema = {
     ),
 };
 
-export { registerSchema };
+const loginSchema = {
+  email: Joi.string()
+    .email()
+    .required()
+    .error(new Error('please provide a valid email')),
+  password: Joi.string()
+    .min(6)
+    .error(new Error('the password should have at least 7 characters')),
+};
+export { registerSchema, loginSchema };
