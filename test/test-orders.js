@@ -368,6 +368,30 @@ const canChangeStatusOrder = done => {
     });
 };
 
+const canChangeStatusLocationOrder = done => {
+  /**
+   * test if we can change both the status and present location of an order
+   */
+  const orderId = '1';
+  const orderData = {
+    status: 'en route for delivery',
+    presentLocation: 'Kamembe',
+  };
+  chai
+    .request(app)
+    .put(`/api/v1/parcels/${orderId}`)
+    .send(orderData)
+    .end((request, response) => {
+      response.should.have.status(200);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(true);
+      response.body.should.have
+        .property('message')
+        .eql('order status and present location have been changed');
+      done();
+    });
+};
+
 const canChangeStatusOrderDate = done => {
   /**
    * test if when updating the status of an order to delivered the date is changed and it's not empty
@@ -421,11 +445,16 @@ describe('get order by id', () => {
 describe('can change cancel, update parcel', () => {
   it('can cancel order by id', canCancelOrder);
   it('can change present location', canChangepresentLocation);
+  it(
+    'can update location and status at the same time',
+    canChangeStatusLocationOrder
+  );
   it('can change status of a parcel delivery', canChangeStatusOrder);
   it(
     'test date is update when status is changed to delivered',
     canChangeStatusOrderDate
   );
+
   it('cannot cancel if already canceled', canCannotCancelOrderCanceled);
 });
 
