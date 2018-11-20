@@ -6,6 +6,7 @@ import app from '../app/server';
 /** setting up the test server */
 chai.use(chaiHttp);
 const should = chai.should();
+const expect = chai.expect;
 
 const returnAllOrders = done => {
   /**
@@ -142,17 +143,26 @@ const canGetOrderById = done => {
    */
   const id = 1;
   const order = orders.get(id.toString());
+  //new Order('Kigali', 'Gisenyi', '2507800000', 1, 'call the recipient');
   chai
     .request(app)
     .get(`/api/v1/parcels/${id}`)
     .end((request, response) => {
+      const receivedOrder = response.body.order;
+      console.log(receivedOrder);
       response.should.have.status(200);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
         .eql('delivery order  retrieved successfully');
-      response.body.should.have.property('order').eql(order);
+      receivedOrder.origin.should.be.eql(order.origin);
+      receivedOrder.destination.should.be.eql(order.destination);
+      receivedOrder.recipientPhone.should.be.eql(order.recipientPhone);
+      receivedOrder.initiatorId.should.be.eql(order.initiatorId);
+      receivedOrder.orderDate.should.be.eql(order.orderDate);
+      receivedOrder.id.should.be.eql(order.id);
+      expect(typeof order.deliveryDate).to.be.eql('undefined');
       done();
     });
 };
@@ -362,11 +372,12 @@ const canChangeStatusOrderDate = done => {
   /**
    * test if when updating the status of an order to delivered the date is changed and it's not empty
    */
-  const orderId = '1';
+  const order = orders.get('1');
   const statusData = { status: 'delivered' };
+  order.deliveryDate = new Date().toJSON();
   chai
     .request(app)
-    .put(`/api/v1/parcels/${orderId}`)
+    .put(`/api/v1/parcels/${order.id}`)
     .send(statusData)
     .end((request, response) => {
       console.log(response.body.order);
@@ -376,7 +387,7 @@ const canChangeStatusOrderDate = done => {
       response.body.should.have
         .property('message')
         .eql('delivery order status has been changed');
-      response.body.order.deliveryDate.should.be.a('string');
+      response.body.order.deliveryDate.should.be.eql(order.deliveryDate);
       done();
     });
 };

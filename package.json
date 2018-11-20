@@ -44,6 +44,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
     "codeclimate-test-reporter": "^0.5.1",
+    "codecov": "^3.1.0",
     "coveralls": "^3.0.2",
     "eslint": "^5.8.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -69,7 +70,9 @@
       "coverage/**/*.js",
       "UI/",
       "config.js",
-      "config.sample.js"
+      "config.sample.js",
+      "test/*",
+      "app/utils/"
     ]
   }
 }
