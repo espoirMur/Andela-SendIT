@@ -11,7 +11,7 @@ class User {
     this._email = email;
     this._phone = phone;
     this._isAdmin = false;
-    this._registrationDate = Date.now();
+    this._registrationDate = new Date().toJSON();
     this._orders = new Map();
     this.password = password;
   }

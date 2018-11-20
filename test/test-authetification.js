@@ -40,7 +40,7 @@ const cannotCreateIfEmailInvalid = done => {
     .post('/auth/signup')
     .send(user)
     .end((request, response) => {
-      response.should.have.status(401);
+      response.should.have.status(400);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
       response.body.should.have
@@ -62,7 +62,7 @@ const cannotCreateIfpasswordInvalid = done => {
     .post('/auth/signup')
     .send(user)
     .end((request, response) => {
-      response.should.have.status(401);
+      response.should.have.status(400);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
       response.body.should.have
@@ -75,7 +75,7 @@ const cannotCreateIfpasswordInvalid = done => {
 const cannotCreateIfPhoneInvalid = done => {
   const user = {
     name: 'espoir',
-    email: 'aninvalidemail',
+    email: 'test@test.com',
     phone: '+25',
     password: 'a random passord',
   };
@@ -84,7 +84,7 @@ const cannotCreateIfPhoneInvalid = done => {
     .post('/auth/signup')
     .send(user)
     .end((request, response) => {
-      response.should.have.status(401);
+      response.should.have.status(400);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
       response.body.should.have
@@ -106,7 +106,7 @@ const cannotCreateIfnameInvalid = done => {
     .post('/auth/signup')
     .send(user)
     .end((request, response, error) => {
-      response.should.have.status(401);
+      response.should.have.status(400);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
       response.body.should.have
@@ -117,12 +117,12 @@ const cannotCreateIfnameInvalid = done => {
 };
 
 const canRegisterUser = done => {
-  const user = new User(
-    'Espoir',
-    'espy_mur@gmail.com',
-    '25078000',
-    'myPassword1234'
-  );
+  const user = {
+    name: 'Espoir',
+    email: 'espy_mur@gmail.com',
+    phone: '2507800',
+    password: 'a new password',
+  };
   chai
     .request(app)
     .post('/auth/signup')
@@ -143,12 +143,13 @@ const canRegisterUser = done => {
 };
 
 const cannotRegisterEmailTaken = done => {
-  const user = new User(
-    'Espoir',
-    'espy_mur@gmail.com',
-    '25078000',
-    'myPassword1234'
-  );
+  const user = {
+    name: 'Espoir',
+    email: 'espy_mur@gmail.com',
+    phone: '250780077466',
+    password: 'a new password',
+  };
+
   chai
     .request(app)
     .post('/auth/signup')
@@ -180,19 +181,10 @@ it('should login a user and send valid token and check if the token is okey', ()
 // logout
 
 describe('cannot create user if invalid content', () => {
-  it.skip(
-    'should return 400 if the name is invalid',
-    cannotCreateIfnameInvalid
-  );
-  it.skip(
-    'should return 400 if the phone is invalid',
-    cannotCreateIfPhoneInvalid
-  );
-  it.skip(
-    'should return 400 if the email is invalid',
-    cannotCreateIfEmailInvalid
-  );
-  it.skip(
+  it('should return 400 if the name is invalid', cannotCreateIfnameInvalid);
+  it('should return 400 if the phone is invalid', cannotCreateIfPhoneInvalid);
+  it('should return 400 if the email is invalid', cannotCreateIfEmailInvalid);
+  it(
     'should return 400 if the password is invalid',
     cannotCreateIfpasswordInvalid
   );

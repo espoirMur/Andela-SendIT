@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import bodyParser from 'body-parser';
 import { users, User } from '../models/user';
-import { userSchema } from '../models/userSchemas';
+import { registerSchema } from '../models/userSchemas';
 import { celebrate } from 'celebrate';
 import { encodeToken, decodeToken } from '../utils/authentification';
 
 const authRouter = Router();
 
-//celebrate({  body: userSchema,})
-authRouter.post('/signup', (req, res) => {
+//
+authRouter.post('/signup', celebrate({ body: registerSchema }), (req, res) => {
   // load user details from body
   //  check if the email is already taken and return an error if
   const { name, email, phone, password } = req.body;

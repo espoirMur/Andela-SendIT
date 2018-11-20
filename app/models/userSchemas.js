@@ -1,11 +1,23 @@
 import { Joi } from 'celebrate';
 
-const userSchema = {
-  name: Joi.string().required(),
-  password: Joi.string().min(6),
+const registerSchema = {
+  name: Joi.string()
+    .required()
+    .error(new Error('please provide a valid name')),
+  password: Joi.string()
+    .min(6)
+    .error(new Error('the password should have at least 7 characters')),
   email: Joi.string()
     .email()
-    .required(),
+    .required()
+    .error(new Error('please provide a valid email')),
+  phone: Joi.string()
+    .min(10)
+    .max(15)
+    .required()
+    .error(
+      new Error('Invalid phone number , please put a number staring with +250')
+    ),
 };
 
-export default userSchema;
+export { registerSchema };
