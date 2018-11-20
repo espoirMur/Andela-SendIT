@@ -1,7 +1,9 @@
+import bcrypt from 'bcryptjs';
+
 const users = new Map();
 /* eslint-disable no-underscore-dangle */
 class User {
-  constructor(name, email, phone) {
+  constructor(name, email, phone, password = 'an empty ') {
     const lengthUsers = users.size;
     this._id = lengthUsers + 1;
     this._name = name;
@@ -10,9 +12,8 @@ class User {
     this._isAdmin = false;
     this._registrationDate = Date.now();
     this._orders = new Map();
-    this._password = 'Hard to guess string';
+    this.password = password;
   }
-
   get id() {
     return this._id;
   }
@@ -25,6 +26,16 @@ class User {
     this._name = name;
   }
 
+  set password(password) {
+    const salt = bcrypt.genSaltSync();
+    const passwordHash = bcrypt.hashSync(password, salt);
+    this._password = passwordHash;
+  }
+
+  get password() {
+    // change with sql query
+    return this._password;
+  }
   get email() {
     return this._email;
   }
@@ -63,6 +74,14 @@ class User {
       a[b.replace('_', '')] = this[b];
       return a;
     }, {});
+  }
+
+  save() {
+    /**
+     *  should save the user to the db */
+    const id_ = this.id.toString();
+    users.set(id_, this.toJSON());
+    return user.id;
   }
 }
 
