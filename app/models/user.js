@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import userOrdersRouter from '../routes/user-orders';
 
 const users = new Map();
 /* eslint-disable no-underscore-dangle */
@@ -74,6 +75,16 @@ class User {
       a[b.replace('_', '')] = this[b];
       return a;
     }, {});
+  }
+
+  static findByEmail(email) {
+    // return true if thebuser with email is already exist
+    // should query the database and check if i can find user with email
+    if (users.get(email)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   save() {
