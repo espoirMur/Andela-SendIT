@@ -43,11 +43,11 @@
                     <thead>
                       <tr>
                         <th scope="col">Order Id</th>
-                        <th scope="col">Order Date</th>
+                        <th scope="col">Date</th>
                         <th scope="col">Price</th>
-                        <th scope="col">Pick Up Location</th>
+                        <th scope="col">origin</th>
                         <th scope="col">Destination</th>
-                        <th scope="col">Tracking Number</th>
+                        <th scope="col">Tracking</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                       </tr>
@@ -55,31 +55,31 @@
                     <tbody>
                       <tr data-id="01">
                         <td data-label="Order Id">Espy-001</td>
-                        <td data-label="Order Date">04/01/2016</td>
+                        <td data-label="Date">04/01/2016</td>
                         <td data-label="Price">$1,190</td>
-                        <td data-label="Pick Up Location"> Gisozi </td>
+                        <td data-label="origin"> Gisozi </td>
                         <td data-label="Destination"> Gisenyi </td>
-                        <td data-label="Tracking Number"> RBOOOOVFR</td>
+                        <td data-label="Tracking"> RBOOOO</td>
                         <td data-label="Status"> Pending</td>
-                        <td data-label="Action"><span class="edit-order"></span> <span class="delete-order"></span> </td>
+                        <td data-label="Action"><button class="edit-order">edit</button> <button class="delete-order">delete</button> </td>
                       </tr>
                       <tr data-id="02">
                             <td scope="row" data-label="Order Id">Espy-001</td>
-                            <td data-label="Order Date">04/01/2016</td>
+                            <td data-label="Date">04/01/2016</td>
                             <td data-label="Price">$1,190</td>
-                            <td data-label="Pick Up Location"> Gisozi </td>
+                            <td data-label="origin"> Gisozi </td>
                             <td data-label="Destination"> Gisenyi</td>
-                            <td data-label="Tracking Number"> RBOOOOVFR</td>
+                            <td data-label="Tracking"> RBOOOO</td>
                             <td data-label="Status"> Pending</td>
                             <td data-label="Action"><span class="edit-order"></span> <span class="delete-order"></span> </td>
                       </tr>
                       <tr data-id="03">
                             <td scope="row" data-label="Order Id">Espy-001</td>
-                            <td data-label="Order Date">04/01/2016</td>
+                            <td data-label="Date">04/01/2016</td>
                             <td data-label="Price">$1,190</td>
-                            <td data-label="Pick Up Location"> Gisozi </td>
+                            <td data-label="Origin"> Gisozi </td>
                             <td data-label="Destination"> Gisenyi</td>
-                            <td data-label="Tracking Number"> RBOOOOVFR</td>
+                            <td data-label="Tracking"> RBOOOO</td>
                             <td data-label="Status">delivered</td>
                             <td data-label="Action"><span class="edit-order"></span> <span class="delete-order"></span> </td>
                       </tr>
@@ -99,9 +99,9 @@
         <h1 class="title-center" id="new-order-form-title"> Create a new delivery order </h1>
         <form id='new-order-form' action="orders.html" method='get'>
             <input type="text" id ="new-order-input-origin" class="new-order-input" placeholder="Origin" required>
-            <i class="material-icons location-picker" id="origin-location-picker">edit_location</i>
+            <span class="location-picker" id="origin-location-picker"></span>
             <input type="text" id ="new-order-input-destination" class="new-order-input" placeholder="Desination" required>
-            <i class="material-icons location-picker" id="destination-location-picker">edit_location</i>
+            <span class="location-picker" id="destination-location-picker"></span>
             <textarea id ="new-order-input-comments" rows="4" class="new-order-input" cols="41" name="comment" form="new-order-form" placeholder="Additional informations">
                     Additionals informations
             </textarea>
