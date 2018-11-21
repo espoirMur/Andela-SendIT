@@ -9,6 +9,7 @@ import { Order } from '../app/models/orders';
 /** setting up the test server */
 chai.use(chaiHttp);
 const should = chai.should();
+const expect = chai.expect;
 // close the sever after running our tests
 let token;
 
@@ -93,7 +94,6 @@ const canGetUserOrdersByid = done => {
   let order;
   if (user) {
     order = user.orders.get(orderId);
-    order = order.toJSON();
   } else {
     order = {};
   }
@@ -102,6 +102,7 @@ const canGetUserOrdersByid = done => {
     .get(`/api/v1/users/${userId}/parcels/${orderId}`)
     .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
+      const receivedOrder = response.body.order;
       response.should.have.status(200);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(true);
@@ -109,7 +110,16 @@ const canGetUserOrdersByid = done => {
         .property('message')
         .eql('user delivery order retrieved successfully');
       response.body.should.have.property('order');
-      response.body.should.have.property('order').eql(order);
+      receivedOrder.origin.should.be.eql(order.origin);
+      receivedOrder.destination.should.be.eql(order.destination);
+      receivedOrder.recipientPhone.should.be.eql(order.recipientPhone);
+      receivedOrder.initiatorId.should.be.eql(order.initiatorId);
+      receivedOrder.orderDate.should.be.eql(order.orderDate);
+      receivedOrder.id.should.be.eql(order.id);
+      expect(receivedOrder.presentLocation).to.eql(order.presentLocation);
+      expect(receivedOrder.weight).to.be.eql(order.weight);
+      expect(typeof order.deliveryDate).to.be.eql('undefined');
+      expect(typeof order.weight).to.be.eql(typeof receivedOrder.weight);
       done();
     });
 };
@@ -217,6 +227,7 @@ const canCancelOrder = done => {
     order = {};
   }
   order.status = 'canceled';
+  order.recipientPhone = '25078888';
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}/cancel `)
@@ -247,6 +258,7 @@ const cannotChangeDestinationOrder = done => {
     order = {};
   }
   order.status = 'delivered';
+  order.recipientPhone = '25078889';
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}`)
