@@ -64,10 +64,67 @@ const getUserIfValidToken = done => {
         });
     });
 };
+
+const cannotAccessAdminRoute = done => {
+  const user = users.get('1');
+  chai
+    .request(app)
+    .post('/auth/signin')
+    .send({
+      email: user.email,
+      password: 'a new password',
+      isAdmin: false,
+    })
+    .end((error, response) => {
+      should.not.exist(error);
+      chai
+        .request(app)
+        .get('/api/v1/parcels')
+        .set('authorization', 'Bearer ' + response.body.token)
+        .end((err, res) => {
+          should.not.exist(err);
+          res.status.should.eql(403);
+          res.body.success.should.eql(false);
+          res.body.message.should.eql(
+            'you are not authorized to perform this action'
+          );
+          done();
+        });
+    });
+};
+
+const canAcessAdminRoute = done => {
+  const user = users.get('1');
+  chai
+    .request(app)
+    .post('/auth/signin')
+    .send({
+      email: user.email,
+      password: 'a new password',
+      isAdmin: false,
+    })
+    .end((error, response) => {
+      should.not.exist(error);
+      chai
+        .request(app)
+        .get('/api/v1/parcels')
+        .set('authorization', 'Bearer ' + response.body.token)
+        .end((err, res) => {
+          should.not.exist(err);
+          res.status.should.eql(200);
+          done();
+        });
+    });
+};
+
 describe('check it fall when wrong token', () => {
   it('shoudld return 401 status code if bad token was provided', authBadToken),
     it('should return 401 status code if no token provided', authNoToken);
 });
 it('can login with valid token', getUserIfValidToken);
 
+describe('test admin routes ', () => {
+  it('cannot access admin route if not admin', cannotAccessAdminRoute),
+    it('can access admin routes', canAcessAdminRoute);
+});
 //it responds with 200 status code if good authorization header

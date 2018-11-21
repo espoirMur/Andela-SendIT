@@ -1,11 +1,31 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { Order, orders } from '../app/models/orders';
+import { users } from '../app/models/user';
 import app from '../app/server';
 
 /** setting up the test server */
 chai.use(chaiHttp);
 const should = chai.should();
+
+let token;
+
+const loginUser = done => {
+  const user = users.get('1');
+  chai
+    .request(app)
+    .post('/auth/signin')
+    .send({
+      email: user.email,
+      password: 'a new password',
+    })
+    .end((error, response) => {
+      should.not.exist(error);
+      token = response.body.token;
+      token.should.be.a('string');
+      done();
+    });
+};
 
 const returnAllOrders = done => {
   /**
@@ -14,6 +34,7 @@ const returnAllOrders = done => {
   chai
     .request(app)
     .get('/api/v1/parcels')
+    .set('authorization', 'Bearer ' + token)
     .end((error, response) => {
       response.should.have.status(200);
       response.type.should.be.eql('application/json');
@@ -38,6 +59,7 @@ const createOrder = done => {
     .post('/api/v1/parcels')
     .type('application/json')
     .send(order.toJSON())
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(201);
       response.body.should.be.a('object');
@@ -59,6 +81,7 @@ const cannotCreateOrderOrigin = done => {
     .request(app)
     .post('/api/v1/parcels')
     .send(order.toJSON())
+    .set('authorization', 'Bearer ' + token)
     .type('application/json')
     .end((request, response) => {
       response.should.have.status(400);
@@ -81,6 +104,7 @@ const cannotCreateOrderDestination = done => {
     .request(app)
     .post('/api/v1/parcels')
     .send(order.toJSON())
+    .set('authorization', 'Bearer ' + token)
     .type('application/json')
     .end((request, response) => {
       response.should.have.status(400);
@@ -103,6 +127,7 @@ const cannotCreateOrderRecipientPhone = done => {
     .request(app)
     .post('/api/v1/parcels')
     .send(order.toJSON())
+    .set('authorization', 'Bearer ' + token)
     .type('application/json')
     .end((request, response) => {
       response.should.have.status(400);
@@ -125,6 +150,7 @@ const cannotCreateOrderBadContent = done => {
     .request(app)
     .post('/api/v1/parcels')
     .send(order.toJSON())
+    .set('authorization', 'Bearer ' + token)
     .type('form')
     .end((request, response) => {
       response.should.have.status(406);
@@ -145,6 +171,7 @@ const canGetOrderById = done => {
   chai
     .request(app)
     .get(`/api/v1/parcels/${id}`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(200);
       response.body.should.be.a('object');
@@ -166,6 +193,7 @@ const cannotGetOrderById = done => {
   chai
     .request(app)
     .get(`/api/v1/parcels/${id}`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
@@ -189,6 +217,7 @@ const canCannotCancelOrder = done => {
   chai
     .request(app)
     .put(`/api/v1/parcels/${id}/cancel `)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(401);
       response.body.should.be.a('object');
@@ -210,6 +239,7 @@ const canCancelOrder = done => {
   chai
     .request(app)
     .put(`/api/v1/parcels/${id}/cancel `)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(200);
       response.body.should.be.a('object');
@@ -232,6 +262,7 @@ const canCannotCancelOrderCanceled = done => {
   chai
     .request(app)
     .put(`/api/v1/parcels/${id}/cancel`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(401);
       response.body.should.be.a('object');
@@ -251,6 +282,7 @@ const canCannotCancelNoExistOrder = done => {
   chai
     .request(app)
     .put(`/api/v1/parcels/${id}/cancel `)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
@@ -273,6 +305,7 @@ const cannotChangepresentLocationDelivered = done => {
   chai
     .request(app)
     .put(`/api/v1/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .send(order)
     .end((request, response) => {
       response.should.have.status(401);
@@ -297,6 +330,7 @@ const canChangepresentLocation = done => {
   chai
     .request(app)
     .put(`/api/v1/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .send(presentLocationData)
     .end((request, response) => {
       response.should.have.status(200);
@@ -324,6 +358,7 @@ const cannotChangePresentLocationOrderMissing = done => {
   chai
     .request(app)
     .put(`/api/v1/parcels/${order.id}`)
+    .set('authorization', 'Bearer ' + token)
     .send(order.toJSON())
     .type('application/json')
     .end((request, response) => {
@@ -346,6 +381,7 @@ const canChangeStatusOrder = done => {
   chai
     .request(app)
     .put(`/api/v1/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .send(statusData)
     .end((request, response) => {
       response.should.have.status(200);
@@ -367,6 +403,7 @@ const canChangeStatusOrderDate = done => {
   chai
     .request(app)
     .put(`/api/v1/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .send(statusData)
     .end((request, response) => {
       console.log(response.body.order);
@@ -384,6 +421,8 @@ const canChangeStatusOrderDate = done => {
 /*
  * Test the /POST route for creating new order
  */
+before('login the user and set the token', loginUser);
+// check if we can update a given order for a given user
 describe('create orders', () => {
   it('create all orders', createOrder);
   it(
