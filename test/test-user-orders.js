@@ -9,9 +9,10 @@ import { Order } from '../app/models/orders';
 /** setting up the test server */
 chai.use(chaiHttp);
 const should = chai.should();
+const expect = chai.expect;
 // close the sever after running our tests
 
-const canGetUserOrders = (done) => {
+const canGetUserOrders = done => {
   /**
    * test if we can all users delivery orders
    *
@@ -40,7 +41,7 @@ const canGetUserOrders = (done) => {
     });
 };
 
-const cannotGetUserOrderById = (done) => {
+const cannotGetUserOrderById = done => {
   /**
    * test if we can return 404 if
    * if user is not found
@@ -54,13 +55,15 @@ const cannotGetUserOrderById = (done) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql(`user with  id ${id} does not exist`);
+      response.body.should.have
+        .property('message')
+        .eql(`user with  id ${id} does not exist`);
       done();
     });
 };
 // check if you can get a given order for a given user
 
-const canGetUserOrdersByid = (done) => {
+const canGetUserOrdersByid = done => {
   /**
    * test if we can retrieve a user order by it id
    *
@@ -71,7 +74,6 @@ const canGetUserOrdersByid = (done) => {
   let order;
   if (user) {
     order = user.orders.get(orderId);
-    order = order.toJSON();
   } else {
     order = {};
   }
@@ -79,6 +81,7 @@ const canGetUserOrdersByid = (done) => {
     .request(app)
     .get(`/api/v1/users/${userId}/parcels/${orderId}`)
     .end((request, response) => {
+      const receivedOrder = response.body.order;
       response.should.have.status(200);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(true);
@@ -86,12 +89,21 @@ const canGetUserOrdersByid = (done) => {
         .property('message')
         .eql('user delivery order retrieved successfully');
       response.body.should.have.property('order');
-      response.body.should.have.property('order').eql(order);
+      receivedOrder.origin.should.be.eql(order.origin);
+      receivedOrder.destination.should.be.eql(order.destination);
+      receivedOrder.recipientPhone.should.be.eql(order.recipientPhone);
+      receivedOrder.initiatorId.should.be.eql(order.initiatorId);
+      receivedOrder.orderDate.should.be.eql(order.orderDate);
+      receivedOrder.id.should.be.eql(order.id);
+      expect(receivedOrder.presentLocation).to.eql(order.presentLocation);
+      expect(receivedOrder.weight).to.be.eql(order.weight);
+      expect(typeof order.deliveryDate).to.be.eql('undefined');
+      expect(typeof order.weight).to.be.eql(typeof receivedOrder.weight);
       done();
     });
 };
 
-const cannotGetUserOrdersByid = (done) => {
+const cannotGetUserOrdersByid = done => {
   /**
    * test if we 404 if an order is not found for the given user
    *
@@ -112,12 +124,14 @@ const cannotGetUserOrdersByid = (done) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql(`order with  id ${orderId} does not exist`);
+      response.body.should.have
+        .property('message')
+        .eql(`order with  id ${orderId} does not exist`);
       done();
     });
 };
 
-const cannotGetUserByIdOrdersByid = (done) => {
+const cannotGetUserByIdOrdersByid = done => {
   /**
    * test if we 404 if an order is the user id is invalid for this endpoint
    *
@@ -145,7 +159,7 @@ const cannotGetUserByIdOrdersByid = (done) => {
     });
 };
 
-const canCannotCancelOrder = (done) => {
+const canCannotCancelOrder = done => {
   /**
    * test if we cannot cancel a delivery order if the status
    * marked as delivered
@@ -167,12 +181,14 @@ const canCannotCancelOrder = (done) => {
       response.should.have.status(401);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql('cannot cancel a delivered order');
+      response.body.should.have
+        .property('message')
+        .eql('cannot cancel a delivered order');
       done();
     });
 };
 
-const canCancelOrder = (done) => {
+const canCancelOrder = done => {
   /**
    * test if we cancel a delivery order if the status
    * marked is not  delivered
@@ -187,6 +203,7 @@ const canCancelOrder = (done) => {
     order = {};
   }
   order.status = 'canceled';
+  order.recipientPhone = '25078888';
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}/cancel `)
@@ -194,12 +211,14 @@ const canCancelOrder = (done) => {
       response.should.have.status(200);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(true);
-      response.body.should.have.property('message').eql('delivery order has been canceled');
+      response.body.should.have
+        .property('message')
+        .eql('delivery order has been canceled');
       done();
     });
 };
 
-const cannotChangeDestinationOrder = (done) => {
+const cannotChangeDestinationOrder = done => {
   /**
    * test if we cannot change destination a delivery order if the status
    * marked as delivered
@@ -214,6 +233,7 @@ const cannotChangeDestinationOrder = (done) => {
     order = {};
   }
   order.status = 'delivered';
+  order.recipientPhone = '25078889';
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}`)
@@ -229,7 +249,7 @@ const cannotChangeDestinationOrder = (done) => {
     });
 };
 
-const canChangeDestinationOrder = (done) => {
+const canChangeDestinationOrder = done => {
   /**
    * test if we can change the destination if the status
    * marked is not  delivered
@@ -252,7 +272,7 @@ const canChangeDestinationOrder = (done) => {
     });
 };
 
-const cannotChangeDesinationOrderMissing = (done) => {
+const cannotChangeDesinationOrderMissing = done => {
   /**
    * cannot update the destination if it missing in payload
    *  */
@@ -268,7 +288,9 @@ const cannotChangeDesinationOrderMissing = (done) => {
       response.should.have.status(400);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql('new destination is required');
+      response.body.should.have
+        .property('message')
+        .eql('new destination is required');
       done();
     });
 };
@@ -285,7 +307,10 @@ describe('can cancel or change', () => {
 });
 
 describe('cannot change destination update if order delivered', () => {
-  it('cannot change destination if bad content', cannotChangeDesinationOrderMissing);
+  it(
+    'cannot change destination if bad content',
+    cannotChangeDesinationOrderMissing
+  );
   it('cannot cancel a delivery order if it is delivered', canCannotCancelOrder);
   it('cannot change destination if delivered', cannotChangeDestinationOrder);
 });

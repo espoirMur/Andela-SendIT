@@ -8,7 +8,6 @@
     "start": "nodemon app/server.js --exec babel-node --",
     "nyc": "nyc npm test",
     "code-climate": "codeclimate-test-reporter < ./coverage/lcov.info",
-    "coveralls": "npm run nyc -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "codecov": "codecov"
   },
   "repository": {
@@ -44,6 +43,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
     "codeclimate-test-reporter": "^0.5.1",
+    "codecov": "^3.1.0",
     "coveralls": "^3.0.2",
     "eslint": "^5.8.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -69,7 +69,9 @@
       "coverage/**/*.js",
       "UI/",
       "config.js",
-      "config.sample.js"
+      "config.sample.js",
+      "test/*",
+      "app/utils/"
     ]
   }
 }

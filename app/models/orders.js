@@ -140,6 +140,14 @@ class Order {
     });
     return OrderJson;
   }
+
+  get recipientPhone() {
+    return this._recipientPhone;
+  }
+
+  set recipientPhone(recipientPhone) {
+    this._recipientPhone = recipientPhone;
+  }
 }
 
 export { Order, orders };
