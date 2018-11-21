@@ -57,6 +57,10 @@ class User {
     return this._isAdmin;
   }
 
+  set isAdmin(value = false) {
+    this._isAdmin = value;
+  }
+
   get registrationDate() {
     return this._registrationDate;
   }
@@ -83,17 +87,17 @@ class User {
     const user = Array.from(users.values()).find(
       aUser => aUser.email === email
     );
-    if (user) {
+    if (typeof user !== 'undefined') {
       return user;
     } else {
       return false;
     }
   }
 
-  verifyPassword() {
+  static verifyPassword(user) {
     // need to verify password in the db
-    const databasePassword = users.get(this.id.toString()).password;
-    const bool = bcrypt.compareSync(this.password, databasePassword);
+    const databasePassword = users.get(user.id.toString()).password;
+    const bool = bcrypt.compareSync(user.password, databasePassword);
     if (!bool) {
       return false;
     } else {
@@ -110,7 +114,8 @@ class User {
   }
 }
 
-const user = new User('Espoir', 'espy_mur@gmail.com', '25078000');
+const user = new User('Espoir', 'espoir_mur@gmail.com', '25078000');
+user.isAdmin = true;
 users.set(user.id.toString(), user);
 // export the module and make them avialable
 

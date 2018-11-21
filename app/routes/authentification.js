@@ -14,7 +14,7 @@ authRouter.post('/signup', celebrate({ body: registerSchema }), (req, res) => {
   const { name, email, phone, password } = req.body;
 
   const exist = User.findByEmail(email);
-  if (exist !== false) {
+  if (exist === false) {
     const user = new User(name, email, phone, password);
     const userId = user.save();
     const token = encodeToken(user.toJSON());
@@ -40,8 +40,7 @@ authRouter.post(
     const { email, password } = req.body;
     const user = User.findByEmail(email);
     if (user) {
-      console.log(user);
-      const validpassword = user.verifyPassword();
+      const validpassword = User.verifyPassword(user);
       if (validpassword) {
         const token = encodeToken(user.toJSON());
         res.status(200).send({
