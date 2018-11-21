@@ -1,3 +1,4 @@
+import { isCelebrate } from 'celebrate';
 const error5OOHandler = (err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send({
@@ -13,4 +14,12 @@ const error4O4Handler = (req, res) => {
   });
 };
 
-export { error5OOHandler, error4O4Handler };
+const joiErrors = () => (err, req, res, next) => {
+  if (!isCelebrate(err)) return next(err);
+  return res.status(400).json({
+    success: false,
+    message: err.message,
+  });
+};
+
+export { error5OOHandler, error4O4Handler, joiErrors };
