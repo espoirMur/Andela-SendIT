@@ -80,16 +80,19 @@ class User {
   static findByEmail(email) {
     // return true if the user with email is already exist
     // should query the database and check if i can find user with email
-    if (users.get(email)) {
-      return users.get('1');
+    const user = Array.from(users.values()).find(
+      aUser => aUser.email === email
+    );
+    if (user) {
+      return user;
     } else {
-      return users.get(1);
+      return false;
     }
   }
 
   verifyPassword() {
     // need to verify password in the db
-    const databasePassword = users.get(user.id).password;
+    const databasePassword = users.get(this.id.toString()).password;
     const bool = bcrypt.compareSync(this.password, databasePassword);
     if (!bool) {
       return false;

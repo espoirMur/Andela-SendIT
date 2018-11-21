@@ -13,12 +13,11 @@ authRouter.post('/signup', celebrate({ body: registerSchema }), (req, res) => {
   //  check if the email is already taken and return an error if
   const { name, email, phone, password } = req.body;
 
-  const exist = User.findByEmail('1');
-  const user = new User(name, email, phone, password);
-  const userId = user.save();
-  const token = encodeToken(user.toJSON());
-
-  if (!exist) {
+  const exist = User.findByEmail(email);
+  if (exist !== false) {
+    const user = new User(name, email, phone, password);
+    const userId = user.save();
+    const token = encodeToken(user.toJSON());
     return res.status(201).send({
       success: true,
       message: 'the new user has been created',
@@ -40,8 +39,9 @@ authRouter.post(
   (req, res, next) => {
     const { email, password } = req.body;
     const user = User.findByEmail(email);
-    if (typeof user !== 'undefined') {
-      validpassword = user.verifyPassword();
+    if (user) {
+      console.log(user);
+      const validpassword = user.verifyPassword();
       if (validpassword) {
         const token = encodeToken(user.toJSON());
         res.status(200).send({

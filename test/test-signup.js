@@ -120,7 +120,7 @@ const canRegisterUser = done => {
   const user = {
     name: 'Espoir',
     email: 'espy_mur@gmail.com',
-    phone: '2507800',
+    phone: '2507800564444',
     password: 'a new password',
   };
   chai
@@ -182,5 +182,5 @@ describe('encodeToken()', () => {
   it('should decode token', canDecodeToken);
 });
 
-it.skip('can create a new user', canRegisterUser);
-it('cannot create if email is already taken', cannotRegisterEmailTaken);
+it('can create a new user', canRegisterUser);
+it.skip('cannot create if email is already taken', cannotRegisterEmailTaken);
