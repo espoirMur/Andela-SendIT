@@ -43,45 +43,31 @@
                     <thead>
                       <tr>
                         <th scope="col">Order Id</th>
-                        <th scope="col">Order Date</th>
+                        <th scope="col">Date</th>
                         <th scope="col">Client Email</th>
                         <th scope="col">Client Phone</th>
                         <th scope="col">Price</th>
-                        <th scope="col">Pick Up Location</th>
+                        <th scope="col">origin</th>
                         <th scope="col">Destination</th>
                         <th scope="col">Current Location</th>
-                        <th scope="col">Tracking Number</th>
+                        <th scope="col">Tracking</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr data-id="01">
-                        <td data-label="Order Id">Espy-001</td>
-                        <td data-label="Order Date">04/01/2016</td>
-                        <td data-label="Client Name">an@email.com</td>
-                        <td data-label="Client phone">25088898889</td>
-                        <td data-label="Price">$1,190</td>
-                        <td data-label="Pick Up Location"> Gisozi </td>
-                        <td data-label="Destination"> Gisenyi </td>
-                        <td data-label="Current Location">Musanze</td>
-                        <td data-label="Tracking Number"> RBOOOOVFR</td>
-                        <td data-label="Status"> Pending</td>
-                        <td data-label="Action"><span class="edit-order"></span> </td>
-                      </tr>
-                    </tbody>
+                    
                     <tr data-id="02">
                         <td data-label="Order Id">Espy-001</td>
-                        <td data-label="Order Date">04/01/2016</td>
+                        <td data-label="Date">04/01/2016</td>
                         <td data-label="Client Name">an@email.com</td>
                         <td data-label="Client phone">25088898889</td>
                         <td data-label="Price">$1,190</td>
-                        <td data-label="Pick Up Location"> Gisozi </td>
+                        <td data-label="origin"> Gisozi </td>
                         <td data-label="Destination"> Gisenyi </td>
                         <td data-label="Current Location">Musanze</td>
-                        <td data-label="Tracking Number"> RBOOOOVFR</td>
+                        <td data-label="Tracking"> RBOOOO</td>
                         <td data-label="Status"> Pending</td>
-                        <td data-label="Action"><span class="edit-order"></span> </td>
+                        <td data-label="Action"><button class="edit-order"> Edit </button> </td>
                       </tr>
                     </tbody>
                     <tfoot>
@@ -97,7 +83,7 @@
         <h1 class="title-center" id="edit-order-form-title"> Update delivery Order </h1>
         <form id='edit-order-form' action="admin.html" method='get'>
             <input type="text" id ="order-input-current-location" class="new-order-input" placeholder="Current Location" required>
-            <i class="material-icons location-picker" id="current-location-picker">edit_location</i>
+            <span class=" location-picker" id="current-location-picker"></span>
             <select name="status" form="edit-order-form" id ="order-input-status" class="new-order-input">
                 <option value="pending">Pending</option>
                 <option value="delivered">Delivered</option>

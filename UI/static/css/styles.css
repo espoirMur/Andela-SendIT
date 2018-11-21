@@ -82,10 +82,11 @@ form {
   table td {
     padding: .625em;
     text-align: center;
+    font-size: 14px;
   }
   
   table th {
-    font-size: .85em;
+    font-size: 12px;
     letter-spacing: .1em;
     text-transform: uppercase;
     /*break content in the cell width*/
@@ -260,26 +261,17 @@ new order input
   z-index: 2;
 }
 
+.location-picker::before{
+  content: "\f2ed";  
+}
 /*
 edit order button
 */
 
 .delete-order, .edit-order{
-  cursor: pointer
-}
-.delete-order, .edit-order:before{
-  font-family: FontAwesome;
   display: inline-block;
   padding-right: 6px;
-  vertical-align: middle;
-}
-.delete-order:before{
-  content: "\f2ed";
-}
-
-.edit-order:before{
-  content: "\f044";
-
+  height: 20;
 }
 /*
 status select 
