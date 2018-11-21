@@ -267,7 +267,20 @@ edit order button
 .delete-order, .edit-order{
   cursor: pointer
 }
+.delete-order, .edit-order:before{
+  font-family: FontAwesome;
+  display: inline-block;
+  padding-right: 6px;
+  vertical-align: middle;
+}
+.delete-order:before{
+  content: "\f2ed";
+}
 
+.edit-order:before{
+  content: "\f044";
+
+}
 /*
 status select 
 */
