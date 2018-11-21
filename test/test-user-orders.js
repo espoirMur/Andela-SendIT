@@ -10,8 +10,26 @@ import { Order } from '../app/models/orders';
 chai.use(chaiHttp);
 const should = chai.should();
 // close the sever after running our tests
+let token;
 
-const canGetUserOrders = (done) => {
+const loginUser = done => {
+  const user = users.get('1');
+  chai
+    .request(app)
+    .post('/auth/signin')
+    .send({
+      email: user.email,
+      password: 'a new password',
+    })
+    .end((error, response) => {
+      should.not.exist(error);
+      token = response.body.token;
+      token.should.be.a('string');
+      done();
+    });
+};
+
+const canGetUserOrders = done => {
   /**
    * test if we can all users delivery orders
    *
@@ -27,6 +45,7 @@ const canGetUserOrders = (done) => {
   chai
     .request(app)
     .get(`/api/v1/users/${id}/parcels`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(200);
       response.body.should.be.a('object');
@@ -40,7 +59,7 @@ const canGetUserOrders = (done) => {
     });
 };
 
-const cannotGetUserOrderById = (done) => {
+const cannotGetUserOrderById = done => {
   /**
    * test if we can return 404 if
    * if user is not found
@@ -50,17 +69,20 @@ const cannotGetUserOrderById = (done) => {
   chai
     .request(app)
     .get(`/api/v1/users/${id}/parcels`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql(`user with  id ${id} does not exist`);
+      response.body.should.have
+        .property('message')
+        .eql(`user with  id ${id} does not exist`);
       done();
     });
 };
 // check if you can get a given order for a given user
 
-const canGetUserOrdersByid = (done) => {
+const canGetUserOrdersByid = done => {
   /**
    * test if we can retrieve a user order by it id
    *
@@ -78,6 +100,7 @@ const canGetUserOrdersByid = (done) => {
   chai
     .request(app)
     .get(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(200);
       response.body.should.be.a('object');
@@ -91,7 +114,7 @@ const canGetUserOrdersByid = (done) => {
     });
 };
 
-const cannotGetUserOrdersByid = (done) => {
+const cannotGetUserOrdersByid = done => {
   /**
    * test if we 404 if an order is not found for the given user
    *
@@ -108,16 +131,19 @@ const cannotGetUserOrdersByid = (done) => {
   chai
     .request(app)
     .get(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql(`order with  id ${orderId} does not exist`);
+      response.body.should.have
+        .property('message')
+        .eql(`order with  id ${orderId} does not exist`);
       done();
     });
 };
 
-const cannotGetUserByIdOrdersByid = (done) => {
+const cannotGetUserByIdOrdersByid = done => {
   /**
    * test if we 404 if an order is the user id is invalid for this endpoint
    *
@@ -134,6 +160,7 @@ const cannotGetUserByIdOrdersByid = (done) => {
   chai
     .request(app)
     .get(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
@@ -145,7 +172,7 @@ const cannotGetUserByIdOrdersByid = (done) => {
     });
 };
 
-const canCannotCancelOrder = (done) => {
+const canCannotCancelOrder = done => {
   /**
    * test if we cannot cancel a delivery order if the status
    * marked as delivered
@@ -163,16 +190,19 @@ const canCannotCancelOrder = (done) => {
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}/cancel`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(401);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql('cannot cancel a delivered order');
+      response.body.should.have
+        .property('message')
+        .eql('cannot cancel a delivered order');
       done();
     });
 };
 
-const canCancelOrder = (done) => {
+const canCancelOrder = done => {
   /**
    * test if we cancel a delivery order if the status
    * marked is not  delivered
@@ -190,16 +220,19 @@ const canCancelOrder = (done) => {
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}/cancel `)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(200);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(true);
-      response.body.should.have.property('message').eql('delivery order has been canceled');
+      response.body.should.have
+        .property('message')
+        .eql('delivery order has been canceled');
       done();
     });
 };
 
-const cannotChangeDestinationOrder = (done) => {
+const cannotChangeDestinationOrder = done => {
   /**
    * test if we cannot change destination a delivery order if the status
    * marked as delivered
@@ -217,6 +250,7 @@ const cannotChangeDestinationOrder = (done) => {
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .send(order.toJSON())
     .end((request, response) => {
       response.should.have.status(401);
@@ -229,7 +263,7 @@ const cannotChangeDestinationOrder = (done) => {
     });
 };
 
-const canChangeDestinationOrder = (done) => {
+const canChangeDestinationOrder = done => {
   /**
    * test if we can change the destination if the status
    * marked is not  delivered
@@ -240,6 +274,7 @@ const canChangeDestinationOrder = (done) => {
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .send(destinationData)
     .end((request, response) => {
       response.should.have.status(200);
@@ -252,7 +287,7 @@ const canChangeDestinationOrder = (done) => {
     });
 };
 
-const cannotChangeDesinationOrderMissing = (done) => {
+const cannotChangeDesinationOrderMissing = done => {
   /**
    * cannot update the destination if it missing in payload
    *  */
@@ -262,17 +297,20 @@ const cannotChangeDesinationOrderMissing = (done) => {
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .send(order)
     .type('application/json')
     .end((request, response) => {
       response.should.have.status(400);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql('new destination is required');
+      response.body.should.have
+        .property('message')
+        .eql('new destination is required');
       done();
     });
 };
-
+before('login the user and set the token', loginUser);
 // check if we can update a given order for a given user
 describe('get user orders by id', () => {
   it('cannot get user if  id invalid', cannotGetUserOrderById);
@@ -285,7 +323,10 @@ describe('can cancel or change', () => {
 });
 
 describe('cannot change destination update if order delivered', () => {
-  it('cannot change destination if bad content', cannotChangeDesinationOrderMissing);
+  it(
+    'cannot change destination if bad content',
+    cannotChangeDesinationOrderMissing
+  );
   it('cannot cancel a delivery order if it is delivered', canCannotCancelOrder);
   it('cannot change destination if delivered', cannotChangeDestinationOrder);
 });
