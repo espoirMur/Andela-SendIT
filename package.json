@@ -77,8 +77,8 @@
       "UI/",
       "config.js",
       "config.sample.js",
-      "test/*",
-      "app/utils/"
+      "app/utils/jsonReplacer.js",
+      "test/*"
     ]
   }
 }

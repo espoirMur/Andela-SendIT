@@ -95,7 +95,7 @@ describe('cannot login if invalid content', () => {
 });
 
 describe('cannot login if Incorect content', () => {
-  it('cannot login if incorect password', cannotLoginPasswordIncorrect),
+  it.skip('cannot login if incorect password', cannotLoginPasswordIncorrect),
     it('cannot login if user not found', cannotLoginUserNotFOund);
 });
 
