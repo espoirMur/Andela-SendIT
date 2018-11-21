@@ -21,4 +21,37 @@ const decodeToken = (token, callback) => {
   else callback(null, payload);
 };
 
-export { encodeToken, decodeToken };
+const ensureAuthentificated = (req, resp, next) => {
+  // check if authentificated before handling any request
+  if (!(req.headers && req.headers.authorization)) {
+    return res.status(400).json({
+      sucess: false,
+      message: 'please log in',
+    });
+  }
+  const header = req.headers.authorization.split(' ');
+  const token = header[1];
+
+  decodeToken(token, (err, payload) => {
+    if (token) {
+      if (err) {
+        return res.status(401).json({
+          message: 'Token has expired',
+          status: false,
+        });
+      } else {
+        // continue or getting user from db get user by id
+        console.log({ id: parseInt(payload.sub) });
+        next();
+      }
+    } else {
+      return res.status(401).json({
+        message: 'please provide a token',
+        status: false,
+      });
+    }
+  });
+};
+
+// ensure is admin
+export { encodeToken, decodeToken, ensureAuthentificated };
