@@ -438,7 +438,11 @@ const canChangeStatusOrderDate = done => {
   order.deliveryDate = new Date().toJSON();
   chai
     .request(app)
+<<<<<<< HEAD
     .put(`/api/v1/parcels/${order.id}`)
+=======
+    .put(`/api/v1/parcels/${orderId}`)
+>>>>>>> 078ac0ca0b3e246ffa7e8073715a38ad7b5dca18
     .set('authorization', 'Bearer ' + token)
     .send(statusData)
     .end((request, response) => {
