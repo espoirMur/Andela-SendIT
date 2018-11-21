@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import { User, users } from '../app/models/user';
 import app from '../app/server';
 import { describe } from 'mocha';
-
+import { encodeToken } from '../app/utils/authentification';
 chai.use(chaiHttp);
 const should = chai.should();
 
@@ -67,53 +67,35 @@ const getUserIfValidToken = done => {
 
 const cannotAccessAdminRoute = done => {
   const user = users.get('1');
+  user.isAdmin = false;
+  const token = encodeToken(user.toJSON());
   chai
     .request(app)
-    .post('/auth/signin')
-    .send({
-      email: user.email,
-      password: 'a new password',
-      isAdmin: false,
-    })
-    .end((error, response) => {
-      should.not.exist(error);
-      chai
-        .request(app)
-        .get('/api/v1/parcels')
-        .set('authorization', 'Bearer ' + response.body.token)
-        .end((err, res) => {
-          should.not.exist(err);
-          res.status.should.eql(403);
-          res.body.success.should.eql(false);
-          res.body.message.should.eql(
-            'you are not authorized to perform this action'
-          );
-          done();
-        });
+    .get('/api/v1/parcels')
+    .set('authorization', 'Bearer ' + token)
+    .end((err, res) => {
+      should.not.exist(err);
+      res.status.should.eql(403);
+      res.body.success.should.eql(false);
+      res.body.message.should.eql(
+        'you are not authorized to perform this action'
+      );
+      done();
     });
 };
 
 const canAcessAdminRoute = done => {
   const user = users.get('1');
+  user.isAdmin = true;
+  const token = encodeToken(user.toJSON());
   chai
     .request(app)
-    .post('/auth/signin')
-    .send({
-      email: user.email,
-      password: 'a new password',
-      isAdmin: false,
-    })
-    .end((error, response) => {
-      should.not.exist(error);
-      chai
-        .request(app)
-        .get('/api/v1/parcels')
-        .set('authorization', 'Bearer ' + response.body.token)
-        .end((err, res) => {
-          should.not.exist(err);
-          res.status.should.eql(200);
-          done();
-        });
+    .get('/api/v1/parcels')
+    .set('authorization', 'Bearer ' + token)
+    .end((err, res) => {
+      should.not.exist(err);
+      res.status.should.eql(200);
+      done();
     });
 };
 
