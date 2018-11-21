@@ -416,6 +416,7 @@ const canChangeStatusLocationOrder = done => {
   chai
     .request(app)
     .put(`/api/v1/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .send(orderData)
     .end((request, response) => {
       response.should.have.status(200);
@@ -437,7 +438,7 @@ const canChangeStatusOrderDate = done => {
   order.deliveryDate = new Date().toJSON();
   chai
     .request(app)
-    .put(`/api/v1/parcels/${orderId}`)
+    .put(`/api/v1/parcels/${order.id}`)
     .set('authorization', 'Bearer ' + token)
     .send(statusData)
     .end((request, response) => {
