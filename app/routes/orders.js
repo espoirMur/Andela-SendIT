@@ -4,10 +4,12 @@
 import { Router } from 'express';
 import bodyParser from 'body-parser';
 import { orders, Order } from '../models/orders';
+import { checkIsAdmin } from '../middlewares/authentification';
+import { decodeToken } from '../utils/authentification';
 
 const router = Router();
 
-router.get('/', (req, res) => {
+router.get('/', checkIsAdmin, (req, res) => {
   const allOders = Order.OrderMapToJson(orders);
   res.status(200).json(allOders);
 });
@@ -36,13 +38,15 @@ router.post('/', (req, res) => {
     });
   }
   const orderDetails = req.body;
-  // should retrieve initiator by his id and implement
-
+  const header = req.headers.authorization;
+  const token = header.slice(7);
+  const payload = decodeToken(token);
+  const initiatorId = payload.sub;
   const order = new Order(
     orderDetails.origin,
     orderDetails.destination,
     orderDetails.recipientPhone,
-    orderDetails.initiatorId,
+    initiatorId,
     orderDetails.comment
   );
   order.save();
@@ -53,7 +57,7 @@ router.post('/', (req, res) => {
   });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', checkIsAdmin, (req, res) => {
   const id = req.params.id;
   const order = orders.get(id);
   if (order) {
@@ -70,7 +74,7 @@ router.get('/:id', (req, res) => {
   }
 });
 
-router.put('/:id/cancel', (req, res) => {
+router.put('/:id/cancel', checkIsAdmin, (req, res) => {
   const id = req.params.id;
   const order = orders.get(id);
   if (order) {
@@ -101,7 +105,7 @@ router.put('/:id/cancel', (req, res) => {
   }
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', checkIsAdmin, (req, res) => {
   const id = req.params.id;
   const order = orders.get(id);
   const presentLocation = req.body.presentLocation;

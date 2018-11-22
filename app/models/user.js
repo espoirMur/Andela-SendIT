@@ -118,8 +118,12 @@ class User {
 }
 
 const user = new User('Espoir', 'espoir_mur@gmail.com', '25078000');
+user._id = '1';
 user.isAdmin = true;
+user.password = 'meAsadmin@sendIt';
+
 users.set(user.id.toString(), user);
+
 // export the module and make them avialable
 
 export { users, User };

@@ -15,6 +15,7 @@ userOrdersRouter.get('/:id/parcels', (req, res) => {
       success: true,
       message: 'user delivery orders  retrieved successfully',
       orders,
+      user,
     });
   } else {
     return res.status(404).send({
