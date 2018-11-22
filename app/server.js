@@ -10,6 +10,8 @@ import {
 } from './middlewares/errors';
 import jsonReplacer from './utils/jsonReplacer';
 import { ensureAuthentificated } from './middlewares/authentification';
+import dotenv from 'dotenv';
+dotenv.config();
 const app = express();
 
 app.get('/', (req, resp) => {
