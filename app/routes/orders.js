@@ -5,6 +5,7 @@ import { Router } from 'express';
 import bodyParser from 'body-parser';
 import { orders, Order } from '../models/orders';
 import { checkIsAdmin } from '../middlewares/authentification';
+import { decodeToken } from '../utils/authentification';
 
 const router = Router();
 
@@ -37,15 +38,17 @@ router.post('/', (req, res) => {
     });
   }
   const orderDetails = req.body;
-  // should retrieve initiator by his id and implement
-
+  const header = req.headers.authorization;
+  const token = header.slice(7);
+  const payload = decodeToken(token);
+  const initiatorId = payload.sub;
   const order = new Order(
     orderDetails.origin,
     orderDetails.destination,
-    orderDetails.recipientPhone,
     orderDetails.initiatorId,
     orderDetails.comment
   );
+  order.initiatorId = initiatorId;
   order.save();
   return res.status(201).send({
     success: true,
