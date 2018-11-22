@@ -1,5 +1,7 @@
 import bcrypt from 'bcryptjs';
-import userOrdersRouter from '../routes/user-orders';
+import { queryCreate, queryEmail, queryId } from './userQueries';
+import { create } from 'domain';
+import { Pool, Client } from 'pg';
 
 const users = new Map();
 /* eslint-disable no-underscore-dangle */
@@ -57,7 +59,7 @@ class User {
     return this._isAdmin;
   }
 
-  set isAdmin(value = false) {
+  set isAdmin(value) {
     this._isAdmin = value;
   }
 
@@ -108,29 +110,42 @@ class User {
     }
   }
 
-  save() {
+  async save() {
     /**
      *  should save the user to the db */
-    const id_ = this.id.toString();
-    users.set(id_, this.toJSON());
-    return user.id;
-  }
-  static async getById(id) {
+    queryCreate.values = [
+      this.name,
+      this.email,
+      this.password,
+      this.phone,
+      this.isAdmin,
+    ];
     const pool = new Pool();
     const client = await pool.connect();
-    const result = await client.query({
-      rowMode: 'array',
-      text: 'SELECT * from users;',
-    });
+    const result = await client.query(queryCreate);
+    await client.end();
+    return result.rows[0];
+  }
+  static async getById(id) {
+    queryId.values = [id];
+    const pool = new Pool();
+    const client = await pool.connect();
+    const result = await client.query(queryId);
+    await client.end();
+    return result;
+  }
+
+  static async getByEmail(email) {
+    queryEmail.values = [email];
+    const pool = new Pool();
+    const client = await pool.connect();
+    const result = await client.query(queryEmail);
     await client.end();
     return result;
   }
 }
 
 const user = new User('Espoir', 'espoir_mur@gmail.com', '25078000');
-user._id = '1';
-user.isAdmin = true;
-user.password = 'meAsadmin@sendIt';
 
 users.set(user.id.toString(), user);
 

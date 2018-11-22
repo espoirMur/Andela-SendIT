@@ -22,10 +22,10 @@ const connectToDb = async () => {
 const createDb = `
 CREATE TABLE users(
   id serial PRIMARY KEY,
-  name VARCHAR (50) UNIQUE NOT NULL,
+  name VARCHAR (50) NOT NULL,
   passwordHash VARCHAR (500) NOT NULL,
   email VARCHAR (55) UNIQUE NOT NULL,
-  registrationDate TIMESTAMP NOT NULL,
+  registrationDate TIMESTAMP DEFAULT NOW(),
   phone VARCHAR (50) NOT NULL,
   isAdmin boolean not NULL
  );
@@ -35,8 +35,8 @@ CREATE TABLE users(
   origin VARCHAR (50) NOT NULL,
   destination VARCHAR (50) NOT NULL,
   presentLocation VARCHAR (50) ,
-  recipentPhone VARCHAR (35) NULL,
-  orderDate TIMESTAMP NOT NULL,
+  recipentPhone VARCHAR (35) NOT NULL,
+  orderDate TIMESTAMP DEFAULT NOW(),
   deliveryDate TIMESTAMP,
   commnent VARCHAR (350) ,
   status VARCHAR(50) NOT NULL,
@@ -58,7 +58,6 @@ const createDatabase = async () => {
       return res;
     }
   });
-  return results;
 };
 
 export { connectToDb, pool, createDatabase };
