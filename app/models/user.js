@@ -83,31 +83,11 @@ class User {
     }, {});
   }
 
-  static findByEmail(email) {
-    // return true if the user with email is already exist
-    // should query the database and check if i can find user with email
-    const user = Array.from(users.values()).find(
-      aUser => aUser.email === email
-    );
-    if (typeof user !== 'undefined') {
-      return user;
-    } else {
-      return false;
-    }
-  }
-
-  static verifyPassword(user, password) {
+  static verifyPassword(databasePassword, password) {
     // need to verify password in the db
-    const databasePassword = users.get(user.id.toString()).password;
-    // why this not working??
-    //const bool = bcrypt.compareSync(user.password, databasePassword);
-    const bool = true;
+    const matched = bcrypt.compareSync(password, databasePassword);
     // need to do more check with the db
-    if (!bool) {
-      return false;
-    } else {
-      return true;
-    }
+    return matched;
   }
 
   async save() {
@@ -135,13 +115,17 @@ class User {
     return result;
   }
 
-  static async getByEmail(email) {
+  static async findByEmail(email) {
     queryEmail.values = [email];
     const pool = new Pool();
     const client = await pool.connect();
     const result = await client.query(queryEmail);
     await client.end();
-    return result;
+    if (result.rows.length === 0) {
+      return false;
+    } else {
+      return result.rows[0];
+    }
   }
 }
 
