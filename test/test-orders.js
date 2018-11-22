@@ -176,7 +176,6 @@ const canGetOrderById = done => {
     .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       const receivedOrder = response.body.order;
-      console.log(receivedOrder);
       response.should.have.status(200);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(true);
@@ -442,7 +441,6 @@ const canChangeStatusOrderDate = done => {
     .set('authorization', 'Bearer ' + token)
     .send(statusData)
     .end((request, response) => {
-      console.log(response.body.order);
       response.should.have.status(200);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(true);

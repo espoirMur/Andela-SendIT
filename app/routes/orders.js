@@ -45,10 +45,10 @@ router.post('/', (req, res) => {
   const order = new Order(
     orderDetails.origin,
     orderDetails.destination,
-    orderDetails.initiatorId,
+    orderDetails.recipientPhone,
+    initiatorId,
     orderDetails.comment
   );
-  order.initiatorId = initiatorId;
   order.save();
   return res.status(201).send({
     success: true,
@@ -110,7 +110,6 @@ router.put('/:id', checkIsAdmin, (req, res) => {
   const order = orders.get(id);
   const presentLocation = req.body.presentLocation;
   const status = req.body.status;
-  console.log(status, '====', presentLocation);
   if (order) {
     if (order.status !== 'delivered') {
       if (

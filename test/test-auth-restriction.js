@@ -57,9 +57,15 @@ const getUserIfValidToken = done => {
         .get('/api/v1/users/1/parcels')
         .set('authorization', 'Bearer ' + response.body.token)
         .end((err, res) => {
+          const Auser = res.body.user;
           should.not.exist(err);
           res.status.should.eql(200);
           res.body.success.should.eql(true);
+          Auser.name.should.eql(user.name);
+          Auser.email.should.eql(user.email);
+          Auser.phone.should.eql(user.phone);
+          Auser.isAdmin.should.eql(user.isAdmin);
+          Auser.registrationDate.should.eql(user.registrationDate);
           done();
         });
     });
@@ -103,10 +109,10 @@ describe('check it fall when wrong token', () => {
   it('shoudld return 401 status code if bad token was provided', authBadToken),
     it('should return 401 status code if no token provided', authNoToken);
 });
-it('can login with valid token', getUserIfValidToken);
 
 describe('test admin routes ', () => {
   it('cannot access admin route if not admin', cannotAccessAdminRoute),
     it('can access admin routes', canAcessAdminRoute);
+  it('can login with valid token', getUserIfValidToken);
 });
 //it responds with 200 status code if good authorization header

@@ -30,9 +30,6 @@ const canChangeOrderWeight = done => {
     .put(`/api/v1/parcels/${orderId}/weight`)
     .send(statusData)
     .end((request, response) => {
-      console.log('=================');
-      console.log(response.body);
-      console.log(response.body.order);
       response.should.have.status(200);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(true);
