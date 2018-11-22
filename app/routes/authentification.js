@@ -40,9 +40,9 @@ authRouter.post(
     const { email, password } = req.body;
     const user = User.findByEmail(email);
     if (user) {
-      const validpassword = User.verifyPassword(user);
+      const validpassword = User.verifyPassword(user, password);
       if (validpassword) {
-        const token = encodeToken(user.toJSON());
+        const token = encodeToken(user);
         res.status(200).send({
           token: token,
           success: true,

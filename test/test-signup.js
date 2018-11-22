@@ -19,11 +19,9 @@ const canDecodeToken = done => {
   const token = encodeToken({ id: 1 });
   should.exist(token);
   token.should.be.a('string');
-  decodeToken(token, (err, res) => {
-    should.not.exist(err);
-    res.sub.should.eql(1);
-    done();
-  });
+  const payload = decodeToken(token);
+  payload.sub.should.be.eql(1);
+  done();
 };
 const cannotCreateIfEmailInvalid = done => {
   /**
@@ -183,4 +181,4 @@ describe('encodeToken()', () => {
 });
 
 it('can create a new user', canRegisterUser);
-it.skip('cannot create if email is already taken', cannotRegisterEmailTaken);
+it('cannot create if email is already taken', cannotRegisterEmailTaken);

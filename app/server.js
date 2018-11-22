@@ -9,7 +9,7 @@ import {
   joiErrors,
 } from './middlewares/errors';
 import jsonReplacer from './utils/jsonReplacer';
-
+import { ensureAuthentificated } from './utils/authentification';
 const app = express();
 
 app.get('/', (req, resp) => {
@@ -28,9 +28,11 @@ app.get('/test/errors/', (req, resp, error) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('json replacer', jsonReplacer);
-app.use('/api/v1/parcels', orders);
-app.use('/api/v1/users', userOrdersRouter);
 app.use('/auth', authRouter);
+app.use('/api/v1/parcels', orders);
+app.use(ensureAuthentificated);
+app.use('/api/v1/users', userOrdersRouter);
+
 app.use(joiErrors());
 app.use(error5OOHandler);
 // for Page not found errors, all route not found should return this error

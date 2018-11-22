@@ -11,6 +11,24 @@ chai.use(chaiHttp);
 const should = chai.should();
 const expect = chai.expect;
 // close the sever after running our tests
+let token;
+
+const loginUser = done => {
+  const user = users.get('1');
+  chai
+    .request(app)
+    .post('/auth/signin')
+    .send({
+      email: user.email,
+      password: 'a new password',
+    })
+    .end((error, response) => {
+      should.not.exist(error);
+      token = response.body.token;
+      token.should.be.a('string');
+      done();
+    });
+};
 
 const canGetUserOrders = done => {
   /**
@@ -28,6 +46,7 @@ const canGetUserOrders = done => {
   chai
     .request(app)
     .get(`/api/v1/users/${id}/parcels`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(200);
       response.body.should.be.a('object');
@@ -51,6 +70,7 @@ const cannotGetUserOrderById = done => {
   chai
     .request(app)
     .get(`/api/v1/users/${id}/parcels`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
@@ -80,6 +100,7 @@ const canGetUserOrdersByid = done => {
   chai
     .request(app)
     .get(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       const receivedOrder = response.body.order;
       response.should.have.status(200);
@@ -120,6 +141,7 @@ const cannotGetUserOrdersByid = done => {
   chai
     .request(app)
     .get(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
@@ -148,6 +170,7 @@ const cannotGetUserByIdOrdersByid = done => {
   chai
     .request(app)
     .get(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
@@ -177,6 +200,7 @@ const canCannotCancelOrder = done => {
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}/cancel`)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(401);
       response.body.should.be.a('object');
@@ -207,6 +231,7 @@ const canCancelOrder = done => {
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}/cancel `)
+    .set('authorization', 'Bearer ' + token)
     .end((request, response) => {
       response.should.have.status(200);
       response.body.should.be.a('object');
@@ -237,6 +262,7 @@ const cannotChangeDestinationOrder = done => {
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .send(order.toJSON())
     .end((request, response) => {
       response.should.have.status(401);
@@ -260,6 +286,7 @@ const canChangeDestinationOrder = done => {
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .send(destinationData)
     .end((request, response) => {
       response.should.have.status(200);
@@ -282,6 +309,7 @@ const cannotChangeDesinationOrderMissing = done => {
   chai
     .request(app)
     .put(`/api/v1/users/${userId}/parcels/${orderId}`)
+    .set('authorization', 'Bearer ' + token)
     .send(order)
     .type('application/json')
     .end((request, response) => {
@@ -294,7 +322,7 @@ const cannotChangeDesinationOrderMissing = done => {
       done();
     });
 };
-
+before('login the user and set the token', loginUser);
 // check if we can update a given order for a given user
 describe('get user orders by id', () => {
   it('cannot get user if  id invalid', cannotGetUserOrderById);
