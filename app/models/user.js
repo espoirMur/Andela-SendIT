@@ -115,6 +115,16 @@ class User {
     users.set(id_, this.toJSON());
     return user.id;
   }
+  static async getById(id) {
+    const pool = new Pool();
+    const client = await pool.connect();
+    const result = await client.query({
+      rowMode: 'array',
+      text: 'SELECT * from users;',
+    });
+    await client.end();
+    return result;
+  }
 }
 
 const user = new User('Espoir', 'espoir_mur@gmail.com', '25078000');
