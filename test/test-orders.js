@@ -416,6 +416,7 @@ const canChangeStatusLocationOrder = done => {
     .request(app)
     .put(`/api/v1/parcels/${orderId}`)
     .set('authorization', 'Bearer ' + token)
+
     .send(orderData)
     .end((request, response) => {
       response.should.have.status(200);

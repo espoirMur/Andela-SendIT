@@ -110,6 +110,7 @@ router.put('/:id', checkIsAdmin, (req, res) => {
   const order = orders.get(id);
   const presentLocation = req.body.presentLocation;
   const status = req.body.status;
+  console.log(status, '====', presentLocation);
   if (order) {
     if (order.status !== 'delivered') {
       if (
