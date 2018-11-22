@@ -21,6 +21,7 @@ authRouter.post(
     await user
       .save()
       .then(result => {
+        // save to the db
         const token = encodeToken(result);
         return res.status(201).send({
           success: true,
@@ -30,8 +31,10 @@ authRouter.post(
         });
       })
       .catch(error => {
+        // if an error check if it's related to duplicated user
         if (error.code === '23505' && error.constraint === 'users_email_key') {
           // 23505 means duplicate key entry and constraint is to show if the email is taken
+          // status 409 duplicate data
           return res.status(409).send({
             success: false,
             message: 'the email is already taken , try to login',
@@ -39,7 +42,7 @@ authRouter.post(
         } else {
           return res.status(500).send({
             success: false,
-            message: 'something please try again',
+            message: 'something went wong please try again',
           });
         }
       });
@@ -49,30 +52,38 @@ authRouter.post(
 authRouter.post(
   '/signin',
   celebrate({ body: loginSchema }),
-  (req, res, next) => {
+  async (req, res, next) => {
     const { email, password } = req.body;
-    const user = User.findByEmail(email);
-    if (user) {
-      const validpassword = User.verifyPassword(user, password);
-      if (validpassword) {
-        const token = encodeToken(user);
-        res.status(200).send({
-          token: token,
-          success: true,
-          userId: user.id,
-        });
-      } else {
-        res.status(401).send({
+    await User.findByEmail(email)
+      .then(results => {
+        if (results) {
+          if (User.verifyPassword(results['passwordhash'], password)) {
+            const token = encodeToken(results);
+            res.status(200).send({
+              token: token,
+              success: true,
+              userId: results.id,
+            });
+          } else {
+            res.status(401).send({
+              success: false,
+              message: 'Invalid credentials',
+            });
+          }
+        } else {
+          res.status(404).send({
+            success: false,
+            message: 'User not found , please create an account',
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        return res.status(500).send({
           success: false,
-          message: 'Invalid credentials',
+          message: 'something went wong please try again',
         });
-      }
-    } else {
-      res.status(404).send({
-        success: false,
-        message: 'User not found , please create an account',
       });
-    }
   }
 );
 

@@ -4,12 +4,13 @@ const queryCreate = {
   values: [],
 }; // create and return the value created
 const queryEmail = {
-  text: 'SELECT * FROM user WHERE email = $1',
+  text: 'SELECT * FROM users WHERE email = $1',
   values: [],
 };
 
 const queryId = {
-  text: 'SELECT * FROM user WHERE id = $1',
+  text: 'SELECT * FROM users WHERE id = $1',
   values: [],
 };
+
 export { queryCreate, queryEmail, queryId };

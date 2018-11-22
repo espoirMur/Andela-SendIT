@@ -5,6 +5,7 @@ import chaiHttp from 'chai-http';
 import { users } from '../app/models/user';
 import app from '../app/server';
 import { Order } from '../app/models/orders';
+import { getMaxListeners } from 'cluster';
 
 /** setting up the test server */
 chai.use(chaiHttp);
@@ -19,8 +20,8 @@ const loginUser = done => {
     .request(app)
     .post('/auth/signin')
     .send({
-      email: user.email,
-      password: 'a new password',
+      email: 'espoir.mur@gmail.com',
+      password: '98745236',
     })
     .end((error, response) => {
       should.not.exist(error);
@@ -324,17 +325,17 @@ const cannotChangeDesinationOrderMissing = done => {
 };
 before('login the user and set the token', loginUser);
 // check if we can update a given order for a given user
-describe('get user orders by id', () => {
+describe.skip('get user orders by id', () => {
   it('cannot get user if  id invalid', cannotGetUserOrderById);
   it('can get user orders by id', canGetUserOrders);
 });
 
-describe('can cancel or change', () => {
+describe.skip('can cancel or change', () => {
   it('can cancel if not delivered', canCancelOrder);
   it('can change destination if not delivered', canChangeDestinationOrder);
 });
 
-describe('cannot change destination update if order delivered', () => {
+describe.skip('cannot change destination update if order delivered', () => {
   it(
     'cannot change destination if bad content',
     cannotChangeDesinationOrderMissing
@@ -343,7 +344,7 @@ describe('cannot change destination update if order delivered', () => {
   it('cannot change destination if delivered', cannotChangeDestinationOrder);
 });
 
-describe('get one order for a given user', () => {
+describe.skip('get one order for a given user', () => {
   it('cannot get order for if orderId not found', cannotGetUserByIdOrdersByid);
   it('cannot get order if userId not found', cannotGetUserOrdersByid);
   it('can get one order', canGetUserOrdersByid);
