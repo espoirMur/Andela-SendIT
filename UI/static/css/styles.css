@@ -40,14 +40,17 @@ form {
     display:none
   }
   #register-form {
-    display:none
+    display:block
+  }
+  #login-form{
+    display: none;
   }
   
   #form-switch:checked~#register-form {
-    display:block
+    display:none;
   }
   #form-switch:checked~#login-form {
-    display:none
+    display:block;
   }
  /*
 * code for the order table
@@ -79,10 +82,11 @@ form {
   table td {
     padding: .625em;
     text-align: center;
+    font-size: 14px;
   }
   
   table th {
-    font-size: .85em;
+    font-size: 12px;
     letter-spacing: .1em;
     text-transform: uppercase;
     /*break content in the cell width*/
@@ -257,14 +261,18 @@ new order input
   z-index: 2;
 }
 
+.location-picker::before{
+  content: "\f2ed";  
+}
 /*
 edit order button
 */
 
 .delete-order, .edit-order{
-  cursor: pointer
+  display: inline-block;
+  padding-right: 6px;
+  height: 20;
 }
-
 /*
 status select 
 */
