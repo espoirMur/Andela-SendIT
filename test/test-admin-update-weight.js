@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { Order, orders } from '../app/models/orders';
-import app from '../app/server';
+import { app } from '../app/server';
 
 /** setting up the test server */
 chai.use(chaiHttp);

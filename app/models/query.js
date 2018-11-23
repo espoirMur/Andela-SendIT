@@ -1,4 +1,4 @@
-CREATE TABLE users(
+const createDB = `CREATE TABLE users(
   id serial PRIMARY KEY,
   name VARCHAR (50) UNIQUE NOT NULL,
   passwordHash VARCHAR (500) NOT NULL,
@@ -23,4 +23,6 @@ CREATE TABLE users(
   CONSTRAINT order_initiator_id_fk FOREIGN KEY (initiatorId)
        REFERENCES users (id) MATCH SIMPLE
        ON UPDATE NO ACTION ON DELETE NO ACTION
- );
+ );`;
+
+export { createDB };

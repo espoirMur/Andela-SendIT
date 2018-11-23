@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../app/server';
+import { app } from '../app/server';
 /** setting up the test server */
 chai.use(chaiHttp);
 const should = chai.should();

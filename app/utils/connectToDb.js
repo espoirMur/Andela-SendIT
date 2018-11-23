@@ -1,5 +1,4 @@
 import { Pool, Client } from 'pg';
-import { create } from 'domain';
 
 const pool = new Pool();
 

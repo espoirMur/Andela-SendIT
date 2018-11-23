@@ -1,8 +1,9 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { User, users } from '../app/models/user';
-import app from '../app/server';
+import { app } from '../app/server';
 import { encodeToken, decodeToken } from '../app/utils/authentification';
+import { before } from 'mocha';
 
 /** setting up the test server */
 chai.use(chaiHttp);
@@ -117,9 +118,9 @@ const cannotCreateIfnameInvalid = done => {
 const canRegisterUser = done => {
   const user = {
     name: 'Espoir',
-    email: 'espy_mur@gmail.com',
+    email: 'test@test.com',
     phone: '2507800564444',
-    password: 'a new password',
+    password: '98745236',
   };
   chai
     .request(app)
@@ -143,7 +144,7 @@ const canRegisterUser = done => {
 const cannotRegisterEmailTaken = done => {
   const user = {
     name: 'Espoir',
-    email: 'espy_mur@gmail.com',
+    email: 'test@test.com',
     phone: '250780077466',
     password: 'a new password',
   };
@@ -180,5 +181,5 @@ describe('encodeToken()', () => {
   it('should decode token', canDecodeToken);
 });
 
-it('can create a new user', canRegisterUser);
+before('can create a new user', canRegisterUser);
 it('cannot create if email is already taken', cannotRegisterEmailTaken);

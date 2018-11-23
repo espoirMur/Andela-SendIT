@@ -1,33 +1,15 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { Order, orders } from '../app/models/orders';
-import { users } from '../app/models/user';
-import app from '../app/server';
+import { users, User } from '../app/models/user';
+import { token } from './test-0Initial';
+
+import { app } from '../app/server';
 
 /** setting up the test server */
 chai.use(chaiHttp);
 const should = chai.should();
 const expect = chai.expect;
-
-let token;
-
-const loginUser = done => {
-  const user = users.get('1');
-  chai
-    .request(app)
-    .post('/auth/signin')
-    .send({
-      email: 'espoir.mur@gmail.com',
-      password: '98745236',
-    })
-    .end((error, response) => {
-      console.log(response);
-      should.not.exist(error);
-      token = response.body.token;
-      token.should.be.a('string');
-      done();
-    });
-};
 
 const returnAllOrders = done => {
   /**
@@ -457,7 +439,7 @@ const canChangeStatusOrderDate = done => {
 /*
  * Test the /POST route for creating new order
  */
-before('login the user and set the token', loginUser);
+
 // check if we can update a given order for a given user
 describe.skip('create orders', () => {
   it('create all orders', createOrder);

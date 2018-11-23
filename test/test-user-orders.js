@@ -2,8 +2,8 @@
 /* eslint-disable no-underscore-dangle */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { users } from '../app/models/user';
-import app from '../app/server';
+import { users, User } from '../app/models/user';
+import { app } from '../app/server';
 import { Order } from '../app/models/orders';
 import { getMaxListeners } from 'cluster';
 
@@ -14,23 +14,39 @@ const expect = chai.expect;
 // close the sever after running our tests
 let token;
 
-const loginUser = done => {
-  const user = users.get('1');
-  chai
-    .request(app)
-    .post('/auth/signin')
-    .send({
-      email: 'espoir.mur@gmail.com',
-      password: '98745236',
+const loginUser = async done => {
+  const user = new User('test', 'test@gmail.com', '250788888', '98745236');
+  await user
+    .save()
+    .then(result => {
+      // save to the db
+      token = encodeToken(result);
+      chai
+        .request(app)
+        .post('/auth/signin')
+        .send(result)
+        .end((error, response) => {
+          console.log(response);
+          should.not.exist(error);
+          token = response.body.token;
+          //token.should.not.be(undefined);
+          token.should.be.a('string');
+          done();
+        });
     })
-    .end((error, response) => {
-      should.not.exist(error);
-      token = response.body.token;
-      token.should.be.a('string');
-      done();
+    .catch(error => {
+      done(error);
     });
 };
 
+const deleteAll = async done => {
+  await User.deleteAll()
+    .then(result => {
+      console.log(result);
+      done;
+    })
+    .catch(done);
+};
 const canGetUserOrders = done => {
   /**
    * test if we can all users delivery orders
@@ -323,7 +339,8 @@ const cannotChangeDesinationOrderMissing = done => {
       done();
     });
 };
-before('login the user and set the token', loginUser);
+//before('login the user and set the token', loginUser);
+//after('delete all users', deleteAll);
 // check if we can update a given order for a given user
 describe.skip('get user orders by id', () => {
   it('cannot get user if  id invalid', cannotGetUserOrderById);

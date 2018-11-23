@@ -1,7 +1,14 @@
 import bcrypt from 'bcryptjs';
-import { queryCreate, queryEmail, queryId } from './userQueries';
+import {
+  queryCreate,
+  queryEmail,
+  queryId,
+  deleteAll,
+  queryDeleteAll,
+} from './userQueries';
 import { create } from 'domain';
 import { Pool, Client } from 'pg';
+import { dbConfigObject } from '../server';
 
 const users = new Map();
 /* eslint-disable no-underscore-dangle */
@@ -100,7 +107,7 @@ class User {
       this.phone,
       this.isAdmin,
     ];
-    const pool = new Pool();
+    const pool = new Pool(dbConfigObject);
     const client = await pool.connect();
     const result = await client.query(queryCreate);
     await client.end();
@@ -108,16 +115,24 @@ class User {
   }
   static async getById(id) {
     queryId.values = [id];
-    const pool = new Pool();
+    const pool = new Pool(dbConfigObject);
     const client = await pool.connect();
     const result = await client.query(queryId);
     await client.end();
     return result;
   }
 
+  static async deleteAll() {
+    const pool = new Pool(dbConfigObject);
+    const client = await pool.connect();
+    const result = await client.query(queryDeleteAll);
+    await client.end();
+    return result;
+  }
+
   static async findByEmail(email) {
     queryEmail.values = [email];
-    const pool = new Pool();
+    const pool = new Pool(dbConfigObject);
     const client = await pool.connect();
     const result = await client.query(queryEmail);
     await client.end();

@@ -13,4 +13,8 @@ const queryId = {
   values: [],
 };
 
-export { queryCreate, queryEmail, queryId };
+const queryDeleteAll = {
+  text: 'delete from users',
+  value: [],
+};
+export { queryCreate, queryEmail, queryId, queryDeleteAll };
