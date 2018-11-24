@@ -26,7 +26,6 @@ authRouter.post(
         return res.status(201).send({
           success: true,
           message: 'the new user has been created',
-          userId: result.id,
           token,
         });
       })
@@ -59,10 +58,10 @@ authRouter.post(
         if (results) {
           if (User.verifyPassword(results['passwordhash'], password)) {
             const token = encodeToken(results);
+            console.log(decodeToken(token));
             res.status(200).send({
               token: token,
               success: true,
-              userId: results.id,
             });
           } else {
             res.status(401).send({

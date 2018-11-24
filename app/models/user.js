@@ -6,7 +6,7 @@ import {
   deleteAll,
   queryDeleteAll,
 } from './userQueries';
-import { Pool, Client } from 'pg';
+import { Pool } from 'pg';
 import { dbConfigObject } from '../server';
 
 const users = new Map();

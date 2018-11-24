@@ -1,8 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
-
-import { users } from './user';
-
+import { Pool } from 'pg';
+import { dbConfigObject } from '../server';
 const orders = new Map();
 
 class Order {
@@ -22,17 +21,6 @@ class Order {
     }
     this._status = 'Created';
     this._weight = 0;
-  }
-
-  save() {
-    /**
-     *  save the object to the file */
-    const id_ = this.id.toString();
-    // adding the file to the previous one
-    orders.set(id_, this.toJSON());
-    // save to user
-    const user = users.get(this.initiatorId.toString());
-    user.orders = this;
   }
 
   get id() {
@@ -89,10 +77,9 @@ class Order {
   get comments() {
     if (typeof this._comments === 'undefined') {
       /** saving null for undefined comment for validation */
-      this._comments = null;
-    } else {
-      this._comments = comments;
+      return null;
     }
+    return this._comments;
   }
 
   set comments(comments) {
@@ -123,30 +110,21 @@ class Order {
     return this._presentLocation;
   }
 
-  toJSON() {
-    /**
-     *  convert the object to json
-     * */
-    return Object.getOwnPropertyNames(this).reduce((a, b) => {
-      a[b.replace('_', '')] = this[b];
-      return a;
-    }, {});
-  }
-
-  static OrderMapToJson(allOrders) {
-    const OrderJson = {};
-    allOrders.forEach((v, k) => {
-      OrderJson[k] = v;
-    });
-    return OrderJson;
-  }
-
   get recipientPhone() {
     return this._recipientPhone;
   }
 
   set recipientPhone(recipientPhone) {
     this._recipientPhone = recipientPhone;
+  }
+
+  static async queryDb(query, values = []) {
+    query.values = values;
+    const pool = new Pool(dbConfigObject);
+    const client = await pool.connect();
+    const result = await client.query(query, values);
+    await client.end();
+    return result.rows;
   }
 }
 

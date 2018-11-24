@@ -1,40 +1,40 @@
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable arrow-parens */
+/* eslint-disable import/no-cycle */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-else-return */
 import { Router } from 'express';
-import bodyParser from 'body-parser';
+import { celebrate } from 'celebrate';
 import { orders, Order } from '../models/orders';
 import { checkIsAdmin } from '../middlewares/authentification';
 import { decodeToken } from '../utils/authentification';
+import { createOrder } from '../models/orderSchemas';
+import { queryCreate, queryGetAll, queryGetId } from '../models/orderQueries';
+import { User } from '../models/user';
 
 const router = Router();
 
-router.get('/', checkIsAdmin, (req, res) => {
-  const allOders = Order.OrderMapToJson(orders);
-  res.status(200).json(allOders);
+router.get('/', checkIsAdmin, async (req, res) => {
+  await Order.queryDb(queryGetAll)
+    .then(results => {
+      return res.status(200).json(results);
+    })
+    .catch(error => {
+      console.log(error);
+      return res.status(500).send({
+        success: false,
+        message: 'something went wong please try again',
+      });
+    });
 });
 
-router.post('/', (req, res) => {
+router.post('/', celebrate({ body: createOrder }), async (req, res) => {
   const contype = req.headers['content-type'];
   if (!contype || contype.indexOf('application/json') !== 0) {
     return res.status(406).send({
       success: false,
       message: 'invalid content type',
-    });
-  } else if (!req.body.origin) {
-    return res.status(400).send({
-      success: false,
-      message: 'pickup location is required',
-    });
-  } else if (!req.body.destination) {
-    return res.status(400).send({
-      success: false,
-      message: 'destination is required',
-    });
-  } else if (!req.body.recipientPhone) {
-    return res.status(400).send({
-      success: false,
-      message: 'recipient phone is required',
     });
   }
   const orderDetails = req.body;
@@ -42,6 +42,8 @@ router.post('/', (req, res) => {
   const token = header.slice(7);
   const payload = decodeToken(token);
   const initiatorId = payload.sub;
+
+  // should I delete Order class?
   const order = new Order(
     orderDetails.origin,
     orderDetails.destination,
@@ -49,29 +51,48 @@ router.post('/', (req, res) => {
     initiatorId,
     orderDetails.comment
   );
-  order.save();
-  return res.status(201).send({
-    success: true,
-    message: 'delivery order successfully created!',
-    orderId: order.id,
-  });
+  const values = Object.values([
+    order.origin,
+    order.destination,
+    order.recipientPhone,
+    order.initiatorId,
+    order.comments,
+  ]);
+  console.log(values);
+  await Order.queryDb(queryCreate, values)
+    .then(result =>
+      res.status(201).send({
+        success: true,
+        message: 'delivery order successfully created!',
+        order: result,
+      })
+    )
+    .catch(error => {
+      console.log(error);
+      return res.status(500).send({
+        success: false,
+        message: 'something went wong please try again',
+      });
+    });
 });
 
-router.get('/:id', checkIsAdmin, (req, res) => {
+router.get('/:id', checkIsAdmin, async (req, res) => {
   const id = req.params.id;
-  const order = orders.get(id);
-  if (order) {
-    return res.status(200).send({
-      success: true,
-      message: 'delivery order  retrieved successfully',
-      order,
-    });
-  } else {
-    return res.status(404).send({
-      success: false,
-      message: `delivery order with id ${id} does not exist`,
-    });
-  }
+
+  await Order.queryDb(queryGetId, [id]).then(results => {
+    if (results.length === 0) {
+      return res.status(404).send({
+        success: false,
+        message: 'the delivery order you are looking for does not exist',
+      });
+    } else {
+      return res.status(200).send({
+        success: true,
+        message: 'delivery order  retrieved successfully',
+        order: results[0],
+      });
+    }
+  });
 });
 
 router.put('/:id/cancel', checkIsAdmin, (req, res) => {

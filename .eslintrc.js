@@ -9,8 +9,4 @@ module.exports = {
     after: false,
     afterEach: false,
   },
-  plugins: ['prettier'],
-  rules: {
-    'prettier/prettier': 'error',
-  },
 };
