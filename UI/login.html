@@ -12,27 +12,28 @@
 
 </head>
 
-<body>
-    
-    <div>
+
+    <body>
+        <div>
         
-      <h4> Hi, Welcome to SendIt </h4>
-        <input type='checkbox' id='form-switch'>
-        <form id='login-form' action="orders.html" method='get'>
-        <input type="text" placeholder="Username" required>
-          <input type="password" placeholder="Password" required>
-          <button type='submit'>Login</button>
-          <label for='form-switch'><span>Register</span></label>
-         <!--label for='form-switch'><span>Reset password</span></label-->
-        </form>
-        <form id='register-form' action="orders.html" method='get'>
-          <input type="text" placeholder="Username" required>
-          <input type="email" placeholder="Email" required>
-          <input type="password" placeholder="Password" required>
-          <input type="password" placeholder="Re Password" required>
-          <button type='submit'>Register</button>
-         <label for='form-switch'>Already Member ? Sign In Now..</label>
-        </form>
-        
-    </div>
+            <h4 id='login-title'> Create an Account</h4>
+              <input type='checkbox' id='form-switch'>
+              <form id='login-form' action="orders.html" method='get'>
+              <input type="text" placeholder="Username" required>
+                <input type="password" placeholder="Password" required>
+                <button type='submit' id='login-btn'>Login</button>
+                <label for='form-switch' id='register-switch'><span>Register</span></label>
+               <!--label for='form-switch'><span>Reset password</span></label-->
+              </form>
+              <form id='register-form' action="orders.html" method='get'>
+                <input type="text" placeholder="Username" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <input type="password" placeholder="Re Password" required>
+                <button type='submit' id='register-btn'>Register</button>
+               <label for='form-switch' id='sign-in-switch'>Already Member ? Sign In Now..</label>
+              </form>
+          </div>
+    </body>
+    <script src="static/js/authentification.js"></script>
 </html>
