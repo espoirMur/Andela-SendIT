@@ -12,9 +12,8 @@
 
 </head>
 
-
     <body>
-        <div>
+        <div class="wrapper">
         
             <h4 id='login-title'> Create an Account</h4>
               <input type='checkbox' id='form-switch'>
@@ -25,13 +24,13 @@
                 <label for='form-switch' id='register-switch'><span>Register</span></label>
                <!--label for='form-switch'><span>Reset password</span></label-->
               </form>
-              <form id='register-form' action="orders.html" method='get'>
-                <input type="text" placeholder="Username" required>
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Password" required>
+              <form id='register-form' action="login.html" method='get'>
+                <input name='email' type="email" placeholder="Email" required>
+                <input type="phone" name='phone' placeholder="Phone" required>
+                <input name="password" type="password" placeholder="Password" required>
                 <input type="password" placeholder="Re Password" required>
                 <button type='submit' id='register-btn'>Register</button>
-               <label for='form-switch' id='sign-in-switch'>Already Member ? Sign In Now..</label>
+               <label for='form-switch' id='sign-in-switch'>Sign In</label>
               </form>
           </div>
     </body>

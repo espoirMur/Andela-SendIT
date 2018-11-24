@@ -34,7 +34,8 @@ form {
     padding:10px
   }
   label {
-    cursor:pointer
+    cursor:pointer;
+    color: blue;
   }
   #form-switch {
     display:none
@@ -52,6 +53,7 @@ form {
   #form-switch:checked~#login-form {
     display:block;
   }
+  
  /*
 * code for the order table
 */
