@@ -253,6 +253,10 @@ new order input
 
 }
 
+.new-order-p{
+  align:"left"
+}
+
 .location-picker {
   float: right;
   margin-right: -15px;
@@ -302,3 +306,4 @@ the navigation bar
 .topnav-right {
   float: right;
 }
+
