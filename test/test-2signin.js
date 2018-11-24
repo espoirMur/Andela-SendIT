@@ -1,10 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { User, users } from '../app/models/user';
-import app from '../app/server';
-
-chai.use(chaiHttp);
-const should = chai.should();
+import { app } from '../app/server';
 
 const cannotLoginIfEmailInvalid = done => {
   /**
@@ -53,7 +50,7 @@ const cannotloginIfpasswordInvalid = done => {
 
 const cannotLoginPasswordIncorrect = done => {
   const user = {
-    email: 'espy_mur@gmail.com',
+    email: 'test@test.com',
     password: 'a new 333333',
   };
   chai
@@ -95,7 +92,7 @@ describe('cannot login if invalid content', () => {
 });
 
 describe('cannot login if Incorect content', () => {
-  it.skip('cannot login if incorect password', cannotLoginPasswordIncorrect),
+  it('cannot login if incorect password', cannotLoginPasswordIncorrect),
     it('cannot login if user not found', cannotLoginUserNotFOund);
 });
 

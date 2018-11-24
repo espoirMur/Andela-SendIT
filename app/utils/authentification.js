@@ -9,7 +9,7 @@ const encodeToken = user => {
       .unix(),
     iat: moment().unix(),
     sub: user.id,
-    isAdmin: user.isAdmin,
+    isadmin: user.isadmin,
   };
   return jwt.encode(playload, 'A secret code to put in venv');
 };

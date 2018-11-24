@@ -10,6 +10,23 @@ import {
 } from './middlewares/errors';
 import jsonReplacer from './utils/jsonReplacer';
 import { ensureAuthentificated } from './middlewares/authentification';
+import dotenv from 'dotenv';
+dotenv.config();
+
+// read the virtual environement
+const env = process.env.NODE_ENV;
+// convert it to uppercasse
+const envString = env.toUpperCase();
+// get the correponding database URI
+const DATABASEURI = process.env['PGDATABASE_' + envString];
+// build the config object using the database URI and other env
+const dbConfigObject = {
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  database: DATABASEURI,
+  password: process.env.PGPASSWORD,
+  port: process.env.PGPORT,
+};
 const app = express();
 
 app.get('/', (req, resp) => {
@@ -40,4 +57,4 @@ app.use(error5OOHandler);
 app.get('*', error4O4Handler);
 app.listen(process.env.PORT || 3000);
 
-export default app;
+export { app, dbConfigObject };

@@ -1,5 +1,13 @@
 import bcrypt from 'bcryptjs';
-import userOrdersRouter from '../routes/user-orders';
+import {
+  queryCreate,
+  queryEmail,
+  queryId,
+  deleteAll,
+  queryDeleteAll,
+} from './userQueries';
+import { Pool, Client } from 'pg';
+import { dbConfigObject } from '../server';
 
 const users = new Map();
 /* eslint-disable no-underscore-dangle */
@@ -57,7 +65,7 @@ class User {
     return this._isAdmin;
   }
 
-  set isAdmin(value = false) {
+  set isAdmin(value) {
     this._isAdmin = value;
   }
 
@@ -81,56 +89,61 @@ class User {
     }, {});
   }
 
-  static findByEmail(email) {
-    // return true if the user with email is already exist
-    // should query the database and check if i can find user with email
-    const user = Array.from(users.values()).find(
-      aUser => aUser.email === email
-    );
-    if (typeof user !== 'undefined') {
-      return user;
-    } else {
-      return false;
-    }
-  }
-
-  static verifyPassword(user, password) {
+  static verifyPassword(databasePassword, password) {
     // need to verify password in the db
-    const databasePassword = users.get(user.id.toString()).password;
-    // why this not working??
-    //const bool = bcrypt.compareSync(user.password, databasePassword);
-    const bool = true;
+    const matched = bcrypt.compareSync(password, databasePassword);
     // need to do more check with the db
-    if (!bool) {
-      return false;
-    } else {
-      return true;
-    }
+    return matched;
   }
 
-  save() {
+  async save() {
     /**
      *  should save the user to the db */
-    const id_ = this.id.toString();
-    users.set(id_, this.toJSON());
-    return user.id;
+    queryCreate.values = [
+      this.name,
+      this.email,
+      this.password,
+      this.phone,
+      this.isAdmin,
+    ];
+    const pool = new Pool(dbConfigObject);
+    const client = await pool.connect();
+    const result = await client.query(queryCreate);
+    await client.end();
+    return result.rows[0];
   }
   static async getById(id) {
-    const pool = new Pool();
+    queryId.values = [id];
+    const pool = new Pool(dbConfigObject);
     const client = await pool.connect();
-    const result = await client.query({
-      rowMode: 'array',
-      text: 'SELECT * from users;',
-    });
+    const result = await client.query(queryId);
     await client.end();
     return result;
+  }
+
+  static async deleteAll() {
+    const pool = new Pool(dbConfigObject);
+    const client = await pool.connect();
+    const result = await client.query(queryDeleteAll);
+    await client.end();
+    return result;
+  }
+
+  static async findByEmail(email) {
+    queryEmail.values = [email];
+    const pool = new Pool(dbConfigObject);
+    const client = await pool.connect();
+    const result = await client.query(queryEmail);
+    await client.end();
+    if (result.rows.length === 0) {
+      return false;
+    } else {
+      return result.rows[0];
+    }
   }
 }
 
 const user = new User('Espoir', 'espoir_mur@gmail.com', '25078000');
-user._id = '1';
-user.isAdmin = true;
-user.password = 'meAsadmin@sendIt';
 
 users.set(user.id.toString(), user);
 

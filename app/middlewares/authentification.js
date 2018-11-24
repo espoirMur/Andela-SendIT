@@ -58,7 +58,7 @@ const checkIsAdmin = (req, res, next) => {
       success: false,
     });
   } else {
-    if (!payload.isAdmin) {
+    if (!payload.isadmin) {
       return res.status(403).json({
         message: 'you are not authorized to perform this action',
         success: false,
