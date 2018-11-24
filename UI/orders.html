@@ -61,7 +61,7 @@
                         <td data-label="Destination"> Gisenyi </td>
                         <td data-label="Tracking"> RBOOOO</td>
                         <td data-label="Status"> Pending</td>
-                        <td data-label="Action"><a class="edit-order">edit</a> <a class="delete-order">cancel</a> </td>
+                        <td data-label="Action"><a class="edit-order">Edit</a> <a class="delete-order">Cancel</a> </td>
                       </tr>
                     <tfoot>
                     </tfoot>
@@ -77,13 +77,16 @@
 <div class="wrapper" >
         <h1 class="title-center" id="new-order-form-title"> Create a new delivery order </h1>
         <form id='new-order-form' action="orders.html" method='get'>
-            <label for="origin"></label>
-            <input name="origin" id ="new-order-input-origin" class="new-order-input" placeholder="Origin" required>
+            <label for="origin">Origin</label>
+            <input name="origin" id ="new-order-input-origin" class="new-order-input" required>
             <span class="location-picker" id="origin-location-picker"></span>
-            <input type="text" id ="new-order-input-destination" class="new-order-input" placeholder="Desination" required>
+            <label for="destination">Destination </label>
+            <input name="destination" type="text" id ="new-order-input-destination" class="new-order-input" required>
             <span class="location-picker" id="destination-location-picker"></span>
-            <textarea id ="new-order-input-comments" rows="4" class="new-order-input" cols="41" name="comment" form="new-order-form" placeholder="Additional informations">
-                    Additionals informations
+            <label for="recipientPhone" id="recipientPhone-label">Recipient Phone</label>
+            <input name="recipientPhone" id ="new-order-recipientPhone" class="new-order-input" required>
+            <label for="comments"> Comments</label>
+            <textarea id ="new-order-input-comments" rows="4" class="new-order-input" cols="41" name="comment" form="new-order-form" >
             </textarea>
             <button id='new-order-button' class="action-button" type='submit'>Submit</button>
         </form>

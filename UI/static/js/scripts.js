@@ -53,7 +53,13 @@ window.onload = function() {
     // change the form name to edit
     let modalTitle = document.getElementById('new-order-form-title');
     let submitButton = document.getElementById('new-order-button');
+    let recipientPhone = document.getElementById('new-order-recipientPhone');
+    let recipientPhoneLabel = document.getElementById('recipientPhone-label');
+    recipientPhone.style.display = 'none';
+    recipientPhoneLabel.style.display = 'none';
+
     submitButton.disabled = false;
+    modalTitle.innerHTML = '';
     modalTitle.innerHTML = 'Edit Order ' + orderId;
     // change the button to submit
     // put name in the field
