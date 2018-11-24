@@ -6,7 +6,6 @@ import {
   deleteAll,
   queryDeleteAll,
 } from './userQueries';
-import { create } from 'domain';
 import { Pool, Client } from 'pg';
 import { dbConfigObject } from '../server';
 
@@ -107,7 +106,11 @@ class User {
       this.phone,
       this.isAdmin,
     ];
+<<<<<<< HEAD
     const pool = new Pool(dbConfigObject);
+=======
+    const pool = new Pool();
+>>>>>>> 20374042956a10741faef2620fb0729f37845f04
     const client = await pool.connect();
     const result = await client.query(queryCreate);
     await client.end();
@@ -115,6 +118,7 @@ class User {
   }
   static async getById(id) {
     queryId.values = [id];
+<<<<<<< HEAD
     const pool = new Pool(dbConfigObject);
     const client = await pool.connect();
     const result = await client.query(queryId);
@@ -126,13 +130,22 @@ class User {
     const pool = new Pool(dbConfigObject);
     const client = await pool.connect();
     const result = await client.query(queryDeleteAll);
+=======
+    const pool = new Pool();
+    const client = await pool.connect();
+    const result = await client.query(queryId);
+>>>>>>> 20374042956a10741faef2620fb0729f37845f04
     await client.end();
     return result;
   }
 
   static async findByEmail(email) {
     queryEmail.values = [email];
+<<<<<<< HEAD
     const pool = new Pool(dbConfigObject);
+=======
+    const pool = new Pool();
+>>>>>>> 20374042956a10741faef2620fb0729f37845f04
     const client = await pool.connect();
     const result = await client.query(queryEmail);
     await client.end();
