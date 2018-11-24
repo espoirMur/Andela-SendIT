@@ -117,7 +117,6 @@ class User {
   }
   static async getById(id) {
     const pool = new Pool();
-
     const client = await pool.connect();
     const result = await client.query({
       rowMode: 'array',
