@@ -12,7 +12,6 @@ import jsonReplacer from './utils/jsonReplacer';
 import { ensureAuthentificated } from './middlewares/authentification';
 import dotenv from 'dotenv';
 dotenv.config();
-<<<<<<< HEAD
 
 // read the virtual environement
 const env = process.env.NODE_ENV;
@@ -28,8 +27,6 @@ const dbConfigObject = {
   password: process.env.PGPASSWORD,
   port: process.env.PGPORT,
 };
-=======
->>>>>>> 20374042956a10741faef2620fb0729f37845f04
 const app = express();
 
 app.get('/', (req, resp) => {
