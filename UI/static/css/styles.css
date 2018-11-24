@@ -1,6 +1,10 @@
 body {
   font-family: "Open Sans", sans-serif;
   line-height: 1.25;
+  background-image: url(../img/main.jpg);
+  height: 100vh;
+  background-size: cover;
+  background-position: center, center;
 }
 
 
@@ -11,8 +15,7 @@ div {
 }
 .wrapper {
 	padding: 5px;
-	max-width: 960px;
-	width: 95%;
+	width: 90%;
 	margin: 20px auto;
 }
 h4 {
@@ -21,7 +24,7 @@ h4 {
 
 form {
     margin:0 auto;
-    width:300px
+    width:300px;
   }
   input, textarea, select {
     margin-bottom: 26px;
@@ -33,9 +36,13 @@ form {
   button {
     padding:10px
   }
-  label {
-    cursor:pointer
+  #sign-in-switch, #register-switch {
+    cursor:pointer;
+    color: blue;
   }
+ #login-title{
+   color: black;;
+ }
   #form-switch {
     display:none
   }
@@ -52,6 +59,7 @@ form {
   #form-switch:checked~#login-form {
     display:block;
   }
+  
  /*
 * code for the order table
 */
@@ -59,10 +67,11 @@ form {
   table {
     border: 1px solid #ccc;
     border-collapse: collapse;
-    margin: 0;
     padding: 0;
     width: 100%;
     table-layout: fixed;
+    margin-left:auto; 
+    margin-right:auto;
   }
   
   table caption {
@@ -253,6 +262,10 @@ new order input
 
 }
 
+.new-order-p{
+  align:"left"
+}
+
 .location-picker {
   float: right;
   margin-right: -15px;
@@ -302,3 +315,4 @@ the navigation bar
 .topnav-right {
   float: right;
 }
+

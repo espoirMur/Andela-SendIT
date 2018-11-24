@@ -45,11 +45,11 @@
                         <th scope="col">Order Id</th>
                         <th scope="col">Date</th>
                         <th scope="col">Client Email</th>
-                        <th scope="col">Client Phone</th>
+                        <th scope="col">Phone</th>
                         <th scope="col">Price</th>
                         <th scope="col">origin</th>
                         <th scope="col">Destination</th>
-                        <th scope="col">Current Location</th>
+                        <th scope="col">Location</th>
                         <th scope="col">Tracking</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
@@ -82,12 +82,15 @@
 <div class="wrapper" >
         <h1 class="title-center" id="edit-order-form-title"> Update delivery Order </h1>
         <form id='edit-order-form' action="admin.html" method='get'>
-            <input type="text" id ="order-input-current-location" class="new-order-input" placeholder="Current Location" required>
+            <label for="origin">Current Location</label>
+            <input type="text" name='current-location' id ="order-input-current-location" class="new-order-input" required>
             <span class=" location-picker" id="current-location-picker"></span>
+            <label for="status"> Status</label>
             <select name="status" form="edit-order-form" id ="order-input-status" class="new-order-input">
                 <option value="pending">Pending</option>
                 <option value="delivered">Delivered</option>
               </select>
+              <label for="comment">Comments</label>
             <textarea id ="order-input-comments" rows="4" class="new-order-input" cols="41" name="comment" form="new-order-form" placeholder="Additionals notes">
                     Additionals notes
             </textarea>

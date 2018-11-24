@@ -1,29 +1,29 @@
 ## Andela-SendIT
+
 SendIT is a courier service that helps users deliver parcels to different destinations. SendIT
 provides courier quotes based on weight categories.
 
 ## Motivation
 
-This project was given as a learning project for andela kigali bootcamp preparation, it help us to  demonstrate our technical abilities by building a full-stack application.
+This project was given as a learning project for andela kigali bootcamp preparation, it help us to demonstrate our technical abilities by building a full-stack application.
 
 ## Build status
-Build status of continus integration i.e. travis, appveyor etc. Ex. - 
 
-**Coming soon**
+[![Maintainability](https://api.codeclimate.com/v1/badges/9e7b46a32f9fa04d5ee3/maintainability)](https://codeclimate.com/github/espoirMur/Andela-SendIT/maintainability)[![Build Status](https://travis-ci.org/espoirMur/Andela-SendIT.svg?branch=develop)](https://travis-ci.org/espoirMur/Andela-SendIT)
+[![codecov](https://codecov.io/gh/espoirMur/Andela-SendIT/branch/develop/graph/badge.svg)](https://codecov.io/gh/espoirMur/Andela-SendIT)
 
 ## Code style
-We will be using Airbnb code style for javascript
- 
-## Screenshots
 
-**Coming soon**
+We will be using Airbnb code style for javascript
 
 ## Tech/framework used
 
 <b>Built with</b>
+
 - HTML+ CSS
 - Vanilla Javascript ES6
 - NodeJs/ Express
+- Mocha and Chai for unittest
 
 ## Features
 
@@ -41,59 +41,64 @@ We will be using Airbnb code style for javascript
 
 6. Admin can change the status and present location of a parcel delivery order.
 
-### Optional Features are : 
+### Optional Features are :
+
 1. The application should display a Google Map with Markers showing the pickup location
-and the destination .
+   and the destination .
 
 2. The application should display computed travel distance and journey duration between
-the pickup location and the destination. Leverage Google Maps [Distance Matrix Service](https://www.google.com/url?q=https://developers.google.com/maps/documentation/javascript/examples/distance-matrix&ust=1540951920000000&usg=AFQjCNEYH17s27tYweNRYehge7Lw0ReUeA&hl=en-GB&source=gmail).
+   the pickup location and the destination. Leverage Google Maps [Distance Matrix Service](https://www.google.com/url?q=https://developers.google.com/maps/documentation/javascript/examples/distance-matrix&ust=1540951920000000&usg=AFQjCNEYH17s27tYweNRYehge7Lw0ReUeA&hl=en-GB&source=gmail).
 
 3. The user gets real-time email notification when Admin changes the status of their parcel.
 
 4. The user gets real-time email notification when Admin changes the present location of
-their parcel.
+   their parcel.
 
-## Code Example
-Show what the library does as concisely as possible, developers should be able to figure out **how** your project solves their problem by looking at the code example. Make sure the API you are showing off is obvious, and that your code is short and concise.
-
-**Coming soon**
 ## Installation
-Provide step by step series of examples and explanations about how to get a development env running.
 
-**Coming soon**
+    $ git clone https://github.com/espoirMur/Andela-SendIT.git
+    $ cd Andela-SendIT
+    $ npm install
+
+### Start & watch
+
+    $ npm start
+
+### Run test
+
+    $ npm test
 
 ## API Reference
 
-Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
+### API Endpoints
 
-**Coming soon**
+| Resource URL                                    | Methods   | Description                                               |
+| ----------------------------------------------- | --------- | --------------------------------------------------------- |
+| `/`                                             | GET       | The index                                                 |
+| `/api/v1/parcels`                               | GET, POST | Fetch all delivery orders, create a parcel delivery order |
+| `/api/v1/parcels/<string:id>`                   | GET, PUT  | View, edit a delivery order                               |
+| `/api/v1/users/<string:id>/parcels`             | GET       | get all parcel delivery orders by a specific users        |
+| `/api/v1/parcels/<string:id>/cancel`            | PUT       | cancel the specific parcel delivery order                 |
+| `/api/v1/users/<string:id>/parcels/<string:id>` | GET, PUT  | View , edit a specific parcel delivery order for a user   |
 
-## Tests
-Describe and show how to run the tests with code examples.
+### Running the APIS
 
-**Coming soon**
+Use postman to run this collection
 
-## How to use?
-If people like your project they’ll want to learn how they can use it. To do so include step by step guide to use your project.
-
-**Coming soon**
-
-## Contribute
-
-Let people know how they can contribute into your project. A [contributing guideline](https://github.com/zulip/zulip-electron/blob/master/CONTRIBUTING.md) will be a big plus.
-
-**Coming soon**
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/075ef216dc0bdf5584c3)
 
 ## Credits
-Give proper credits. This could be a link to any repo which inspired you to build this project, any blogposts or links to people who contrbuted in this project. 
 
-[This Guide for the readme style](https://medium.com/@meakaakka/a-beginners-guide-to-writing-a-kickass-readme-7ac01da88ab3)
+I used the following tutorials to build this project
 
-**Coming soon**
+- [This Guide for the readme style](https://medium.com/@meakaakka/a-beginners-guide-to-writing-a-kickass-readme-7ac01da88ab3)
 
-#### Anything else that seems useful
+- [Tutorial 1](https://scotch.io/tutorials/test-a-node-restful-api-with-mocha-and-chai)
+
+- [Tutorial 2](https://medium.com/@purposenigeria/build-a-restful-api-with-node-js-and-express-js-d7e59c7a3dfb)
+
+- [Tutorial 3](http://dsernst.com/2015/09/02/node-mocha-travis-istanbul-coveralls-unit-tests-coverage-for-your-open-source-project/)
 
 ## License
-A short snippet describing the license (MIT, Apache etc)
 
 MIT © [espoirMur](https://github.com/espoirMur)

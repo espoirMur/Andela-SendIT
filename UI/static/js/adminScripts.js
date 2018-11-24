@@ -45,8 +45,6 @@ const editOrder = function() {
 
 };
 
-
-
 const allEditButtons = document.getElementsByClassName("edit-order");
 
 // when a user click on any edit button fire an event
