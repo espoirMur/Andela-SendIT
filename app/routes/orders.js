@@ -10,7 +10,7 @@ import { checkIsAdmin } from '../middlewares/authentification';
 import { decodeToken } from '../utils/authentification';
 import { createOrder } from '../models/orderSchemas';
 import { queryGetAll, queryCancel } from '../models/orderQueries';
-import getOrder from '../middlewares/getOrder';
+import { getOrder, checkCancel } from '../middlewares/getOrder';
 
 const router = Router();
 
@@ -77,41 +77,25 @@ router.get('/:id', checkIsAdmin, getOrder, async (req, res) => {
   });
 });
 
-router.put('/:id/cancel', checkIsAdmin, getOrder, (req, res) => {
+router.put('/:id/cancel', checkIsAdmin, getOrder, checkCancel, (req, res) => {
   const id = req.params.id;
-  const order = req.order;
   // from the middlware get order
-
-  if (order.status !== 'delivered') {
-    if (order.status === 'canceled') {
-      return res.status(403).send({
-        success: false,
-        message: 'order has already been canceled',
-      });
-    } else {
-      Order.queryDb(queryCancel, [id])
-        .then((result) => {
-          if (result.rowCount === 1) {
-            return res.status(200).send({
-              success: true,
-              message: 'delivery order has been canceled',
-            });
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          return res.status(500).send({
-            success: false,
-            message: 'something went wong please try again',
-          });
+  Order.queryDb(queryCancel, [id])
+    .then((result) => {
+      if (result.rowCount === 1) {
+        return res.status(200).send({
+          success: true,
+          message: 'delivery order has been canceled',
         });
-    }
-  } else {
-    return res.status(403).send({
-      success: false,
-      message: 'cannot cancel a delivered order',
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      return res.status(500).send({
+        success: false,
+        message: 'something went wong please try again',
+      });
     });
-  }
 });
 
 router.put('/:id', checkIsAdmin, (req, res) => {

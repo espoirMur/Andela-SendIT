@@ -1,8 +1,10 @@
+/* eslint-disable import/no-mutable-exports */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { User, users } from '../app/models/user';
-import { encodeToken, decodeToken } from '../app/utils/authentification';
+import { User } from '../app/models/user';
+import { encodeToken } from '../app/utils/authentification';
 import { app } from '../app/server';
+
 chai.use(chaiHttp);
 const should = chai.should();
 
@@ -43,6 +45,7 @@ const deleteAll = (done) => {
     })
     .catch(done);
 };
+
 before('login the user and set the token', loginUser);
 after('delete all users', deleteAll);
 

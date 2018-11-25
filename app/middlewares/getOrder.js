@@ -3,7 +3,9 @@ import { queryGetId } from '../models/orderQueries';
 
 const getOrder = async (req, res, next) => {
   // called before any route where we are retreiving order by id
-  await Order.queryDb(queryGetId, [req.params.id])
+  // should use destructuring ask why???
+  const { id } = req.params;
+  await Order.queryDb(queryGetId, [parseInt(id, 10)])
     .then((results) => {
       if (results.rows.length === 0) {
         return res.status(404).send({
@@ -24,4 +26,23 @@ const getOrder = async (req, res, next) => {
     });
 };
 
-export default getOrder;
+const checkCancel = (req, res, next) => {
+  // get an order in the request and check if it is already delivered or cancel and return message
+  const { order } = req;
+  if (order.status !== 'delivered') {
+    if (order.status === 'canceled') {
+      return res.status(403).send({
+        success: false,
+        message: 'order has already been canceled',
+      });
+    }
+    req.order = order;
+    next();
+  } else {
+    return res.status(403).send({
+      success: false,
+      message: 'cannot update a delivered order',
+    });
+  }
+};
+export { getOrder, checkCancel };

@@ -35,35 +35,6 @@ const returnAllOrders = (done) => {
     });
 };
 
-const createOrder = (done) => {
-  /**
-   * test if we can create a new order
-   * */
-  const order = {
-    origin: 'test-somewhere',
-    destination: 'Kamembe',
-    recipientPhone: '25078489848',
-    comments: 'call the recipient on reception',
-  };
-  chai
-    .request(app)
-    .post('/api/v1/parcels')
-    .type('application/json')
-    .send(order)
-    .set('authorization', `Beared ${token}`)
-    .end((request, response) => {
-      orderId = response.body.order.id;
-      response.should.have.status(201);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(true);
-      response.body.should.have
-        .property('message')
-        .eql('delivery order successfully created!');
-      response.body.should.have.property('order');
-      done();
-    });
-};
-
 const cannotCreateOrderOrigin = (done) => {
   /**
    * cannot create an order if  pick-up location is missing
@@ -207,6 +178,35 @@ const canGetOrderById = (done) => {
     });
 };
 
+const createOrder = (done) => {
+  /**
+   * test if we can create a new order
+   * */
+  const order = {
+    origin: 'test-somewhere',
+    destination: 'Kamembe',
+    recipientPhone: '25078489848',
+    comments: 'call the recipient on reception',
+  };
+  chai
+    .request(app)
+    .post('/api/v1/parcels')
+    .type('application/json')
+    .send(order)
+    .set('authorization', `Beared ${token}`)
+    .end((request, response) => {
+      orderId = response.body.order.id;
+      orderId = orderId.toString();
+      response.should.have.status(201);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(true);
+      response.body.should.have
+        .property('message')
+        .eql('delivery order successfully created!');
+      response.body.should.have.property('order');
+      done();
+    });
+};
 const cannotGetOrderById = (done) => {
   /**
    * test if we can return 404 if the id is invalid and not found
@@ -234,7 +234,6 @@ const cannotGetOrderById = (done) => {
 
 // check if we can update a given order for a given user
 describe('create orders', () => {
-  it('create all orders', createOrder);
   it(
     'cannot create order if  pickup location missing',
     cannotCreateOrderOrigin
@@ -252,6 +251,7 @@ describe('create orders', () => {
 
 // test get order
 describe('get order by id', () => {
+  it('create an order', createOrder);
   it('can get order by id', canGetOrderById);
   it('cannot get order if  id invalid', cannotGetOrderById);
 });
