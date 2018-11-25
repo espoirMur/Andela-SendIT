@@ -1,71 +1,102 @@
+/* eslint-disable comma-dangle */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { Order, orders } from '../app/models/orders';
-import { users, User } from '../app/models/user';
 import { token } from './test-0Initial';
+import {
+  queryGetAll,
+  queryCreate,
+  queryGetId,
+} from '../app/models/orderQueries';
 
 import { app } from '../app/server';
+import { User } from '../app/models/user';
+import { decodeToken } from '../app/utils/authentification';
 
 /** setting up the test server */
 chai.use(chaiHttp);
-const should = chai.should();
-const expect = chai.expect;
-
-const returnAllOrders = done => {
+const { should } = chai.should();
+const { expect } = chai.expect;
+let orderId;
+const returnAllOrders = (done) => {
   /**
    * test if We  can return all orders in json format
    */
-  chai
-    .request(app)
-    .get('/api/v1/parcels')
-    .set('authorization', 'Bearer ' + token)
-    .end((error, response) => {
-      response.should.have.status(200);
-      response.type.should.be.eql('application/json');
-      response.body.should.be.eql(Order.OrderMapToJson(orders));
-      done();
+
+  Order.queryDb(queryGetAll)
+    .then((results) => {
+      chai
+        .request(app)
+        .get('/api/v1/parcels')
+        .set('authorization', `Beared ${token}`)
+        .end((error, response) => {
+          response.should.have.status(200);
+          response.type.should.be.eql('application/json');
+          response.body.should.be.eql(results);
+          done();
+        });
+    })
+    .catch((error) => {
+      done(error);
     });
 };
 
-const createOrder = done => {
+const createOrder = (done) => {
   /**
    * test if we can create a new order
    * */
-  const order = new Order(
-    'Kigali',
-    'Gisenyi',
-    '2507800000',
-    1,
-    'call the recipient'
-  );
-  chai
-    .request(app)
-    .post('/api/v1/parcels')
-    .type('application/json')
-    .send(order.toJSON())
-    .set('authorization', 'Bearer ' + token)
-    .end((request, response) => {
-      response.should.have.status(201);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(true);
-      response.body.should.have
-        .property('message')
-        .eql('delivery order successfully created!');
-      done();
+  const order = {
+    origin: 'test',
+    destination: 'Kamembe',
+    recipientPhone: '25078489848',
+    comments: 'call the recipient on reception',
+  };
+  const values = Object.values(order);
+  values[3] = decodeToken(token).sub;
+  values[4] = order.comments;
+  Order.queryDb(queryCreate, values)
+    .then((results) => {
+      chai
+        .request(app)
+        .post('/api/v1/parcels')
+        .type('application/json')
+        .send(order)
+        .set('authorization', `Beared ${token}`)
+        .end((request, response) => {
+          console.log(results);
+          orderId = results[0].id;
+          response.should.have.status(201);
+          response.body.should.be.a('object');
+          response.body.should.have.property('success').eql(true);
+          response.body.should.have
+            .property('message')
+            .eql('delivery order successfully created!');
+
+          console.log('======', 'order id', orderId);
+          done();
+        });
+    })
+    .catch((error) => {
+      done(error);
     });
 };
 
-const cannotCreateOrderOrigin = done => {
+const cannotCreateOrderOrigin = (done) => {
   /**
    * cannot create an order if  pick-up location is missing
    *  */
-  const order = new Order('', 'Gisenyi', '25609888', 1, 'call the recipient');
+  const order = {
+    origin: '',
+    destination: 'Kamembe',
+    recipientPhone: '25078489848',
+    comments: 'call the recipient on reception',
+  };
 
   chai
     .request(app)
     .post('/api/v1/parcels')
-    .send(order.toJSON())
-    .set('authorization', 'Bearer ' + token)
+    .send(order)
+    .set('authorization', `Beared ${token}`)
     .type('application/json')
     .end((request, response) => {
       response.should.have.status(400);
@@ -78,17 +109,22 @@ const cannotCreateOrderOrigin = done => {
     });
 };
 
-const cannotCreateOrderDestination = done => {
+const cannotCreateOrderDestination = (done) => {
   /**
    * cannot create an order if  destination is missing
    *  */
-  const order = new Order('Gisenyi', '', '25609888', 1, 'call the recipient');
+  const order = {
+    origin: 'espoir',
+    destination: '',
+    recipientPhone: '25078489848',
+    comments: 'call the recipient on reception',
+  };
 
   chai
     .request(app)
     .post('/api/v1/parcels')
-    .send(order.toJSON())
-    .set('authorization', 'Bearer ' + token)
+    .send(order)
+    .set('authorization', `Beared ${token}`)
     .type('application/json')
     .end((request, response) => {
       response.should.have.status(400);
@@ -101,17 +137,22 @@ const cannotCreateOrderDestination = done => {
     });
 };
 
-const cannotCreateOrderRecipientPhone = done => {
+const cannotCreateOrderRecipientPhone = (done) => {
   /**
-   * cannot create an order if  destination is missing
+   * cannot create an order if  recipient phone missing
    *  */
-  const order = new Order('Gisenyi', 'Kigali', '', 1, 'call the recipient');
+  const order = {
+    origin: 'kigali',
+    destination: 'Kamembe',
+    recipientPhone: '',
+    comments: 'call the recipient on reception',
+  };
 
   chai
     .request(app)
     .post('/api/v1/parcels')
-    .send(order.toJSON())
-    .set('authorization', 'Bearer ' + token)
+    .send(order)
+    .set('authorization', `Beared ${token}`)
     .type('application/json')
     .end((request, response) => {
       response.should.have.status(400);
@@ -124,17 +165,22 @@ const cannotCreateOrderRecipientPhone = done => {
     });
 };
 
-const cannotCreateOrderBadContent = done => {
+const cannotCreateOrderBadContent = (done) => {
   /**
    * should return 406 if  the content type is not json
    *  */
-  const order = new Order('', '', '', 1, 'call the recipient');
+  const order = {
+    origin: 'test',
+    destination: 'Kamembe',
+    recipientPhone: '25078489848',
+    comments: 'call the recipient on reception',
+  };
 
   chai
     .request(app)
     .post('/api/v1/parcels')
-    .send(order.toJSON())
-    .set('authorization', 'Bearer ' + token)
+    .send(order)
+    .set('authorization', `Beared ${token}`)
     .type('form')
     .end((request, response) => {
       response.should.have.status(406);
@@ -145,303 +191,65 @@ const cannotCreateOrderBadContent = done => {
     });
 };
 
-const canGetOrderById = done => {
+const canGetOrderById = (done) => {
   /**
    * test if we can get a delivery order by id
    *
    */
-  const id = 1;
-  const order = orders.get(id.toString());
-  //new Order('Kigali', 'Gisenyi', '2507800000', 1, 'call the recipient');
-  chai
-    .request(app)
-    .get(`/api/v1/parcels/${id}`)
-    .set('authorization', 'Bearer ' + token)
-    .end((request, response) => {
-      const receivedOrder = response.body.order;
-      response.should.have.status(200);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(true);
-      response.body.should.have
-        .property('message')
-        .eql('delivery order  retrieved successfully');
-      receivedOrder.origin.should.be.eql(order.origin);
-      receivedOrder.destination.should.be.eql(order.destination);
-      receivedOrder.recipientPhone.should.be.eql(order.recipientPhone);
-      receivedOrder.initiatorId.should.be.eql(order.initiatorId);
-      receivedOrder.orderDate.should.be.eql(order.orderDate);
-      receivedOrder.id.should.be.eql(order.id);
-      expect(typeof order.deliveryDate).to.be.eql('undefined');
-      done();
+  Order.queryDb(queryGetId, [orderId])
+    .then((order) => {
+      chai
+        .request(app)
+        .get(`/api/v1/parcels/${orderId}`)
+        .set('authorization', `Beared ${token}`)
+        .end((request, response) => {
+          const receivedOrder = response.body.order;
+          console.log(receivedOrder);
+          response.should.have.status(200);
+          response.body.should.be.a('object');
+          response.body.should.have.property('success').eql(true);
+          response.body.should.have
+            .property('message')
+            .eql('delivery order  retrieved successfully');
+          receivedOrder.origin.should.be.eql(order[0].origin);
+          receivedOrder.destination.should.be.eql(order[0].destination);
+          receivedOrder.recipientphone.should.be.eql(order[0].recipientphone);
+          receivedOrder.initiatorid.should.be.eql(order[0].initiatorid);
+          receivedOrder.id.should.be.eql(order[0].id);
+          done();
+        });
+    })
+    .catch((error) => {
+      done(error);
     });
 };
 
-const cannotGetOrderById = done => {
+const cannotGetOrderById = (done) => {
   /**
    * test if we can return 404 if the id is invalid and not found
    *
    */
-  const id = '1STFF';
+  const id = -1;
   chai
     .request(app)
     .get(`/api/v1/parcels/${id}`)
-    .set('authorization', 'Bearer ' + token)
+    .set('authorization', `Beared ${token}`)
     .end((request, response) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql(`delivery order with id ${id} does not exist`);
+        .eql('the delivery order you are looking for does not exist');
       done();
     });
 };
-
-const canCannotCancelOrder = done => {
-  /**
-   * test if we cannot cancel a delivery order if the status
-   * marked as delivered
-   * in the future we need to allow only admin or a person who create order to implement
-   */
-  const id = 1;
-  const order = orders.get(id.toString());
-  order.status = 'delivered';
-  chai
-    .request(app)
-    .put(`/api/v1/parcels/${id}/cancel `)
-    .set('authorization', 'Bearer ' + token)
-    .end((request, response) => {
-      response.should.have.status(401);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(false);
-      response.body.should.have
-        .property('message')
-        .eql('cannot cancel a delivered order');
-      done();
-    });
-};
-
-const canCancelOrder = done => {
-  /**
-   * test if we cancel a delivery order if the status
-   * marked is not  delivered
-   */
-  const id = 1;
-  const order = orders.get(id.toString());
-  chai
-    .request(app)
-    .put(`/api/v1/parcels/${id}/cancel `)
-    .set('authorization', 'Bearer ' + token)
-    .end((request, response) => {
-      response.should.have.status(200);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(true);
-      response.body.should.have
-        .property('message')
-        .eql('delivery order has been canceled');
-      done();
-    });
-};
-
-const canCannotCancelOrderCanceled = done => {
-  /**
-   * test if we cannot cancel a delivery order if the status
-   * cannot cancel an already canceled orders
-   */
-  const id = 1;
-  const order = orders.get(id.toString());
-  order.status = 'canceled';
-  chai
-    .request(app)
-    .put(`/api/v1/parcels/${id}/cancel`)
-    .set('authorization', 'Bearer ' + token)
-    .end((request, response) => {
-      response.should.have.status(401);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(false);
-      response.body.should.have
-        .property('message')
-        .eql('order has already been canceled');
-      done();
-    });
-};
-
-const canCannotCancelNoExistOrder = done => {
-  /**
-   * if we cannot cancel and order if it doesn't exist
-   */
-  const id = '56YYYT';
-  chai
-    .request(app)
-    .put(`/api/v1/parcels/${id}/cancel `)
-    .set('authorization', 'Bearer ' + token)
-    .end((request, response) => {
-      response.should.have.status(404);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(false);
-      response.body.should.have
-        .property('message')
-        .eql(`delivery order with id ${id} does not exist`);
-      done();
-    });
-};
-
-const cannotChangepresentLocationDelivered = done => {
-  /**
-   * test if we cannot change present location a delivery order if the status
-   * marked as delivered
-   */
-  const orderId = '1';
-  const order = orders.get(orderId);
-  order.status = 'delivered';
-  chai
-    .request(app)
-    .put(`/api/v1/parcels/${orderId}`)
-    .set('authorization', 'Bearer ' + token)
-    .send(order)
-    .end((request, response) => {
-      response.should.have.status(401);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(false);
-      response.body.should.have
-        .property('message')
-        .eql(
-          'cannot change the present location or status  of  a delivered order'
-        );
-      done();
-    });
-};
-
-const canChangepresentLocation = done => {
-  /**
-   * test if we can change the present location if the status
-   * marked is not  delivered
-   */
-  const orderId = '1';
-  const presentLocationData = { presentLocation: 'kamembe' };
-  chai
-    .request(app)
-    .put(`/api/v1/parcels/${orderId}`)
-    .set('authorization', 'Bearer ' + token)
-    .send(presentLocationData)
-    .end((request, response) => {
-      response.should.have.status(200);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(true);
-      response.body.should.have
-        .property('message')
-        .eql('delivery order  present location has been changed');
-      done();
-    });
-};
-
-const cannotChangePresentLocationOrderMissing = done => {
-  /**
-   * cannot update the present location if it missing in payload
-   *  */
-  const order = new Order();
-
-  order.origin = 'Goma';
-  order.weight = 500;
-  order.presentLocation = undefined;
-  order.initiatorId = 1;
-  order.status = undefined;
-  order.save();
-  chai
-    .request(app)
-    .put(`/api/v1/parcels/${order.id}`)
-    .set('authorization', 'Bearer ' + token)
-    .send(order.toJSON())
-    .type('application/json')
-    .end((request, response) => {
-      response.should.have.status(400);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(false);
-      response.body.should.have
-        .property('message')
-        .eql('either present location or status is required');
-      done();
-    });
-};
-
-const canChangeStatusOrder = done => {
-  /**
-   * test if we can change the status of an order
-   */
-  const orderId = '1';
-  const statusData = { status: 'en route for delivery' };
-  chai
-    .request(app)
-    .put(`/api/v1/parcels/${orderId}`)
-    .set('authorization', 'Bearer ' + token)
-    .send(statusData)
-    .end((request, response) => {
-      response.should.have.status(200);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(true);
-      response.body.should.have
-        .property('message')
-        .eql('delivery order status has been changed');
-      done();
-    });
-};
-
-const canChangeStatusLocationOrder = done => {
-  /**
-   * test if we can change both the status and present location of an order
-   */
-  const orderId = '1';
-  const orderData = {
-    status: 'en route for delivery',
-    presentLocation: 'Kamembe',
-  };
-  chai
-    .request(app)
-    .put(`/api/v1/parcels/${orderId}`)
-    .set('authorization', 'Bearer ' + token)
-
-    .send(orderData)
-    .end((request, response) => {
-      response.should.have.status(200);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(true);
-      response.body.should.have
-        .property('message')
-        .eql('order status and present location have been changed');
-      done();
-    });
-};
-
-const canChangeStatusOrderDate = done => {
-  /**
-   * test if when updating the status of an order to delivered the date is changed and it's not empty
-   */
-  const order = orders.get('1');
-  const statusData = { status: 'delivered' };
-  order.deliveryDate = new Date().toJSON();
-  chai
-    .request(app)
-    .put(`/api/v1/parcels/${order.id}`)
-    .set('authorization', 'Bearer ' + token)
-    .send(statusData)
-    .end((request, response) => {
-      response.should.have.status(200);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(true);
-      response.body.should.have
-        .property('message')
-        .eql('delivery order status has been changed');
-      response.body.order.deliveryDate.should.be.eql(order.deliveryDate);
-      done();
-    });
-};
-
 /*
  * Test the /POST route for creating new order
  */
 
 // check if we can update a given order for a given user
-describe.skip('create orders', () => {
+describe('create orders', () => {
   it('create all orders', createOrder);
   it(
     'cannot create order if  pickup location missing',
@@ -459,39 +267,9 @@ describe.skip('create orders', () => {
 });
 
 // test get order
-describe.skip('get order by id', () => {
+describe('get order by id', () => {
   it('can get order by id', canGetOrderById);
   it('cannot get order if  id invalid', cannotGetOrderById);
-});
-
-describe.skip('can change cancel, update parcel', () => {
-  it('can cancel order by id', canCancelOrder);
-  it('can change present location', canChangepresentLocation);
-  it(
-    'can update location and status at the same time',
-    canChangeStatusLocationOrder
-  );
-  it('can change status of a parcel delivery', canChangeStatusOrder);
-  it(
-    'test date is update when status is changed to delivered',
-    canChangeStatusOrderDate
-  );
-
-  it('cannot cancel if already canceled', canCannotCancelOrderCanceled);
-});
-
-// test cancel order
-describe.skip('cannot update order', () => {
-  it(
-    'cannot  change present location if delivered',
-    cannotChangepresentLocationDelivered
-  );
-  it('cannot cancel if delivered', canCannotCancelOrder);
-  it('cannot cancel non existant order', canCannotCancelNoExistOrder);
-  it(
-    'cannot change if present location is missing ',
-    cannotChangePresentLocationOrderMissing
-  );
 });
 
 it('return all orders as json', returnAllOrders);

@@ -9,17 +9,15 @@ const should = chai.should();
 let token;
 let testUser;
 
-const loginUser = done => {
+const loginUser = (done) => {
   const user = new User('test', 'test@gmail.com', '250788888', '98745236');
   user.isAdmin = true;
   user
     .save()
-    .then(result => {
+    .then((result) => {
       // save to the db
       token = encodeToken(result);
       testUser = result;
-      console.log('================', result);
-      console.log(decodeToken(token));
       chai
         .request(app)
         .post('/auth/signin')
@@ -32,14 +30,14 @@ const loginUser = done => {
           done();
         });
     })
-    .catch(error => {
+    .catch((error) => {
       done(error);
     });
 };
 
-const deleteAll = done => {
+const deleteAll = (done) => {
   User.deleteAll()
-    .then(result => {
+    .then((result) => {
       console.log(result);
       done();
     })

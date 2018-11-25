@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import { User, users } from '../app/models/user';
 import { app } from '../app/server';
 
-const cannotLoginIfEmailInvalid = done => {
+const cannotLoginIfEmailInvalid = (done) => {
   /**
    * cannot login if email is invalid or missing
    */
@@ -26,7 +26,7 @@ const cannotLoginIfEmailInvalid = done => {
     });
 };
 
-const cannotloginIfpasswordInvalid = done => {
+const cannotloginIfpasswordInvalid = (done) => {
   const user = {
     email: 'an@test.com',
     password: '',
@@ -46,9 +46,9 @@ const cannotloginIfpasswordInvalid = done => {
     });
 };
 
-//test if fail to verify password
+// test if fail to verify password
 
-const cannotLoginPasswordIncorrect = done => {
+const cannotLoginPasswordIncorrect = (done) => {
   const user = {
     email: 'test@test.com',
     password: 'a new 333333',
@@ -66,7 +66,7 @@ const cannotLoginPasswordIncorrect = done => {
     });
 };
 
-const cannotLoginUserNotFOund = done => {
+const cannotLoginUserNotFOund = (done) => {
   const user = {
     email: 'an@test.com',
     password: '2224444InvalidPassword',

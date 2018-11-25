@@ -1,5 +1,4 @@
 /* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable arrow-parens */
 /* eslint-disable import/no-cycle */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-underscore-dangle */
@@ -11,16 +10,15 @@ import { checkIsAdmin } from '../middlewares/authentification';
 import { decodeToken } from '../utils/authentification';
 import { createOrder } from '../models/orderSchemas';
 import { queryCreate, queryGetAll, queryGetId } from '../models/orderQueries';
-import { User } from '../models/user';
 
 const router = Router();
 
 router.get('/', checkIsAdmin, async (req, res) => {
   await Order.queryDb(queryGetAll)
-    .then(results => {
+    .then((results) => {
       return res.status(200).json(results);
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
       return res.status(500).send({
         success: false,
@@ -49,7 +47,7 @@ router.post('/', celebrate({ body: createOrder }), async (req, res) => {
     orderDetails.destination,
     orderDetails.recipientPhone,
     initiatorId,
-    orderDetails.comment
+    orderDetails.comments
   );
   const values = Object.values([
     order.origin,
@@ -58,16 +56,16 @@ router.post('/', celebrate({ body: createOrder }), async (req, res) => {
     order.initiatorId,
     order.comments,
   ]);
-  console.log(values);
+  console.log(values, 'vs orders', order, orderDetails.comments);
   await Order.queryDb(queryCreate, values)
-    .then(result =>
+    .then((result) => {
       res.status(201).send({
         success: true,
         message: 'delivery order successfully created!',
-        order: result,
-      })
-    )
-    .catch(error => {
+        order: result[0],
+      });
+    })
+    .catch((error) => {
       console.log(error);
       return res.status(500).send({
         success: false,
@@ -79,7 +77,7 @@ router.post('/', celebrate({ body: createOrder }), async (req, res) => {
 router.get('/:id', checkIsAdmin, async (req, res) => {
   const id = req.params.id;
 
-  await Order.queryDb(queryGetId, [id]).then(results => {
+  await Order.queryDb(queryGetId, [id]).then((results) => {
     if (results.length === 0) {
       return res.status(404).send({
         success: false,
@@ -169,7 +167,7 @@ router.put('/:id', checkIsAdmin, (req, res) => {
         });
       }
     } else {
-      return res.status(401).send({
+      return res.status(403).send({
         success: false,
         message:
           'cannot change the present location or status  of  a delivered order',
@@ -178,7 +176,7 @@ router.put('/:id', checkIsAdmin, (req, res) => {
   } else {
     return res.status(404).send({
       success: false,
-      message: `delivery order with id ${id} does not exist`,
+      message: 'the delivery order you are looking for  does not exist',
     });
   }
 });
