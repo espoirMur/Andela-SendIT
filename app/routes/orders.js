@@ -10,7 +10,7 @@ import { checkIsAdmin } from '../middlewares/authentification';
 import { decodeToken } from '../utils/authentification';
 import { createOrder } from '../models/orderSchemas';
 import { queryGetAll, queryCancel } from '../models/orderQueries';
-import { getOrder, checkCancel } from '../middlewares/getOrder';
+import { getOrder, checkCancel, checkCreator } from '../middlewares/getOrder';
 
 const router = Router();
 
@@ -77,7 +77,7 @@ router.get('/:id', checkIsAdmin, getOrder, async (req, res) => {
   });
 });
 
-router.put('/:id/cancel', checkIsAdmin, getOrder, checkCancel, (req, res) => {
+router.put('/:id/cancel', getOrder, checkCreator, checkCancel, (req, res) => {
   const id = req.params.id;
   // from the middlware get order
   Order.queryDb(queryCancel, [id])

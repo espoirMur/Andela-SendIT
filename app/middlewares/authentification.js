@@ -25,11 +25,9 @@ const ensureAuthentificated = (req, res, next) => {
       message: 'the token provided is or expired  invalid',
       success: false,
     });
-  } else {
-    // continue or getting user from db get user by id
-    //console.log({ id: parseInt(payload.sub) });
-    next();
   }
+  // continue or getting user from db get user by id
+  next();
 };
 
 const checkIsAdmin = (req, res, next) => {
@@ -57,19 +55,16 @@ const checkIsAdmin = (req, res, next) => {
       message: 'the token provided is or expired  invalid',
       success: false,
     });
-  } else {
-    if (!payload.isadmin) {
-      console.log(payload);
-      return res.status(403).json({
-        message: 'you are not authorized to perform this action',
-        success: false,
-      });
-    } else {
-      // continue or getting user from db get user by id
-      //console.log({ id: parseInt(payload.sub) });
-      next();
-    }
   }
+  if (!payload.isadmin) {
+    return res.status(403).json({
+      message: 'you are not authorized to perform this action',
+      success: false,
+    });
+  }
+  // continue or getting user from db get user by id
+  //  console.log({ id: parseInt(payload.sub) });
+  next();
 };
 
 export { ensureAuthentificated, checkIsAdmin };
