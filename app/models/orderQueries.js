@@ -48,6 +48,11 @@ const queryUpdateDeliver = {
   values: [],
 };
 
+const queryCancel = {
+  text: "UPDATE ORDERs set status= 'canceled' where id=$1;",
+  values: [],
+};
+
 export {
   queryCreate,
   queryGetAll,
@@ -59,4 +64,5 @@ export {
   queryUpdateLocation,
   queryUpdateStatus,
   queryUpdateWeight,
+  queryCancel,
 };

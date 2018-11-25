@@ -1,17 +1,11 @@
 /* eslint-disable comma-dangle */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { Order, orders } from '../app/models/orders';
+import { Order } from '../app/models/orders';
 import { token } from './test-0Initial';
-import {
-  queryGetAll,
-  queryCreate,
-  queryGetId,
-} from '../app/models/orderQueries';
+import { queryGetAll, queryGetId } from '../app/models/orderQueries';
 
 import { app } from '../app/server';
-import { User } from '../app/models/user';
-import { decodeToken } from '../app/utils/authentification';
 
 /** setting up the test server */
 chai.use(chaiHttp);
@@ -32,7 +26,7 @@ const returnAllOrders = (done) => {
         .end((error, response) => {
           response.should.have.status(200);
           response.type.should.be.eql('application/json');
-          response.body.should.be.eql(results);
+          response.body.should.be.eql(results.rows);
           done();
         });
     })
@@ -46,38 +40,27 @@ const createOrder = (done) => {
    * test if we can create a new order
    * */
   const order = {
-    origin: 'test',
+    origin: 'test-somewhere',
     destination: 'Kamembe',
     recipientPhone: '25078489848',
     comments: 'call the recipient on reception',
   };
-  const values = Object.values(order);
-  values[3] = decodeToken(token).sub;
-  values[4] = order.comments;
-  Order.queryDb(queryCreate, values)
-    .then((results) => {
-      chai
-        .request(app)
-        .post('/api/v1/parcels')
-        .type('application/json')
-        .send(order)
-        .set('authorization', `Beared ${token}`)
-        .end((request, response) => {
-          console.log(results);
-          orderId = results[0].id;
-          response.should.have.status(201);
-          response.body.should.be.a('object');
-          response.body.should.have.property('success').eql(true);
-          response.body.should.have
-            .property('message')
-            .eql('delivery order successfully created!');
-
-          console.log('======', 'order id', orderId);
-          done();
-        });
-    })
-    .catch((error) => {
-      done(error);
+  chai
+    .request(app)
+    .post('/api/v1/parcels')
+    .type('application/json')
+    .send(order)
+    .set('authorization', `Beared ${token}`)
+    .end((request, response) => {
+      orderId = response.body.order.id;
+      response.should.have.status(201);
+      response.body.should.be.a('object');
+      response.body.should.have.property('success').eql(true);
+      response.body.should.have
+        .property('message')
+        .eql('delivery order successfully created!');
+      response.body.should.have.property('order');
+      done();
     });
 };
 
@@ -197,25 +180,25 @@ const canGetOrderById = (done) => {
    *
    */
   Order.queryDb(queryGetId, [orderId])
-    .then((order) => {
+    .then((results) => {
+      const order = results.rows[0];
       chai
         .request(app)
         .get(`/api/v1/parcels/${orderId}`)
         .set('authorization', `Beared ${token}`)
         .end((request, response) => {
           const receivedOrder = response.body.order;
-          console.log(receivedOrder);
           response.should.have.status(200);
           response.body.should.be.a('object');
           response.body.should.have.property('success').eql(true);
           response.body.should.have
             .property('message')
             .eql('delivery order  retrieved successfully');
-          receivedOrder.origin.should.be.eql(order[0].origin);
-          receivedOrder.destination.should.be.eql(order[0].destination);
-          receivedOrder.recipientphone.should.be.eql(order[0].recipientphone);
-          receivedOrder.initiatorid.should.be.eql(order[0].initiatorid);
-          receivedOrder.id.should.be.eql(order[0].id);
+          receivedOrder.origin.should.be.eql(order.origin);
+          receivedOrder.destination.should.be.eql(order.destination);
+          receivedOrder.recipientphone.should.be.eql(order.recipientphone);
+          receivedOrder.initiatorid.should.be.eql(order.initiatorid);
+          receivedOrder.id.should.be.eql(order.id);
           done();
         });
     })
@@ -229,7 +212,8 @@ const cannotGetOrderById = (done) => {
    * test if we can return 404 if the id is invalid and not found
    *
    */
-  const id = -1;
+  const id = 999999999;
+  // a value we cannot have
   chai
     .request(app)
     .get(`/api/v1/parcels/${id}`)

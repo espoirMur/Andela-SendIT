@@ -104,7 +104,7 @@ const cannotCreateIfnameInvalid = (done) => {
     .request(app)
     .post('/auth/signup')
     .send(user)
-    .end((request, response, error) => {
+    .end((request, response) => {
       response.should.have.status(400);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);

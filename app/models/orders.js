@@ -1,7 +1,10 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 import { Pool } from 'pg';
+
 import { dbConfigObject } from '../server';
+import { queryCreate } from './orderQueries';
+
 const orders = new Map();
 
 class Order {
@@ -113,13 +116,40 @@ class Order {
     this._recipientPhone = recipientPhone;
   }
 
+  toJSON() {
+    /**
+     *  convert the object to json
+     * */
+    return Object.getOwnPropertyNames(this).reduce((a, b) => {
+      a[b.replace('_', '')] = this[b];
+      return a;
+    }, {});
+  }
+
   static async queryDb(query, values = []) {
     query.values = values;
     const pool = new Pool(dbConfigObject);
     const client = await pool.connect();
     const result = await client.query(query, values);
     await client.end();
-    return result.rows;
+    return result;
+  }
+
+  async save() {
+    /**
+     *  should save the order in the db */
+    queryCreate.values = [
+      this.origin,
+      this.destination,
+      this.recipientPhone,
+      this.initiatorId,
+      this.comments,
+    ];
+    const pool = new Pool(dbConfigObject);
+    const client = await pool.connect();
+    const result = await client.query(queryCreate);
+    await client.end();
+    return result.rows[0];
   }
 }
 

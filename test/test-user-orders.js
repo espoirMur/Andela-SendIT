@@ -5,7 +5,6 @@ import chaiHttp from 'chai-http';
 import { users, User } from '../app/models/user';
 import { app } from '../app/server';
 import { Order } from '../app/models/orders';
-import { getMaxListeners } from 'cluster';
 
 /** setting up the test server */
 chai.use(chaiHttp);
@@ -14,11 +13,11 @@ const expect = chai.expect;
 // close the sever after running our tests
 let token;
 
-const loginUser = async done => {
+const loginUser = async (done) => {
   const user = new User('test', 'test@gmail.com', '250788888', '98745236');
   await user
     .save()
-    .then(result => {
+    .then((result) => {
       // save to the db
       token = encodeToken(result);
       chai
@@ -34,20 +33,20 @@ const loginUser = async done => {
           done();
         });
     })
-    .catch(error => {
+    .catch((error) => {
       done(error);
     });
 };
 
-const deleteAll = async done => {
+const deleteAll = async (done) => {
   await User.deleteAll()
-    .then(result => {
+    .then((result) => {
       console.log(result);
       done;
     })
     .catch(done);
 };
-const canGetUserOrders = done => {
+const canGetUserOrders = (done) => {
   /**
    * test if we can all users delivery orders
    *
@@ -77,7 +76,7 @@ const canGetUserOrders = done => {
     });
 };
 
-const cannotGetUserOrderById = done => {
+const cannotGetUserOrderById = (done) => {
   /**
    * test if we can return 404 if
    * if user is not found
@@ -100,7 +99,7 @@ const cannotGetUserOrderById = done => {
 };
 // check if you can get a given order for a given user
 
-const canGetUserOrdersByid = done => {
+const canGetUserOrdersByid = (done) => {
   /**
    * test if we can retrieve a user order by it id
    *
@@ -141,7 +140,7 @@ const canGetUserOrdersByid = done => {
     });
 };
 
-const cannotGetUserOrdersByid = done => {
+const cannotGetUserOrdersByid = (done) => {
   /**
    * test if we 404 if an order is not found for the given user
    *
@@ -170,7 +169,7 @@ const cannotGetUserOrdersByid = done => {
     });
 };
 
-const cannotGetUserByIdOrdersByid = done => {
+const cannotGetUserByIdOrdersByid = (done) => {
   /**
    * test if we 404 if an order is the user id is invalid for this endpoint
    *
@@ -199,7 +198,7 @@ const cannotGetUserByIdOrdersByid = done => {
     });
 };
 
-const canCannotCancelOrder = done => {
+const canCannotCancelOrder = (done) => {
   /**
    * test if we cannot cancel a delivery order if the status
    * marked as delivered
@@ -229,7 +228,7 @@ const canCannotCancelOrder = done => {
     });
 };
 
-const canCancelOrder = done => {
+const canCancelOrder = (done) => {
   /**
    * test if we cancel a delivery order if the status
    * marked is not  delivered
@@ -260,7 +259,7 @@ const canCancelOrder = done => {
     });
 };
 
-const cannotChangeDestinationOrder = done => {
+const cannotChangeDestinationOrder = (done) => {
   /**
    * test if we cannot change destination a delivery order if the status
    * marked as delivered
@@ -292,7 +291,7 @@ const cannotChangeDestinationOrder = done => {
     });
 };
 
-const canChangeDestinationOrder = done => {
+const canChangeDestinationOrder = (done) => {
   /**
    * test if we can change the destination if the status
    * marked is not  delivered
@@ -316,7 +315,7 @@ const canChangeDestinationOrder = done => {
     });
 };
 
-const cannotChangeDesinationOrderMissing = done => {
+const cannotChangeDesinationOrderMissing = (done) => {
   /**
    * cannot update the destination if it missing in payload
    *  */

@@ -1,12 +1,12 @@
+import { Pool } from 'pg';
 import bcrypt from 'bcryptjs';
 import {
   queryCreate,
   queryEmail,
   queryId,
-  deleteAll,
   queryDeleteAll,
 } from './userQueries';
-import { Pool } from 'pg';
+
 import { dbConfigObject } from '../server';
 
 const users = new Map();
@@ -20,9 +20,9 @@ class User {
     this._phone = phone;
     this._isAdmin = false;
     this._registrationDate = new Date().toJSON();
-    this._orders = new Map();
     this.password = password;
   }
+
   get id() {
     return this._id;
   }
@@ -45,6 +45,7 @@ class User {
     // change with sql query
     return this._password;
   }
+
   get email() {
     return this._email;
   }
@@ -71,14 +72,6 @@ class User {
 
   get registrationDate() {
     return this._registrationDate;
-  }
-
-  get orders() {
-    return this._orders;
-  }
-
-  set orders(order) {
-    this._orders.set(order.id.toString(), order);
   }
 
   toJSON() {
@@ -112,6 +105,7 @@ class User {
     await client.end();
     return result.rows[0];
   }
+
   static async getById(id) {
     queryId.values = [id];
     const pool = new Pool(dbConfigObject);
@@ -137,9 +131,8 @@ class User {
     await client.end();
     if (result.rows.length === 0) {
       return false;
-    } else {
-      return result.rows[0];
     }
+    return result.rows[0];
   }
 }
 

@@ -2,6 +2,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { Order, orders } from '../app/models/orders';
 import { token } from './test-0Initial';
+import { app } from '../app/server';
 
 chai.use(chaiHttp);
 const { should } = chai.should();

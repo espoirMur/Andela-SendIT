@@ -9,14 +9,15 @@ import { orders, Order } from '../models/orders';
 import { checkIsAdmin } from '../middlewares/authentification';
 import { decodeToken } from '../utils/authentification';
 import { createOrder } from '../models/orderSchemas';
-import { queryCreate, queryGetAll, queryGetId } from '../models/orderQueries';
+import { queryGetAll, queryCancel } from '../models/orderQueries';
+import getOrder from '../middlewares/getOrder';
 
 const router = Router();
 
 router.get('/', checkIsAdmin, async (req, res) => {
   await Order.queryDb(queryGetAll)
     .then((results) => {
-      return res.status(200).json(results);
+      return res.status(200).json(results.rows);
     })
     .catch((error) => {
       console.log(error);
@@ -49,20 +50,14 @@ router.post('/', celebrate({ body: createOrder }), async (req, res) => {
     initiatorId,
     orderDetails.comments
   );
-  const values = Object.values([
-    order.origin,
-    order.destination,
-    order.recipientPhone,
-    order.initiatorId,
-    order.comments,
-  ]);
-  console.log(values, 'vs orders', order, orderDetails.comments);
-  await Order.queryDb(queryCreate, values)
+
+  await order
+    .save()
     .then((result) => {
       res.status(201).send({
         success: true,
         message: 'delivery order successfully created!',
-        order: result[0],
+        order: result,
       });
     })
     .catch((error) => {
@@ -74,52 +69,47 @@ router.post('/', celebrate({ body: createOrder }), async (req, res) => {
     });
 });
 
-router.get('/:id', checkIsAdmin, async (req, res) => {
-  const id = req.params.id;
-
-  await Order.queryDb(queryGetId, [id]).then((results) => {
-    if (results.length === 0) {
-      return res.status(404).send({
-        success: false,
-        message: 'the delivery order you are looking for does not exist',
-      });
-    } else {
-      return res.status(200).send({
-        success: true,
-        message: 'delivery order  retrieved successfully',
-        order: results[0],
-      });
-    }
+router.get('/:id', checkIsAdmin, getOrder, async (req, res) => {
+  return res.status(200).send({
+    success: true,
+    message: 'delivery order  retrieved successfully',
+    order: req.order,
   });
 });
 
-router.put('/:id/cancel', checkIsAdmin, (req, res) => {
+router.put('/:id/cancel', checkIsAdmin, getOrder, (req, res) => {
   const id = req.params.id;
-  const order = orders.get(id);
-  if (order) {
-    if (order.status !== 'delivered') {
-      if (order.status === 'canceled') {
-        return res.status(401).send({
-          success: false,
-          message: 'order has already been canceled',
-        });
-      } else {
-        order.status = 'canceled';
-        return res.status(200).send({
-          success: true,
-          message: 'delivery order has been canceled',
-        });
-      }
-    } else {
-      return res.status(401).send({
+  const order = req.order;
+  // from the middlware get order
+
+  if (order.status !== 'delivered') {
+    if (order.status === 'canceled') {
+      return res.status(403).send({
         success: false,
-        message: 'cannot cancel a delivered order',
+        message: 'order has already been canceled',
       });
+    } else {
+      Order.queryDb(queryCancel, [id])
+        .then((result) => {
+          if (result.rowCount === 1) {
+            return res.status(200).send({
+              success: true,
+              message: 'delivery order has been canceled',
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          return res.status(500).send({
+            success: false,
+            message: 'something went wong please try again',
+          });
+        });
     }
   } else {
-    return res.status(404).send({
+    return res.status(403).send({
       success: false,
-      message: `delivery order with id ${id} does not exist`,
+      message: 'cannot cancel a delivered order',
     });
   }
 });
