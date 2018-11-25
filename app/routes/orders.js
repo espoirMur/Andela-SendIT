@@ -97,7 +97,7 @@ router.put('/:id/cancel', getOrder, checkCreator, checkCancel, (req, res) => {
       });
     });
 });
-
+/*** 
 router.put('/:id', checkIsAdmin, (req, res) => {
   const id = req.params.id;
   const order = orders.get(id);
@@ -154,5 +154,5 @@ router.put('/:id', checkIsAdmin, (req, res) => {
     });
   }
 });
-
+**/
 export default router;

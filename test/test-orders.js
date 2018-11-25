@@ -251,9 +251,10 @@ describe('create orders', () => {
 
 // test get order
 describe('get order by id', () => {
-  it('create an order', createOrder);
+  before('create an order', createOrder);
   it('can get order by id', canGetOrderById);
   it('cannot get order if  id invalid', cannotGetOrderById);
 });
 
 it('return all orders as json', returnAllOrders);
+export default orderId;

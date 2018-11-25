@@ -9,15 +9,16 @@ const queryGetAll = {
   `,
 };
 
-const queryGetAllUser = {
+const queryGetAllOrderUser = {
   text: 'select * from orders where initiatorId =$1;',
+  values: [],
 };
 
 const queryGetId = {
   text: 'select * from orders where id=$1;',
 };
 
-const queryGetIdUSer = {
+const queryGetOneOrderUSer = {
   text: 'select * from orders where id=$1 and initiatorId=$2;',
   values: [],
 };
@@ -56,9 +57,9 @@ const queryCancel = {
 export {
   queryCreate,
   queryGetAll,
-  queryGetAllUser,
+  queryGetAllOrderUser,
   queryGetId,
-  queryGetIdUSer,
+  queryGetOneOrderUSer,
   queryUpdateDeliver,
   queryUpdateDestination,
   queryUpdateLocation,
