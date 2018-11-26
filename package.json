@@ -4,7 +4,7 @@
   "description": "SendIT is a courier service that helps users deliver parcels to different destinations. SendIT provides courier quotes based on weight categories.",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=TEST mocha --compilers js:babel-core/register ./test/* --exit",
+    "test": "NODE_ENV=TEST mocha --compilers js:babel-core/register ./test/test* --exit",
     "start": "NODE_ENV=DEV nodemon app/server.js --exec babel-node --",
     "nyc": "nyc npm test",
     "code-climate": "codeclimate-test-reporter < ./coverage/lcov.info",
@@ -80,7 +80,8 @@
       "config.js",
       "config.sample.js",
       "app/utils/jsonReplacer.js",
-      "test/*"
+      "test/*",
+      "app/utils/connectToDb.js"
     ]
   }
 }

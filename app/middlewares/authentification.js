@@ -1,6 +1,7 @@
 import { decodeToken } from '../utils/authentification';
+import { User } from '../models/user';
 
-const ensureAuthentificated = (req, res, next) => {
+const ensureAuthentificated = async (req, res, next) => {
   // check if authentificated before handling any request
   if (!(req.headers && req.headers.authorization)) {
     return res.status(401).json({
@@ -25,11 +26,26 @@ const ensureAuthentificated = (req, res, next) => {
       message: 'the token provided is or expired  invalid',
       success: false,
     });
-  } else {
-    // continue or getting user from db get user by id
-    //console.log({ id: parseInt(payload.sub) });
-    next();
   }
+  await User.getById(payload.sub)
+    .then((results) => {
+      if (results.rows.length === 0) {
+        return res.status(404).send({
+          success: false,
+          message: 'user cannot be found',
+        });
+      }
+      const user = results.rows[0];
+      req.user = user;
+      next();
+    })
+    .catch((error) => {
+      console.error(error);
+      return res.status(500).send({
+        success: false,
+        message: 'something went wong please try again',
+      });
+    });
 };
 
 const checkIsAdmin = (req, res, next) => {
@@ -57,18 +73,16 @@ const checkIsAdmin = (req, res, next) => {
       message: 'the token provided is or expired  invalid',
       success: false,
     });
-  } else {
-    if (!payload.isadmin) {
-      return res.status(403).json({
-        message: 'you are not authorized to perform this action',
-        success: false,
-      });
-    } else {
-      // continue or getting user from db get user by id
-      //console.log({ id: parseInt(payload.sub) });
-      next();
-    }
   }
+  if (!payload.isadmin) {
+    return res.status(403).json({
+      message: 'you are not authorized to perform this action',
+      success: false,
+    });
+  }
+  // continue or getting user from db get user by id
+  //  console.log({ id: parseInt(payload.sub) });
+  next();
 };
 
 export { ensureAuthentificated, checkIsAdmin };

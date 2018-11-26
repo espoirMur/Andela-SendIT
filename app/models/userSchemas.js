@@ -29,4 +29,5 @@ const loginSchema = {
     .min(6)
     .error(new Error('the password should have at least 7 characters')),
 };
+
 export { registerSchema, loginSchema };

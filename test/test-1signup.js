@@ -9,14 +9,14 @@ import { before } from 'mocha';
 chai.use(chaiHttp);
 const should = chai.should();
 
-const shouldReturnToken = done => {
+const shouldReturnToken = (done) => {
   const results = encodeToken({ id: 1 });
   should.exist(results);
   results.should.be.a('string');
   done();
 };
 
-const canDecodeToken = done => {
+const canDecodeToken = (done) => {
   const token = encodeToken({ id: 1 });
   should.exist(token);
   token.should.be.a('string');
@@ -24,7 +24,7 @@ const canDecodeToken = done => {
   payload.sub.should.be.eql(1);
   done();
 };
-const cannotCreateIfEmailInvalid = done => {
+const cannotCreateIfEmailInvalid = (done) => {
   /**
    * cannot create if email is invalid or missing
    */
@@ -49,7 +49,7 @@ const cannotCreateIfEmailInvalid = done => {
     });
 };
 
-const cannotCreateIfpasswordInvalid = done => {
+const cannotCreateIfpasswordInvalid = (done) => {
   const user = {
     name: 'espoir',
     email: 'aninvalidemail',
@@ -71,7 +71,7 @@ const cannotCreateIfpasswordInvalid = done => {
     });
 };
 
-const cannotCreateIfPhoneInvalid = done => {
+const cannotCreateIfPhoneInvalid = (done) => {
   const user = {
     name: 'espoir',
     email: 'test@test.com',
@@ -93,7 +93,7 @@ const cannotCreateIfPhoneInvalid = done => {
     });
 };
 
-const cannotCreateIfnameInvalid = done => {
+const cannotCreateIfnameInvalid = (done) => {
   const user = {
     name: '',
     email: 'aninvalidemail',
@@ -104,7 +104,7 @@ const cannotCreateIfnameInvalid = done => {
     .request(app)
     .post('/auth/signup')
     .send(user)
-    .end((request, response, error) => {
+    .end((request, response) => {
       response.should.have.status(400);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
@@ -115,7 +115,7 @@ const cannotCreateIfnameInvalid = done => {
     });
 };
 
-const canRegisterUser = done => {
+const canRegisterUser = (done) => {
   const user = {
     name: 'Espoir',
     email: 'test@test.com',
@@ -130,18 +130,14 @@ const canRegisterUser = done => {
       should.not.exist(err);
       response.redirects.length.should.eql(0);
       response.status.should.eql(201);
-      response.body.should.include.keys(
-        'success',
-        'token',
-        'message',
-        'userId'
-      );
+      response.body.should.include.keys('success', 'token', 'message');
       response.body.success.should.eql(true);
-      response.body.message.should.eql('the new user has been created'), done();
+      response.body.message.should.eql('the new user has been created');
+      done();
     });
 };
 
-const cannotRegisterEmailTaken = done => {
+const cannotRegisterEmailTaken = (done) => {
   const user = {
     name: 'Espoir',
     email: 'test@test.com',

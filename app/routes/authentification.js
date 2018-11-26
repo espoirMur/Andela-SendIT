@@ -20,17 +20,16 @@ authRouter.post(
     const user = new User(name, email, phone, password);
     await user
       .save()
-      .then(result => {
+      .then((result) => {
         // save to the db
         const token = encodeToken(result);
         return res.status(201).send({
           success: true,
           message: 'the new user has been created',
-          userId: result.id,
           token,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         // if an error check if it's related to duplicated user
         if (error.code === '23505' && error.constraint === 'users_email_key') {
           // 23505 means duplicate key entry and constraint is to show if the email is taken
@@ -55,14 +54,14 @@ authRouter.post(
   async (req, res, next) => {
     const { email, password } = req.body;
     await User.findByEmail(email)
-      .then(results => {
+      .then((results) => {
         if (results) {
-          if (User.verifyPassword(results['passwordhash'], password)) {
+          if (User.verifyPassword(results.passwordhash, password)) {
             const token = encodeToken(results);
+            console.log(decodeToken(token));
             res.status(200).send({
-              token: token,
+              token,
               success: true,
-              userId: results.id,
             });
           } else {
             res.status(401).send({
@@ -77,7 +76,7 @@ authRouter.post(
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         return res.status(500).send({
           success: false,

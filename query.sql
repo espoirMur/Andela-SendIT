@@ -1,4 +1,4 @@
-const createDB = `CREATE TABLE users(
+`CREATE TABLE users(
   id serial PRIMARY KEY,
   name VARCHAR (50) UNIQUE NOT NULL,
   passwordHash VARCHAR (500) NOT NULL,
@@ -13,10 +13,10 @@ const createDB = `CREATE TABLE users(
   origin VARCHAR (50) NOT NULL,
   destination VARCHAR (50) NOT NULL,
   presentLocation VARCHAR (50) ,
-  recipentPhone VARCHAR (35) NULL,
+  recipientPhone VARCHAR (35) NULL,
   orderDate TIMESTAMP NOT NULL,
   deliveryDate TIMESTAMP,
-  commnent VARCHAR (350) ,
+  comments VARCHAR (350) ,
   status VARCHAR(50) NOT NULL,
   initiatorId INTEGER,
   weight INTEGER,
@@ -24,5 +24,3 @@ const createDB = `CREATE TABLE users(
        REFERENCES users (id) MATCH SIMPLE
        ON UPDATE NO ACTION ON DELETE NO ACTION
  );`;
-
-export { createDB };
