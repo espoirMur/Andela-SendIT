@@ -26,8 +26,8 @@ const loginUser = (done) => {
         .send({ email: result.email, password: '98745236' })
         .end((error, response) => {
           should.not.exist(error);
+          // eslint-disable-next-line prefer-destructuring
           token = response.body.token;
-          //token.should.not.be(undefined);
           token.should.be.a('string');
           done();
         });
@@ -39,7 +39,7 @@ const loginUser = (done) => {
 
 const deleteAll = (done) => {
   User.deleteAll()
-    .then((result) => {
+    .then(() => {
       done();
     })
     .catch(done);

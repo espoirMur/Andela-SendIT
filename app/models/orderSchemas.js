@@ -13,4 +13,15 @@ const createOrder = {
   comments: Joi.string(),
 };
 
-export { createOrder };
+const updateDestination = {
+  destination: Joi.string()
+    .required()
+    .error(new Error('destination is required')),
+};
+
+const orderId = {
+  id: Joi.number()
+    .required()
+    .error(new Error('Invalid parameter')),
+};
+export { createOrder, updateDestination, orderId };

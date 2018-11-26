@@ -9,22 +9,14 @@ import {
 
 import { dbConfigObject } from '../server';
 
-const users = new Map();
 /* eslint-disable no-underscore-dangle */
 class User {
   constructor(name, email, phone, password = 'an empty ') {
-    const lengthUsers = users.size;
-    this._id = lengthUsers + 1;
     this._name = name;
     this._email = email;
     this._phone = phone;
     this._isAdmin = false;
-    this._registrationDate = new Date().toJSON();
     this.password = password;
-  }
-
-  get id() {
-    return this._id;
   }
 
   get name() {
@@ -74,18 +66,9 @@ class User {
     return this._registrationDate;
   }
 
-  toJSON() {
-    return Object.getOwnPropertyNames(this).reduce((a, b) => {
-      // eslint-disable-next-line no-param-reassign
-      a[b.replace('_', '')] = this[b];
-      return a;
-    }, {});
-  }
-
   static verifyPassword(databasePassword, password) {
     // need to verify password in the db
     const matched = bcrypt.compareSync(password, databasePassword);
-    // need to do more check with the db
     return matched;
   }
 
@@ -136,10 +119,7 @@ class User {
   }
 }
 
-const user = new User('Espoir', 'espoir_mur@gmail.com', '25078000');
-
-users.set(user.id.toString(), user);
-
 // export the module and make them avialable
 
-export { users, User };
+// eslint-disable-next-line import/prefer-default-export
+export { User };

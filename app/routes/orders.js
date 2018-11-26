@@ -8,8 +8,16 @@ import { celebrate } from 'celebrate';
 import { Order } from '../models/orders';
 import { checkIsAdmin } from '../middlewares/authentification';
 import { decodeToken } from '../utils/authentification';
-import { createOrder } from '../models/orderSchemas';
-import { queryGetAll, queryCancel } from '../models/orderQueries';
+import {
+  createOrder,
+  updateDestination,
+  orderId,
+} from '../models/orderSchemas';
+import {
+  queryGetAll,
+  queryCancel,
+  queryUpdateDestination,
+} from '../models/orderQueries';
 import { getOrder, checkCancel, checkCreator } from '../middlewares/getOrder';
 
 const router = Router();
@@ -97,6 +105,35 @@ router.put('/:id/cancel', getOrder, checkCreator, checkCancel, (req, res) => {
       });
     });
 });
+
+router.put(
+  '/:id/destination',
+  celebrate({ body: updateDestination, params: orderId }),
+  getOrder,
+  checkCreator,
+  checkCancel,
+  async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const { destination } = req.body;
+    await Order.queryDb(queryUpdateDestination, [destination, id])
+      .then((result) => {
+        if (result.rowCount === 1) {
+          return res.status(200).send({
+            success: true,
+            message: `delivery order destination has been changed to ${destination}`,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        return res.status(500).send({
+          success: false,
+          message: 'something went wong please try again',
+        });
+      });
+  }
+);
+
 /*** 
 router.put('/:id', checkIsAdmin, (req, res) => {
   const id = req.params.id;

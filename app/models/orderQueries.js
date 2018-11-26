@@ -34,7 +34,7 @@ const queryUpdateLocation = {
 };
 
 const queryUpdateDestination = {
-  text: 'UPDATE ORDERs set destination= $1 where id=$2 and InitiatorId=$3;',
+  text: 'UPDATE ORDERs set destination= $1 where id=$2;',
   values: [],
 };
 
