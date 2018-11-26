@@ -5,7 +5,7 @@
 /* eslint-disable no-else-return */
 import { Router } from 'express';
 import { celebrate } from 'celebrate';
-import { orders, Order } from '../models/orders';
+import { Order } from '../models/orders';
 import { checkIsAdmin } from '../middlewares/authentification';
 import { decodeToken } from '../utils/authentification';
 import { createOrder } from '../models/orderSchemas';

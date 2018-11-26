@@ -257,4 +257,3 @@ describe('get order by id', () => {
 });
 
 it('return all orders as json', returnAllOrders);
-export default orderId;

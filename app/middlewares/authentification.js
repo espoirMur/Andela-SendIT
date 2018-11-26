@@ -32,7 +32,7 @@ const ensureAuthentificated = async (req, res, next) => {
       if (results.rows.length === 0) {
         return res.status(404).send({
           success: false,
-          message: 'user cannot be found ',
+          message: 'user cannot be found',
         });
       }
       const user = results.rows[0];

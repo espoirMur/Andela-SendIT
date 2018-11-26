@@ -40,7 +40,6 @@ const loginUser = (done) => {
 const deleteAll = (done) => {
   User.deleteAll()
     .then((result) => {
-      console.log(result);
       done();
     })
     .catch(done);
