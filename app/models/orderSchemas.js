@@ -19,9 +19,28 @@ const updateDestination = {
     .error(new Error('destination is required')),
 };
 
+const updateStatus = {
+  status: Joi.string()
+    .required()
+    .error(new Error('new status is required')),
+  weight: Joi.number(),
+};
+
+const updateLocation = {
+  location: Joi.string()
+    .required()
+    .error(new Error('present location is required')),
+};
+
 const orderId = {
-  id: Joi.number()
+  id: Joi.string()
     .required()
     .error(new Error('Invalid parameter')),
 };
-export { createOrder, updateDestination, orderId };
+export {
+  createOrder,
+  updateDestination,
+  orderId,
+  updateStatus,
+  updateLocation,
+};

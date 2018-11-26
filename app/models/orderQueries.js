@@ -39,13 +39,13 @@ const queryUpdateDestination = {
 };
 
 const queryUpdateWeight = {
-  text: 'UPDATE ORDERs set weight= $1 where id=$2;',
+  text: 'UPDATE ORDERs set weight= $1, status =$2 where id=$3;',
   values: [],
 };
 
 const queryUpdateDeliver = {
   text:
-    "UPDATE orders set status='delivered' and deliveryDate=now() where id=$1",
+    "UPDATE orders set status= 'delivered' , deliveryDate=now(), presentLocation=$2 where id=$1",
   values: [],
 };
 

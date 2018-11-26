@@ -5,7 +5,7 @@ import { decodeToken } from '../utils/authentification';
 const getOrder = async (req, res, next) => {
   // called before any route where we are retreiving order by id
   // should use destructuring ask why???
-  const { id } = req.params;
+  const id = req.params.orderId;
   await Order.queryDb(queryGetId, [parseInt(id, 10)])
     .then((results) => {
       if (results.rows.length === 0) {
@@ -53,7 +53,6 @@ const checkCreator = (req, res, next) => {
   const header = req.headers.authorization;
   const token = header.slice(7);
   const payload = decodeToken(token);
-  console.log('check token', payload);
   if (!payload.isadmin && order.initiatorid !== payload.sub) {
     return res.status(403).json({
       message: 'you are not authorized to perform this action',

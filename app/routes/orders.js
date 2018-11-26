@@ -11,12 +11,17 @@ import { decodeToken } from '../utils/authentification';
 import {
   createOrder,
   updateDestination,
-  orderId,
+  updateStatus,
+  updateLocation,
 } from '../models/orderSchemas';
 import {
   queryGetAll,
   queryCancel,
   queryUpdateDestination,
+  queryUpdateStatus,
+  queryUpdateDeliver,
+  queryUpdateLocation,
+  queryUpdateWeight,
 } from '../models/orderQueries';
 import { getOrder, checkCancel, checkCreator } from '../middlewares/getOrder';
 
@@ -56,7 +61,7 @@ router.post('/', celebrate({ body: createOrder }), async (req, res) => {
     orderDetails.destination,
     orderDetails.recipientPhone,
     initiatorId,
-    orderDetails.comments
+    orderDetails.comments,
   );
 
   await order
@@ -77,7 +82,7 @@ router.post('/', celebrate({ body: createOrder }), async (req, res) => {
     });
 });
 
-router.get('/:id', checkIsAdmin, getOrder, async (req, res) => {
+router.get('/:orderId', checkIsAdmin, getOrder, async (req, res) => {
   return res.status(200).send({
     success: true,
     message: 'delivery order  retrieved successfully',
@@ -85,35 +90,41 @@ router.get('/:id', checkIsAdmin, getOrder, async (req, res) => {
   });
 });
 
-router.put('/:id/cancel', getOrder, checkCreator, checkCancel, (req, res) => {
-  const id = req.params.id;
-  // from the middlware get order
-  Order.queryDb(queryCancel, [id])
-    .then((result) => {
-      if (result.rowCount === 1) {
-        return res.status(200).send({
-          success: true,
-          message: 'delivery order has been canceled',
+router.put(
+  '/:orderId/cancel',
+  getOrder,
+  checkCreator,
+  checkCancel,
+  (req, res) => {
+    const id = req.params.id;
+    // from the middlware get order
+    Order.queryDb(queryCancel, [id])
+      .then((result) => {
+        if (result.rowCount === 1) {
+          return res.status(200).send({
+            success: true,
+            message: 'delivery order has been canceled',
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        return res.status(500).send({
+          success: false,
+          message: 'something went wong please try again',
         });
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      return res.status(500).send({
-        success: false,
-        message: 'something went wong please try again',
       });
-    });
-});
+  },
+);
 
 router.put(
-  '/:id/destination',
-  celebrate({ body: updateDestination, params: orderId }),
+  '/:orderId/destination',
+  celebrate({ body: updateDestination }),
   getOrder,
   checkCreator,
   checkCancel,
   async (req, res) => {
-    const id = parseInt(req.params.id, 10);
+    const id = parseInt(req.params.orderId, 10);
     const { destination } = req.body;
     await Order.queryDb(queryUpdateDestination, [destination, id])
       .then((result) => {
@@ -131,65 +142,97 @@ router.put(
           message: 'something went wong please try again',
         });
       });
-  }
+  },
 );
 
-/*** 
-router.put('/:id', checkIsAdmin, (req, res) => {
-  const id = req.params.id;
-  const order = orders.get(id);
-  const presentLocation = req.body.presentLocation;
-  const status = req.body.status;
-  console.log(status, '====', presentLocation);
-  if (order) {
-    if (order.status !== 'delivered') {
-      if (
-        typeof status === 'undefined' &&
-        typeof presentLocation === 'undefined'
-      ) {
-        return res.status(400).send({
-          success: false,
-          message: 'either present location or status is required',
-        });
-      } else if (status && typeof presentLocation === 'undefined') {
-        order.status = status;
-        if (status === 'delivered') {
-          order.deliveryDate = new Date().toJSON();
-        }
-        return res.status(200).send({
-          success: true,
-          message: 'delivery order status has been changed',
-          order,
-        });
-      } else if (presentLocation && typeof status === 'undefined') {
-        order.presentLocation = presentLocation;
-        return res.status(200).send({
-          success: true,
-          message: 'delivery order  present location has been changed',
-          order,
-        });
-      } else if (presentLocation && status) {
-        order.status = status;
-        order.presentLocation = presentLocation;
-        return res.status(200).send({
-          success: true,
-          message: 'order status and present location have been changed',
-          order,
-        });
-      }
+router.put(
+  '/:orderId/status',
+  checkIsAdmin,
+  celebrate({ body: updateStatus }),
+  getOrder,
+  checkCancel,
+  async (req, res) => {
+    const { status, weight } = req.body;
+    const id = req.params.orderId;
+    const order = req.order;
+    let query;
+    const values = [];
+    let message;
+    if (order.status === 'created' && status === 'received' && weight) {
+      // update parcel weight calculate the price and send a mail  to client
+      query = queryUpdateWeight;
+      values.push(weight);
+      values.push(status);
+      values.push(id);
+      message =
+        'We have recieved your order , please checkout the invoice sent via mail';
     } else {
-      return res.status(403).send({
-        success: false,
-        message:
-          'cannot change the present location or status  of  a delivered order',
-      });
+      query = queryUpdateStatus;
+      message = `delivery order status has been changed to ${status}`;
+      values.push(status);
+      values.push(id);
     }
-  } else {
-    return res.status(404).send({
-      success: false,
-      message: 'the delivery order you are looking for  does not exist',
-    });
-  }
-});
-**/
+
+    await Order.queryDb(query, values)
+      .then((result) => {
+        if (result.rowCount === 1) {
+          return res.status(200).send({
+            success: true,
+            message,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        return res.status(500).send({
+          success: false,
+          message: 'something went wong please try again',
+        });
+      });
+  },
+);
+
+router.put(
+  '/:orderId/presentLocation',
+  checkIsAdmin,
+  celebrate({ body: updateLocation }),
+  getOrder,
+  checkCancel,
+  async (req, res) => {
+    const order = req.order;
+    const { location } = req.body;
+    const id = req.params.orderId;
+    let query;
+    const values = [];
+    let message;
+    if (order.destination === location) {
+      // if present location is delivered update and set values to delivered
+      query = queryUpdateDeliver;
+      values.push(id);
+      message = 'The order has been delivered';
+    } else {
+      query = queryUpdateLocation;
+      values.push(id);
+      message = `presentLocation has changed  to ${location}`;
+    }
+    values.push(location);
+    await Order.queryDb(query, values)
+      .then((result) => {
+        // send email
+        if (result.rowCount === 1) {
+          return res.status(200).send({
+            success: true,
+            message,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        return res.status(500).send({
+          success: false,
+          message: 'something went wong please try again',
+        });
+      });
+  },
+);
 export default router;
