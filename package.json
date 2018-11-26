@@ -80,7 +80,8 @@
       "config.js",
       "config.sample.js",
       "app/utils/jsonReplacer.js",
-      "test/*"
+      "test/*",
+      "app/utils/connectToDb.js"
     ]
   }
 }

@@ -116,16 +116,6 @@ class Order {
     this._recipientPhone = recipientPhone;
   }
 
-  toJSON() {
-    /**
-     *  convert the object to json
-     * */
-    return Object.getOwnPropertyNames(this).reduce((a, b) => {
-      a[b.replace('_', '')] = this[b];
-      return a;
-    }, {});
-  }
-
   static async queryDb(query, values = []) {
     query.values = values;
     const pool = new Pool(dbConfigObject);
