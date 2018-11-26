@@ -4,7 +4,7 @@ node_js:
 services:
   - postgresql
 before_script:
-  - psql -c 'create database andelasendit;' -U postgres
+  - psql -c 'create database andelasendittest;' -U postgres
   - psql -U postgres -d postgres -a -f create-tables.sql
 after_success:
   - npm run coveralls
