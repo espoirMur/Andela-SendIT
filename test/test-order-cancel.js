@@ -41,28 +41,6 @@ const createOrder = (done) => {
     });
 };
 
-const canCannotCancelOrder = (done) => {
-  /**
-   * test if we cannot cancel a delivery order if the status
-   * marked as delivered
-   * in the future we need to allow only admin or a person who create order to implement
-   */
-  console.log(orderId, '=======', orderId);
-  chai
-    .request(app)
-    .put(`/api/v1/parcels/${orderId}/cancel `)
-    .set('authorization', `Beared ${token}`)
-    .end((request, response) => {
-      response.should.have.status(403);
-      response.body.should.be.a('object');
-      response.body.should.have.property('success').eql(false);
-      response.body.should.have
-        .property('message')
-        .eql('cannot cancel a delivered order');
-      done();
-    });
-};
-
 const canCancelOrder = (done) => {
   /**
    * test if we cancel a delivery order if the status
@@ -169,7 +147,6 @@ const cannotCancelIfNotInitiator = (done) => {
 describe('cancel order', () => {
   before('create new order', createOrder);
   it('can cancel order', canCancelOrder);
-  it.skip('cannot cancel if delivered', canCannotCancelOrder);
   it('cannot cancel non existant order', canCannotCancelNoExistOrder);
   it('cannot cancel if already canceled', canCannotCancelOrderCanceled);
 });

@@ -96,7 +96,7 @@ router.put(
   checkCreator,
   checkCancel,
   (req, res) => {
-    const id = req.params.id;
+    const id = req.params.orderId;
     // from the middlware get order
     Order.queryDb(queryCancel, [id])
       .then((result) => {
@@ -209,13 +209,14 @@ router.put(
       // if present location is delivered update and set values to delivered
       query = queryUpdateDeliver;
       values.push(id);
+      values.push(location);
       message = 'The order has been delivered';
     } else {
       query = queryUpdateLocation;
+      values.push(location);
       values.push(id);
       message = `presentLocation has changed  to ${location}`;
     }
-    values.push(location);
     await Order.queryDb(query, values)
       .then((result) => {
         // send email
