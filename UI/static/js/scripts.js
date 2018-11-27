@@ -83,7 +83,7 @@ window.onload = function() {
     }
   };
 
-  const deleteOrder = function() {
+  const cancelOrder = function() {
     const row = this.closest('tr');
     const status = row.cells[6].innerHTML;
     if (status === 'delivered') {
@@ -106,5 +106,5 @@ window.onload = function() {
 
   // delete an order
   const allDeleteButtons = document.getElementsByClassName('delete-order');
-  Array.from(allDeleteButtons, d => d.addEventListener('click', deleteOrder));
+  Array.from(allDeleteButtons, d => d.addEventListener('click', cancelOrder));
 };

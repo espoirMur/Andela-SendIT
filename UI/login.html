@@ -22,13 +22,14 @@
             <h4 id='login-title'> Create an Account</h4>
               <input type='checkbox' id='form-switch'>
               <form id='login-form' action="orders.html" method='get'>
-              <input type="text" placeholder="Username" required>
-                <input type="password" placeholder="Password" required>
+              <input type="email" placeholder="Email" name="email"required>
+                <input type="password" placeholder="Password" name="password"required>
                 <button type='submit' id='login-btn'>Login</button>
                 <label for='form-switch' id='register-switch'><span>Register</span></label>
                <!--label for='form-switch'><span>Reset password</span></label-->
               </form>
               <form id='register-form' action="login.html" method='get'>
+                  <input name='name' type="text" placeholder="Names" required>
                 <input name='email' type="email" placeholder="Email" required>
                 <input type="phone" name='phone' placeholder="Phone" required>
                 <input name="password" type="password" placeholder="Password" required>
@@ -38,5 +39,10 @@
               </form>
           </div>
     </body>
+    <div class="footer">
+      <p>
+        Copyright &copy; 2018 SendIT
+      </p>
+    </div>
     <script src="static/js/authentification.js"></script>
 </html>
