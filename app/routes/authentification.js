@@ -31,19 +31,19 @@ authRouter.post(
       })
       .catch((error) => {
         // if an error check if it's related to duplicated user
+        console.log(error, '=================');
         if (error.code === '23505' && error.constraint === 'users_email_key') {
           // 23505 means duplicate key entry and constraint is to show if the email is taken
           // status 409 duplicate data
           return res.status(409).send({
             success: false,
-            message: 'the email is already taken , try to login',
-          });
-        } else {
-          return res.status(500).send({
-            success: false,
-            message: 'something went wong please try again',
+            message: 'the email is already taken, sign in',
           });
         }
+        return res.status(500).send({
+          success: false,
+          message: 'something went wong please try again',
+        });
       });
   },
 );

@@ -1,6 +1,5 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { User, users } from '../app/models/user';
 import { app } from '../app/server';
 import { encodeToken, decodeToken } from '../app/utils/authentification';
 import { before } from 'mocha';
@@ -150,15 +149,14 @@ const cannotRegisterEmailTaken = (done) => {
     .post('/auth/signup')
     .send(user)
     .end((err, response) => {
+      console.log(`error during email ${err}`);
       should.not.exist(err);
       response.redirects.length.should.eql(0);
       response.status.should.eql(409);
       response.body.should.include.keys('success', 'message');
       response.body.success.should.eql(false);
-      response.body.message.should.eql(
-        'the email is already taken , try to login'
-      ),
-        done();
+      response.body.message.should.eql('the email is already taken, sign in');
+      done();
     });
 };
 
@@ -168,7 +166,7 @@ describe('cannot create user if invalid content', () => {
   it('should return 400 if the email is invalid', cannotCreateIfEmailInvalid);
   it(
     'should return 400 if the password is invalid',
-    cannotCreateIfpasswordInvalid
+    cannotCreateIfpasswordInvalid,
   );
 });
 
