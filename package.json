@@ -9,7 +9,9 @@
     "nyc": "nyc npm test",
     "code-climate": "codeclimate-test-reporter < ./coverage/lcov.info",
     "codecov": "codecov",
-    "createDb": "NODE_ENV=TEST babel-node app/utils/connectToDb.js"
+    "createDb": "NODE_ENV=TEST babel-node app/utils/connectToDb.js",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+   
   },
   "repository": {
     "type": "git",
@@ -47,7 +49,6 @@
     "chai-http": "^4.2.0",
     "codeclimate-test-reporter": "^0.5.1",
     "codecov": "^3.1.0",
-    "coveralls": "^3.0.2",
     "dotenv": "^6.1.0",
     "eslint": "^5.8.0",
     "eslint-config-airbnb-base": "^13.1.0",

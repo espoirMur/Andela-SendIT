@@ -31,7 +31,6 @@ authRouter.post(
       })
       .catch((error) => {
         // if an error check if it's related to duplicated user
-        console.log(error, '=================');
         if (error.code === '23505') {
           // 23505 means duplicate key entry and constraint is to show if the email is taken
           // status 409 duplicate data
