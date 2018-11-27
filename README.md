@@ -10,7 +10,7 @@ This project was given as a learning project for andela kigali bootcamp preparat
 ## Build status
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/9e7b46a32f9fa04d5ee3/maintainability)](https://codeclimate.com/github/espoirMur/Andela-SendIT/maintainability)[![Build Status](https://travis-ci.org/espoirMur/Andela-SendIT.svg?branch=develop)](https://travis-ci.org/espoirMur/Andela-SendIT)
-[![codecov](https://codecov.io/gh/espoirMur/Andela-SendIT/branch/develop/graph/badge.svg)](https://codecov.io/gh/espoirMur/Andela-SendIT)
+[![Coverage Status](https://coveralls.io/repos/github/espoirMur/Andela-SendIT/badge.svg?branch=develop)](https://coveralls.io/github/espoirMur/Andela-SendIT?branch=develop)
 
 ## Code style
 
