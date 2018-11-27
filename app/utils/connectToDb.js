@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS orders (
   status character varying(50) NOT NULL,
   initiatorid integer,
   weight integer,
+  price integer,
   CONSTRAINT order_initiator_id_fk FOREIGN KEY (initiatorId)
      REFERENCES users (id) MATCH SIMPLE
      ON UPDATE NO ACTION ON DELETE NO ACTION

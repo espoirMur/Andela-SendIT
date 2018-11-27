@@ -160,9 +160,11 @@ router.put(
     let message;
     if (order.status === 'created' && status === 'received' && weight) {
       // update parcel weight calculate the price and send a mail  to client
+      const price = weight * 4000;
       query = queryUpdateWeight;
       values.push(weight);
       values.push(status);
+      values.push(price);
       values.push(id);
       message =
         'We have recieved your order , please checkout the invoice sent via mail';
