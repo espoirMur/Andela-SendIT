@@ -27,6 +27,7 @@ const ensureAuthentificated = async (req, res, next) => {
       success: false,
     });
   }
+  // user authentficated with token
   await User.getById(payload.sub)
     .then((results) => {
       if (results.rows.length === 0) {

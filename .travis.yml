@@ -5,7 +5,7 @@ services:
   - postgresql
 before_script:
   - psql -c 'create database andelasendittest;' -U postgres
-  - psql -U postgres -d postgres -a -f create-tables.sql
+  - npm run createDb
 after_success:
   - npm run coveralls
   - npm run code-climate

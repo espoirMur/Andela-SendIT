@@ -1,62 +1,56 @@
-import { Pool, Client } from 'pg';
-
-const pool = new Pool();
-
-const connectToDb = async () => {
-  let client;
-  try {
-    client = await pool.connect();
-    const initialquery = client.query();
-    initialquery.on('end', () => {
-      client.end();
-      console.log('done');
-    });
-  } catch (error) {
-    console.log(error);
-  } finally {
-    client.release();
-  }
-};
+import { Pool } from 'pg';
+import { dbConfigObject } from '../server';
 
 const createDb = `
-CREATE TABLE users(
+CREATE TABLE IF NOT EXISTS users (
   id serial PRIMARY KEY,
-  name VARCHAR (50) NOT NULL,
-  passwordHash VARCHAR (500) NOT NULL,
-  email VARCHAR (55) UNIQUE NOT NULL,
-  registrationDate TIMESTAMP DEFAULT NOW(),
-  phone VARCHAR (50) NOT NULL,
-  isAdmin boolean not NULL
- );
+  name character varying(50) NOT NULL,
+  passwordhash character varying(500) NOT NULL,
+  email character varying(55) UNIQUE NOT NULL,
+  registrationdate timestamp without time zone DEFAULT now(),
+  phone character varying(50) NOT NULL,
+  isadmin boolean NOT NULL
+);
 
- CREATE TABLE orders(
+
+CREATE TABLE IF NOT EXISTS orders (
   id serial PRIMARY KEY,
-  origin VARCHAR (50) NOT NULL,
-  destination VARCHAR (50) NOT NULL,
-  presentLocation VARCHAR (50) ,
-  recipentPhone VARCHAR (35) NOT NULL,
-  orderDate TIMESTAMP DEFAULT NOW(),
-  deliveryDate TIMESTAMP,
-  commnent VARCHAR (350) ,
-  status VARCHAR(50) NOT NULL,
-  initiatorId INTEGER,
-  weight INTEGER,
+  origin character varying(50) NOT NULL,
+  destination character varying(50) NOT NULL,
+  presentlocation character varying(50),
+  recipientphone character varying(35) NOT NULL,
+  orderdate timestamp without time zone DEFAULT now(),
+  deliverydate timestamp without time zone,
+  comments character varying(350),
+  status character varying(50) NOT NULL,
+  initiatorid integer,
+  weight integer,
   CONSTRAINT order_initiator_id_fk FOREIGN KEY (initiatorId)
-       REFERENCES users (id) MATCH SIMPLE
-       ON UPDATE NO ACTION ON DELETE NO ACTION
- );
+     REFERENCES users (id) MATCH SIMPLE
+     ON UPDATE NO ACTION ON DELETE NO ACTION
+);
 `;
 
-const createDatabase = async () => {
-  const pool = await new Pool();
-  pool.query(createDb, (err, res) => {
-    if (err) {
-      throw err;
-    } else {
-      console.log(res);
-      return res;
-    }
-  });
+const exitNode = () => {
+  setTimeout(() => {
+    process.exit(0); // Exit with success
+  }, 900);
 };
 
-export { connectToDb, pool, createDatabase };
+const createDatabase = async (query) => {
+  const pool = new Pool(dbConfigObject);
+  const client = await pool.connect();
+  const result = await client.query(query);
+  await client.end();
+  return result;
+};
+
+createDatabase(createDb)
+  .then((res) => {
+    console.log(res);
+    exitNode();
+  })
+  .catch((err) => {
+    console.log(err);
+    exitNode();
+  });

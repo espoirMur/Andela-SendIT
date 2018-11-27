@@ -82,7 +82,6 @@ class User {
       this.phone,
       this.isAdmin,
     ];
-    console.log(dbConfigObject, '===============');
     const pool = new Pool(dbConfigObject);
     const client = await pool.connect();
     const result = await client.query(queryCreate);
