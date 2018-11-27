@@ -11,6 +11,7 @@ import {
 import jsonReplacer from './utils/jsonReplacer';
 import { ensureAuthentificated } from './middlewares/authentification';
 import dotenv from 'dotenv';
+import { sendEmail } from '../app/utils/sendEmails';
 dotenv.config();
 
 // read the virtual environement
@@ -29,12 +30,26 @@ const dbConfigObject = {
 };
 const app = express();
 
-app.get('/', (req, resp) => {
-  resp.send({
-    success: true,
-    message:
-      'welcome to my apis, check the documenation for more info on how to use',
-  });
+app.get('/', async (req, resp) => {
+  const mailOptions = {
+    from: 'espoir.mur@gmail.com', // sender address
+    to: 'espoir.mur@gmail.com', // list of receivers
+    subject: 'test send email from andela', // Subject line
+    html: '<p>test email</p>', // plain text body
+    text: 'email is supposed to be sent',
+  };
+  await sendEmail(mailOptions)
+    .then((info) => {
+      console.log(info);
+      resp.send({
+        success: true,
+        message:
+          'welcome to my apis, check the documenation for more info on how to use',
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 });
 
 app.get('/test/errors/', (req, resp, error) => {
