@@ -47,6 +47,7 @@ const createDatabase = async (query) => {
 
 createDatabase(createDb)
   .then((res) => {
+    console.log('success using connection=======', dbConfigObject);
     console.log(res);
     exitNode();
   })
