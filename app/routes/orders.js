@@ -54,8 +54,6 @@ router.post('/', celebrate({ body: createOrder }), async (req, res) => {
   const token = header.slice(7);
   const payload = decodeToken(token);
   const initiatorId = payload.sub;
-
-  // should I delete Order class?
   const order = new Order(
     orderDetails.origin,
     orderDetails.destination,
@@ -97,8 +95,9 @@ router.put(
   checkCancel,
   (req, res) => {
     const id = req.params.orderId;
+    const values = [id];
     // from the middlware get order
-    Order.queryDb(queryCancel, [id])
+    Order.queryDb(queryCancel, values)
       .then((result) => {
         if (result.rowCount === 1) {
           return res.status(200).send({
@@ -156,23 +155,19 @@ router.put(
     const id = req.params.orderId;
     const order = req.order;
     let query;
-    const values = [];
+    let values;
     let message;
     if (order.status === 'created' && status === 'received' && weight) {
       // update parcel weight calculate the price and send a mail  to client
       const price = weight * 4000;
       query = queryUpdateWeight;
-      values.push(weight);
-      values.push(status);
-      values.push(price);
-      values.push(id);
+      values = [weight, status, price, id];
       message =
         'We have recieved your order , please checkout the invoice sent via mail';
     } else {
       query = queryUpdateStatus;
       message = `delivery order status has been changed to ${status}`;
-      values.push(status);
-      values.push(id);
+      values = [status, id];
     }
 
     await Order.queryDb(query, values)
@@ -205,18 +200,16 @@ router.put(
     const { location } = req.body;
     const id = req.params.orderId;
     let query;
-    const values = [];
+    let values;
     let message;
     if (order.destination === location) {
       // if present location is delivered update and set values to delivered
       query = queryUpdateDeliver;
-      values.push(id);
-      values.push(location);
+      values = [id, location];
       message = 'The order has been delivered';
     } else {
       query = queryUpdateLocation;
-      values.push(location);
-      values.push(id);
+      values = [location, id];
       message = `presentLocation has changed  to ${location}`;
     }
     await Order.queryDb(query, values)

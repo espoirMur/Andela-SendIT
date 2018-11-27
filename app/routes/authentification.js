@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import bodyParser from 'body-parser';
 import { users, User } from '../models/user';
 import { registerSchema, loginSchema } from '../models/userSchemas';
 import { celebrate } from 'celebrate';
@@ -50,14 +49,13 @@ authRouter.post(
 authRouter.post(
   '/signin',
   celebrate({ body: loginSchema }),
-  async (req, res, next) => {
+  async (req, res) => {
     const { email, password } = req.body;
     await User.findByEmail(email)
       .then((results) => {
         if (results) {
           if (User.verifyPassword(results.passwordhash, password)) {
             const token = encodeToken(results);
-            console.log(decodeToken(token));
             res.status(200).send({
               token,
               success: true,

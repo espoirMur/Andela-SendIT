@@ -6,7 +6,8 @@ const getOrder = async (req, res, next) => {
   // called before any route where we are retreiving order by id
   // should use destructuring ask why???
   const id = req.params.orderId;
-  await Order.queryDb(queryGetId, [parseInt(id, 10)])
+  const values = [parseInt(id, 10)];
+  await Order.queryDb(queryGetId, values)
     .then((results) => {
       if (results.rows.length === 0) {
         return res.status(404).send({

@@ -48,7 +48,6 @@ app.set('json replacer', jsonReplacer);
 app.use('/auth', authRouter);
 app.use(ensureAuthentificated);
 app.use('/api/v1/parcels', orders);
-app.use(ensureAuthentificated);
 app.use('/api/v1/users', userOrdersRouter);
 
 app.use(joiErrors());

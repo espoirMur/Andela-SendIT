@@ -17,4 +17,5 @@ const queryDeleteAll = {
   text: 'delete from orders;delete from users',
   value: [],
 };
+
 export { queryCreate, queryEmail, queryId, queryDeleteAll };
