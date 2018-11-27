@@ -10,7 +10,7 @@
     "code-climate": "codeclimate-test-reporter < ./coverage/lcov.info",
     "codecov": "codecov",
     "createDb": "NODE_ENV=TEST babel-node app/utils/connectToDb.js",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
    
   },
   "repository": {
