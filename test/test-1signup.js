@@ -149,7 +149,6 @@ const cannotRegisterEmailTaken = (done) => {
     .post('/auth/signup')
     .send(user)
     .end((err, response) => {
-      console.log(`error during email ${err}`);
       should.not.exist(err);
       response.redirects.length.should.eql(0);
       response.status.should.eql(409);
