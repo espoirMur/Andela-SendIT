@@ -45,7 +45,7 @@ authRouter.post(
           });
         }
       });
-  }
+  },
 );
 
 authRouter.post(
@@ -83,7 +83,7 @@ authRouter.post(
           message: 'something went wong please try again',
         });
       });
-  }
+  },
 );
 
 export default authRouter;

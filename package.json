@@ -8,7 +8,8 @@
     "start": "NODE_ENV=DEV nodemon app/server.js --exec babel-node --",
     "nyc": "nyc npm test",
     "code-climate": "codeclimate-test-reporter < ./coverage/lcov.info",
-    "codecov": "codecov"
+    "codecov": "codecov",
+    "createDb": "NODE_ENV=DEV babel-node app/utils/connectToDb.js"
   },
   "repository": {
     "type": "git",
