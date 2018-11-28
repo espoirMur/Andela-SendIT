@@ -47,9 +47,9 @@ app.use('/api/v1/users', userOrdersRouter);
 app.use(joiErrors());
 
 // for Page not found errors, all route not found should return this error
-app.get('*', error4O4Handler);
-app.use(error5OOHandler);
 
+app.use(error5OOHandler);
+app.get('*', error4O4Handler);
 app.listen(process.env.PORT || 3000);
 
 // eslint-disable-next-line import/prefer-default-export

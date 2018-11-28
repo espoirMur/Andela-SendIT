@@ -1,5 +1,6 @@
 import { isCelebrate } from 'celebrate';
-const error5OOHandler = (err, req, res) => {
+const error5OOHandler = (err, req, res, next) => {
+  // next need to be here it's failling in productiion
   console.error(err.stack);
   res.status(500).send({
     success: false,
