@@ -1,6 +1,12 @@
+/* eslint-disable import/no-cycle */
 import express from 'express';
 import bodyParser from 'body-parser';
-import orders from './routes/orders';
+import dotenv from 'dotenv';
+import orderRouter from './routes/orders/orders';
+import cancelRoute from './routes/orders/order-cancel';
+import destinationRouter from './routes/orders/order-change-destination';
+import locationRouter from './routes/orders/order-change-location';
+import statusRouter from './routes/orders/order-change-status';
 import userOrdersRouter from './routes/user-orders';
 import authRouter from './routes/authentification';
 import {
@@ -10,16 +16,14 @@ import {
 } from './middlewares/errors';
 import jsonReplacer from './utils/jsonReplacer';
 import { ensureAuthentificated } from './middlewares/authentification';
-import dotenv from 'dotenv';
-import { sendEmail } from '../app/utils/sendEmails';
+
 dotenv.config();
 
 // read the virtual environement
 const env = process.env.NODE_ENV;
-// convert it to uppercasse
-const envString = env.toUpperCase();
+
 // get the correponding database URI
-const DATABASEURI = process.env['PGDATABASE_' + envString];
+const DATABASEURI = process.env[`PGDATABASE_${env}`];
 // build the config object using the database URI and other env
 const dbConfigObject = {
   user: process.env.PGUSER,
@@ -30,26 +34,12 @@ const dbConfigObject = {
 };
 const app = express();
 
-app.get('/', async (req, resp) => {
-  const mailOptions = {
-    from: 'espoir.mur@gmail.com', // sender address
-    to: 'espoir.mur@gmail.com', // list of receivers
-    subject: 'test send email from andela', // Subject line
-    html: '<p>test email</p>', // plain text body
-    text: 'email is supposed to be sent',
-  };
-  await sendEmail(mailOptions)
-    .then((info) => {
-      console.log(info);
-      resp.send({
-        success: true,
-        message:
-          'welcome to my apis, check the documenation for more info on how to use',
-      });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+app.get('/', (req, resp) => {
+  resp.send({
+    success: true,
+    message:
+      'welcome to my apis, check the documenation for more info on how to use',
+  });
 });
 
 app.get('/test/errors/', (req, resp, error) => {
@@ -62,7 +52,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('json replacer', jsonReplacer);
 app.use('/auth', authRouter);
 app.use(ensureAuthentificated);
-app.use('/api/v1/parcels', orders);
+app.use('/api/v1/parcels', [
+  orderRouter,
+  cancelRoute,
+  destinationRouter,
+  locationRouter,
+  statusRouter,
+]);
 app.use('/api/v1/users', userOrdersRouter);
 
 app.use(joiErrors());
