@@ -32,7 +32,7 @@ userOrdersRouter.get('/:userId/parcels/:orderId', async (req, res) => {
   const { userId, orderId } = req.params;
   await Order.queryDb(queryGetOneOrderUSer, [orderId, userId])
     .then((results) => {
-      if (results.rows.length === 0) {
+      if (!results.rows.length) {
         return res.status(404).send({
           success: false,
           message: 'the delivery order you are looking for does not exist',

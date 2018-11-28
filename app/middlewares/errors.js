@@ -1,5 +1,6 @@
 import { isCelebrate } from 'celebrate';
 const error5OOHandler = (err, req, res, next) => {
+  // if next is removed it fails, I don't know why
   console.error(err.stack);
   res.status(500).send({
     success: false,
