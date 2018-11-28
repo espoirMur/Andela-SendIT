@@ -2,7 +2,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { Order } from '../app/models/orders';
-import { token } from './test-0Initial';
+import { token } from './test-initial';
 import { queryGetAll, queryGetId } from '../app/models/orderQueries';
 
 import { app } from '../app/server';
@@ -236,16 +236,16 @@ const cannotGetOrderById = (done) => {
 describe('create orders', () => {
   it(
     'cannot create order if  pickup location missing',
-    cannotCreateOrderOrigin
+    cannotCreateOrderOrigin,
   );
   it('return 400 if content type is not json', cannotCreateOrderBadContent);
   it(
     'cannot create order if destination is missing ',
-    cannotCreateOrderDestination
+    cannotCreateOrderDestination,
   );
   it(
     'cannot create order if recipient phone is missing',
-    cannotCreateOrderRecipientPhone
+    cannotCreateOrderRecipientPhone,
   );
 });
 

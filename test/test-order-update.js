@@ -1,7 +1,7 @@
 /* eslint-disable comma-dangle */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { token } from './test-0Initial';
+import { token } from './test-initial';
 
 import { app } from '../app/server';
 
@@ -35,7 +35,7 @@ const createOrder = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql('delivery order successfully created!');
+        .eql('Delivery order successfully created!');
       response.body.should.have.property('order');
       done();
     });
@@ -55,7 +55,7 @@ const canChangeDestination = (done) => {
       response.body.should.have
         .property('message')
         .eql(
-          `delivery order destination has been changed to ${
+          `Delivery order destination has been changed to ${
             payload.destination
           }`,
         );
@@ -76,7 +76,7 @@ const canChangeStatus = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql(`delivery order status has been changed to ${payload.status}`);
+        .eql(`Delivery order status has been changed to ${payload.status}`);
       done();
     });
 };
@@ -117,7 +117,7 @@ const canChangePresentLocation = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql(`presentLocation has changed  to ${payload.location}`);
+        .eql(`PresentLocation has changed  to ${payload.location}`);
       done();
     });
 };
@@ -156,16 +156,21 @@ const canCannotCancelOrder = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('cannot update a delivered order');
+        .eql('Cannot update a delivered order');
       done();
     });
 };
 describe('can update an order', () => {
   before('create an order', createOrder);
   it('can get order by id', canChangeDestination);
-  it('can change status and weight', canChangeStatusWeight);
-  it('can change the status of the delivery order', canChangeStatus);
-  it('can change present location', canChangePresentLocation);
-  it('change prsent location  to deliver', canChangePresentLocationDeliver);
+  it('can change status and weight', canChangeStatusWeight).timeout(6000);
+  it('can change the status of the delivery order', canChangeStatus).timeout(
+    6000,
+  );
+  it('can change present location', canChangePresentLocation).timeout(6000);
+  it(
+    'change present location  to deliver',
+    canChangePresentLocationDeliver,
+  ).timeout(6000);
   it('cannot cancel if delivered', canCannotCancelOrder);
 });

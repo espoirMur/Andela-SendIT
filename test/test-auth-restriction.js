@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-expressions */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { app } from '../app/server';
 import { describe } from 'mocha';
 import { encodeToken } from '../app/utils/authentification';
-import { testUser, token } from './test-0Initial';
+import { testUser, token } from './test-initial';
 chai.use(chaiHttp);
 const should = chai.should();
 
@@ -76,7 +77,7 @@ const cannotAccessAdminRoute = (done) => {
       res.status.should.eql(403);
       res.body.success.should.eql(false);
       res.body.message.should.eql(
-        'you are not authorized to perform this action'
+        'you are not authorized to perform this action',
       );
       done();
     });

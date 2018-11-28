@@ -3,7 +3,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { app } from '../app/server';
-import { token } from './test-0Initial';
+import { token } from './test-initial';
 import { decodeToken, encodeToken } from '../app/utils/authentification';
 /** setting up the test server */
 

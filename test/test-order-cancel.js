@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { token } from './test-0Initial';
+import { token } from './test-initial';
 import { app } from '../app/server';
 import { encodeToken } from '../app/utils/authentification';
 import { User } from '../app/models/user';
@@ -57,7 +57,7 @@ const canCancelOrder = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql('delivery order has been canceled');
+        .eql('Delivery order has been canceled');
       done();
     });
 };
@@ -146,7 +146,7 @@ const cannotCancelIfNotInitiator = (done) => {
 // test cancel order
 describe('cancel order', () => {
   before('create new order', createOrder);
-  it('can cancel order', canCancelOrder);
+  it('can cancel order', canCancelOrder).timeout(6000);
   it('cannot cancel non existant order', canCannotCancelNoExistOrder);
   it('cannot cancel if already canceled', canCannotCancelOrderCanceled);
 });

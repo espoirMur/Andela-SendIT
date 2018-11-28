@@ -33,7 +33,7 @@ orderRouter.post('/', celebrate({ body: createOrder }), async (req, res) => {
   if (!contype || contype.indexOf('application/json') !== 0) {
     return res.status(406).send({
       success: false,
-      message: 'invalid content type',
+      message: 'Invalid content type',
     });
   }
   const orderDetails = req.body;
@@ -54,7 +54,7 @@ orderRouter.post('/', celebrate({ body: createOrder }), async (req, res) => {
     .then((result) => {
       res.status(201).send({
         success: true,
-        message: 'delivery order successfully created!',
+        message: 'Delivery order successfully created!',
         order: result,
       });
     })
@@ -62,7 +62,7 @@ orderRouter.post('/', celebrate({ body: createOrder }), async (req, res) => {
       console.log(error);
       return res.status(500).send({
         success: false,
-        message: 'something went wong please try again',
+        message: 'Something went wong please try again',
       });
     });
 });
@@ -70,7 +70,7 @@ orderRouter.post('/', celebrate({ body: createOrder }), async (req, res) => {
 orderRouter.get('/:orderId', checkIsAdmin, getOrder, async (req, res) => {
   return res.status(200).send({
     success: true,
-    message: 'delivery order  retrieved successfully',
+    message: 'Delivery order  retrieved successfully',
     order: req.order,
   });
 });

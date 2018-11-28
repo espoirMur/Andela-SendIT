@@ -5,7 +5,7 @@ import { app } from '../app/server';
 chai.use(chaiHttp);
 const should = chai.should();
 
-const testHomePage = done => {
+const testHomePage = (done) => {
   /**
    * call the homepage using request libary
    */
@@ -19,7 +19,7 @@ const testHomePage = done => {
       response.body.should.have
         .property('message')
         .eql(
-          'welcome to my apis, check the documenation for more info on how to use'
+          'welcome to my apis, check the documenation for more info on how to use',
         );
       done();
     });

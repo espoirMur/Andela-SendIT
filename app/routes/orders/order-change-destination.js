@@ -26,7 +26,7 @@ destinationRouter.put(
         if (result.rowCount === 1) {
           return res.status(200).send({
             success: true,
-            message: `delivery order destination has been changed to ${destination}`,
+            message: `Delivery order destination has been changed to ${destination}`,
           });
         }
       })
@@ -34,7 +34,7 @@ destinationRouter.put(
         console.error(error);
         return res.status(500).send({
           success: false,
-          message: 'something went wong please try again',
+          message: 'Something went wong please try again',
         });
       });
   },
