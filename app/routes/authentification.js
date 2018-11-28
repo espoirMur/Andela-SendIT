@@ -19,7 +19,6 @@ authRouter.post(
 
     const { name, email, phone, password } = req.body;
 
-    //const exist = User.findByEmail(email);
     const user = new User(name, email, phone, password);
     await user
       .save()

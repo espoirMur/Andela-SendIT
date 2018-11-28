@@ -25,7 +25,8 @@ destinationRouter.put(
   async (req, res) => {
     const id = parseInt(req.params.orderId, 10);
     const { destination } = req.body;
-    await Order.queryDb(queryUpdateDestination, [destination, id])
+    const values = [destination, id];
+    await Order.queryDb(queryUpdateDestination, values)
       .then((result) => {
         if (result.rowCount === 1) {
           return res.status(200).send({

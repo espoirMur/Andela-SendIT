@@ -2,7 +2,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { User } from '../app/models/user';
-import { encodeToken } from '../app/utils/authentification';
+import { encodeToken, decodeToken } from '../app/utils/authentification';
 import { app } from '../app/server';
 
 chai.use(chaiHttp);
@@ -29,6 +29,10 @@ const loginUser = (done) => {
           // eslint-disable-next-line prefer-destructuring
           token = response.body.token;
           token.should.be.a('string');
+          const payload = decodeToken(token);
+          payload.should.include.keys('sub', 'isadmin');
+          result.id.should.be.eql(payload.sub);
+          result.isadmin.should.be.eql(payload.isadmin);
           done();
         });
     })

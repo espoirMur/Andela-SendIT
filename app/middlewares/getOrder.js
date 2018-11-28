@@ -1,6 +1,8 @@
+/* eslint-disable arrow-parens */
 import { Order } from '../models/orders';
 import { queryGetId } from '../models/orderQueries';
 import { decodeToken } from '../utils/authentification';
+import { error5OOHandler } from './errors';
 
 const getOrder = async (req, res, next) => {
   // called before any route where we are retreiving order by id
@@ -9,7 +11,7 @@ const getOrder = async (req, res, next) => {
   const values = [parseInt(id, 10)];
   await Order.queryDb(queryGetId, values)
     .then((results) => {
-      if (results.rows.length === 0) {
+      if (!results.rows.length) {
         return res.status(404).send({
           success: false,
           message: 'The delivery order you are looking for does not exist',

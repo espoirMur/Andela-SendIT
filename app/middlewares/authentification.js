@@ -3,6 +3,7 @@ import { decodeToken } from '../utils/authentification';
 // eslint-disable-next-line import/no-cycle
 import { User } from '../models/user';
 import { error5OOHandler } from './errors';
+
 const ensureAuthenticated = async (req, res, next) => {
   // check if authentificated before handling any request
   if (!(req.headers && req.headers.authorization)) {
@@ -32,7 +33,7 @@ const ensureAuthenticated = async (req, res, next) => {
   // user authentficated with token
   await User.getById(payload.sub)
     .then((results) => {
-      if (results.rows.length === 0) {
+      if (!results.rows.length) {
         return res.status(404).send({
           success: false,
           message: 'The User cannot be found',

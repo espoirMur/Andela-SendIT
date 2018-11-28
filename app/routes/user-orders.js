@@ -14,7 +14,8 @@ const userOrdersRouter = Router();
 
 userOrdersRouter.get('/:userId/parcels', async (req, res) => {
   const { user } = req;
-  await Order.queryDb(queryGetAllOrderUser, [user.id])
+  const values = [user.id];
+  await Order.queryDb(queryGetAllOrderUser, values)
     .then((results) => {
       return res.status(200).send({
         success: true,
@@ -27,7 +28,8 @@ userOrdersRouter.get('/:userId/parcels', async (req, res) => {
 
 userOrdersRouter.get('/:userId/parcels/:orderId', async (req, res) => {
   const { userId, orderId } = req.params;
-  await Order.queryDb(queryGetOneOrderUSer, [orderId, userId])
+  const values = [orderId, userId];
+  await Order.queryDb(queryGetOneOrderUSer, values)
     .then((results) => {
       if (!results.rows.length) {
         return res.status(404).send({
