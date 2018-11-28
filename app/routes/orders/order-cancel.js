@@ -1,3 +1,5 @@
+/* eslint-disable arrow-parens */
+/* eslint-disable import/no-cycle */
 import { Router } from 'express';
 import { Order } from '../../models/orders';
 
@@ -7,6 +9,9 @@ import {
   checkCancel,
   checkCreator,
 } from '../../middlewares/getOrder';
+
+import error500Message from '../../utils/errorMessage';
+import { orderCanceled } from '../../utils/sendEmails';
 
 const cancelRouter = Router();
 
@@ -21,20 +26,20 @@ cancelRouter.put(
     // from the middlware get order
     Order.queryDb(queryCancel, values)
       .then((result) => {
+        // send email
         if (result.rowCount === 1) {
-          return res.status(200).send({
-            success: true,
-            message: 'delivery order has been canceled',
-          });
+          orderCanceled(req.user, req.order)
+            .then((info) => {
+              return res.status(200).send({
+                success: true,
+                message: 'Delivery order has been canceled',
+              });
+            })
+            // eslint-disable-next-line arrow-parens
+            .catch((error) => error500Message(error, res));
         }
       })
-      .catch((error) => {
-        console.error(error);
-        return res.status(500).send({
-          success: false,
-          message: 'something went wong please try again',
-        });
-      });
+      .catch((error) => error500Message(error, res));
   },
 );
 
