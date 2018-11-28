@@ -146,7 +146,7 @@ const cannotCancelIfNotInitiator = (done) => {
 // test cancel order
 describe('cancel order', () => {
   before('create new order', createOrder);
-  it('can cancel order', canCancelOrder).timeout(6000);
+  it('can cancel order', canCancelOrder).timeout(10000);
   it('cannot cancel non existant order', canCannotCancelNoExistOrder);
   it('cannot cancel if already canceled', canCannotCancelOrderCanceled);
 });

@@ -42,10 +42,6 @@ app.get('/', (req, resp) => {
   });
 });
 
-app.get('/test/errors/', (req, resp, error) => {
-  throw new Error('A new error');
-});
-
 // support parsing of application/json type post data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -62,8 +58,10 @@ app.use('/api/v1/parcels', [
 app.use('/api/v1/users', userOrdersRouter);
 
 app.use(joiErrors());
-app.use(error5OOHandler);
+
 // for Page not found errors, all route not found should return this error
+
+app.use(error5OOHandler);
 app.get('*', error4O4Handler);
 app.listen(process.env.PORT || 3000);
 
