@@ -163,14 +163,14 @@ const canCannotCancelOrder = (done) => {
 describe('can update an order', () => {
   before('create an order', createOrder);
   it('can get order by id', canChangeDestination);
-  it('can change status and weight', canChangeStatusWeight).timeout(6000);
+  it('can change status and weight', canChangeStatusWeight).timeout(10000);
   it('can change the status of the delivery order', canChangeStatus).timeout(
-    6000,
+    10000,
   );
-  it('can change present location', canChangePresentLocation).timeout(6000);
+  it('can change present location', canChangePresentLocation).timeout(10000);
   it(
     'change present location  to deliver',
     canChangePresentLocationDeliver,
-  ).timeout(6000);
+  ).timeout(10000);
   it('cannot cancel if delivered', canCannotCancelOrder);
 });
