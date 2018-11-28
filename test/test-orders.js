@@ -150,7 +150,8 @@ const canGetOrderById = (done) => {
    * test if we can get a delivery order by id
    *
    */
-  Order.queryDb(queryGetId, [orderId])
+  const values = [orderId];
+  Order.queryDb(queryGetId, values)
     .then((results) => {
       const order = results.rows[0];
       chai
@@ -204,6 +205,10 @@ const createOrder = (done) => {
         .property('message')
         .eql('Delivery order successfully created!');
       response.body.should.have.property('order');
+      response.body.order.origin.should.be.eql(order.origin);
+      response.body.order.destination.should.be.eql(order.destination);
+      response.body.order.recipientphone.should.be.eql(order.recipientPhone);
+      response.body.order.comments.should.be.eql(order.comments);
       done();
     });
 };
@@ -233,7 +238,7 @@ const cannotGetOrderById = (done) => {
  */
 
 // check if we can update a given order for a given user
-describe('create orders', () => {
+describe('cannot create order if invalid cotent', () => {
   it(
     'cannot create order if  pickup location missing',
     cannotCreateOrderOrigin,

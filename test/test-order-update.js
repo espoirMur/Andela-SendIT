@@ -17,7 +17,7 @@ const createOrder = (done) => {
    * */
   const order = {
     origin: 'test-somewhere',
-    destination: 'kamembe',
+    destination: 'Kamembe',
     recipientPhone: '25078489848',
     comments: 'call the recipient on reception',
   };
@@ -37,10 +37,13 @@ const createOrder = (done) => {
         .property('message')
         .eql('Delivery order successfully created!');
       response.body.should.have.property('order');
+      response.body.order.origin.should.be.eql(order.origin);
+      response.body.order.destination.should.be.eql(order.destination);
+      response.body.order.recipientphone.should.be.eql(order.recipientPhone);
+      response.body.order.comments.should.be.eql(order.comments);
       done();
     });
 };
-
 const canChangeDestination = (done) => {
   const payload = { destination: 'kamembe' };
   chai

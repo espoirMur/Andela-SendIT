@@ -37,10 +37,13 @@ const createOrder = (done) => {
         .property('message')
         .eql('Delivery order successfully created!');
       response.body.should.have.property('order');
+      response.body.order.origin.should.be.eql(order.origin);
+      response.body.order.destination.should.be.eql(order.destination);
+      response.body.order.recipientphone.should.be.eql(order.recipientPhone);
+      response.body.order.comments.should.be.eql(order.comments);
       done();
     });
 };
-
 const canCancelOrder = (done) => {
   /**
    * test if we cancel a delivery order if the status
