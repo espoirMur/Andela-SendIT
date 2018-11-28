@@ -20,7 +20,7 @@ const authNoToken = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('please provide a token');
+        .eql('Please provide a token');
       done();
     });
 };
@@ -37,7 +37,7 @@ const authBadToken = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('the token provided is or expired  invalid');
+        .eql('The token provided is or expired  invalid');
       done();
     });
 };
@@ -77,7 +77,7 @@ const cannotAccessAdminRoute = (done) => {
       res.status.should.eql(403);
       res.body.success.should.eql(false);
       res.body.message.should.eql(
-        'you are not authorized to perform this action',
+        'You are not authorized to perform this action',
       );
       done();
     });

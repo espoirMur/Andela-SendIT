@@ -12,7 +12,7 @@ import {
 
 import { getOrder, checkCancel } from '../../middlewares/getOrder';
 import { oderDelivered, orderLocationChanged } from '../../utils/sendEmails';
-import error500Message from '../../utils/errorMessage';
+import { error5OOHandler } from '../../middlewares/errors';
 
 const locationRouter = Router();
 
@@ -37,7 +37,6 @@ locationRouter.put(
       message = 'The order has been delivered';
       mail = oderDelivered;
     } else {
-      console.log('I am inside');
       query = queryUpdateLocation;
       values = [location, id];
       message = `PresentLocation has changed  to ${location}`;
@@ -48,7 +47,6 @@ locationRouter.put(
       .then((result) => {
         // send email
         if (result.rowCount === 1) {
-          console.log(result);
           mail(req.user, order)
             .then((info) => {
               return res.status(200).send({
@@ -57,10 +55,10 @@ locationRouter.put(
               });
             })
             // eslint-disable-next-line arrow-parens
-            .catch((error) => error500Message(error, res));
+            .catch((error) => error5OOHandler(error, res, req));
         }
       })
-      .catch((error) => error500Message(error, res));
+      .catch((error) => error5OOHandler(error, res, req));
   },
 );
 export default locationRouter;

@@ -58,7 +58,7 @@ const cannotCreateOrderOrigin = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('pickup location is required');
+        .eql('Pickup location is required');
       done();
     });
 };
@@ -86,7 +86,7 @@ const cannotCreateOrderDestination = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('destination is required');
+        .eql('Destination is required');
       done();
     });
 };
@@ -114,7 +114,7 @@ const cannotCreateOrderRecipientPhone = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('recipient phone is required');
+        .eql('Recipient phone is required');
       done();
     });
 };
@@ -140,7 +140,7 @@ const cannotCreateOrderBadContent = (done) => {
       response.should.have.status(406);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql('invalid content type');
+      response.body.should.have.property('message').eql('Invalid content type');
       done();
     });
 };
@@ -164,7 +164,7 @@ const canGetOrderById = (done) => {
           response.body.should.have.property('success').eql(true);
           response.body.should.have
             .property('message')
-            .eql('delivery order  retrieved successfully');
+            .eql('Delivery order  retrieved successfully');
           receivedOrder.origin.should.be.eql(order.origin);
           receivedOrder.destination.should.be.eql(order.destination);
           receivedOrder.recipientphone.should.be.eql(order.recipientphone);
@@ -202,7 +202,7 @@ const createOrder = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql('delivery order successfully created!');
+        .eql('Delivery order successfully created!');
       response.body.should.have.property('order');
       done();
     });
@@ -224,7 +224,7 @@ const cannotGetOrderById = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('the delivery order you are looking for does not exist');
+        .eql('The delivery order you are looking for does not exist');
       done();
     });
 };

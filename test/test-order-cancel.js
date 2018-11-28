@@ -35,7 +35,7 @@ const createOrder = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql('delivery order successfully created!');
+        .eql('Delivery order successfully created!');
       response.body.should.have.property('order');
       done();
     });
@@ -77,7 +77,7 @@ const canCannotCancelOrderCanceled = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('order has already been canceled');
+        .eql('The order has already been canceled');
       done();
     });
 };
@@ -97,7 +97,7 @@ const canCannotCancelNoExistOrder = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('the delivery order you are looking for does not exist');
+        .eql('The delivery order you are looking for does not exist');
       done();
     });
 };
@@ -139,7 +139,7 @@ const cannotCancelIfNotInitiator = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('you are not authorized to perform this action');
+        .eql('You are not authorized to perform this action');
       done();
     });
 };

@@ -1,8 +1,11 @@
+/* eslint-disable import/no-cycle */
+/* eslint-disable arrow-parens */
 import { Router } from 'express';
-import { users, User } from '../models/user';
-import { registerSchema, loginSchema } from '../models/userSchemas';
 import { celebrate } from 'celebrate';
-import { encodeToken, decodeToken } from '../utils/authentification';
+import { User } from '../models/user';
+import { registerSchema, loginSchema } from '../models/userSchemas';
+import { encodeToken } from '../utils/authentification';
+import { error5OOHandler } from '../middlewares/errors';
 
 const authRouter = Router();
 
@@ -13,6 +16,7 @@ authRouter.post(
   async (req, res) => {
     // load user details from body
     //  check if the email is already taken and return an error if
+
     const { name, email, phone, password } = req.body;
 
     //const exist = User.findByEmail(email);
@@ -24,7 +28,7 @@ authRouter.post(
         const token = encodeToken(result);
         return res.status(201).send({
           success: true,
-          message: 'the new user has been created',
+          message: 'The new user has been created',
           token,
         });
       })
@@ -35,12 +39,12 @@ authRouter.post(
           // status 409 duplicate data
           return res.status(409).send({
             success: false,
-            message: 'the email is already taken, sign in',
+            message: 'The email is already taken, sign in',
           });
         }
         return res.status(500).send({
           success: false,
-          message: 'something went wong please try again',
+          message: 'Something went wong please try again',
         });
       });
   },
@@ -73,13 +77,7 @@ authRouter.post(
           });
         }
       })
-      .catch((error) => {
-        console.log(error);
-        return res.status(500).send({
-          success: false,
-          message: 'something went wong please try again',
-        });
-      });
+      .catch((error) => error5OOHandler(error, res, req));
   },
 );
 

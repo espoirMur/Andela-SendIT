@@ -19,7 +19,7 @@ const testHomePage = (done) => {
       response.body.should.have
         .property('message')
         .eql(
-          'welcome to my apis, check the documenation for more info on how to use',
+          'Welcome to my apis, check the documenation for more info on how to use',
         );
       done();
     });

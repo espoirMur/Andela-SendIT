@@ -15,7 +15,7 @@ import {
   joiErrors,
 } from './middlewares/errors';
 import jsonReplacer from './utils/jsonReplacer';
-import { ensureAuthentificated } from './middlewares/authentification';
+import { ensureAuthenticated } from './middlewares/authentification';
 
 dotenv.config();
 
@@ -38,7 +38,7 @@ app.get('/', (req, resp) => {
   resp.send({
     success: true,
     message:
-      'welcome to my apis, check the documenation for more info on how to use',
+      'Welcome to my apis, check the documenation for more info on how to use',
   });
 });
 
@@ -51,7 +51,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('json replacer', jsonReplacer);
 app.use('/auth', authRouter);
-app.use(ensureAuthentificated);
+app.use(ensureAuthenticated);
 app.use('/api/v1/parcels', [
   orderRouter,
   cancelRoute,

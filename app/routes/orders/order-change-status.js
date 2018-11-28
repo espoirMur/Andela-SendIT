@@ -10,7 +10,8 @@ import {
   queryUpdateWeight,
 } from '../../models/orderQueries';
 import { orderStatusChanged, orderRecieved } from '../../utils/sendEmails';
-import error500Message from '../../utils/errorMessage';
+import { error5OOHandler } from '../../middlewares/errors';
+
 const statusRouter = Router();
 
 statusRouter.put(
@@ -55,11 +56,11 @@ statusRouter.put(
               });
             })
             // eslint-disable-next-line arrow-parens
-            .catch((error) => error500Message(error, res));
+            .catch((error) => error5OOHandler(error, res, req));
         }
       })
       // eslint-disable-next-line arrow-parens
-      .catch((error) => error500Message(error, res));
+      .catch((error) => error5OOHandler(error, res, req));
   },
 );
 

@@ -39,7 +39,7 @@ const shouldRaise404 = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('the page you are looking for cannot be found');
+        .eql('The page you are looking for cannot be found');
       done();
     });
 };

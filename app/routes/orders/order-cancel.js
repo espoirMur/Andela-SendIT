@@ -10,7 +10,7 @@ import {
   checkCreator,
 } from '../../middlewares/getOrder';
 
-import error500Message from '../../utils/errorMessage';
+import { error5OOHandler } from '../../middlewares/errors';
 import { orderCanceled } from '../../utils/sendEmails';
 
 const cancelRouter = Router();
@@ -36,10 +36,10 @@ cancelRouter.put(
               });
             })
             // eslint-disable-next-line arrow-parens
-            .catch((error) => error500Message(error, res));
+            .catch((error) => error5OOHandler(error, res, req));
         }
       })
-      .catch((error) => error500Message(error, res));
+      .catch((error) => error5OOHandler(error, res, req));
   },
 );
 

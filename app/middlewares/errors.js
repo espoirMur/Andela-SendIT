@@ -11,7 +11,7 @@ const error5OOHandler = (err, req, res, next) => {
 const error4O4Handler = (req, res) => {
   res.status(404).send({
     success: false,
-    message: 'the page you are looking for cannot be found',
+    message: 'The page you are looking for cannot be found',
   });
 };
 

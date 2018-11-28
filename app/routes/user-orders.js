@@ -1,3 +1,5 @@
+/* eslint-disable import/no-cycle */
+/* eslint-disable arrow-parens */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-else-return */
 import { Router } from 'express';
@@ -6,6 +8,7 @@ import {
   queryGetOneOrderUSer,
 } from '../models/orderQueries';
 import { Order } from '../models/orders';
+import { error5OOHandler } from '../middlewares/errors';
 
 const userOrdersRouter = Router();
 
@@ -15,17 +18,11 @@ userOrdersRouter.get('/:userId/parcels', async (req, res) => {
     .then((results) => {
       return res.status(200).send({
         success: true,
-        message: 'user delivery orders retrieved successfully',
+        message: 'User delivery orders retrieved successfully',
         orders: results.rows,
       });
     })
-    .catch((error) => {
-      console.error(error);
-      return res.status(500).send({
-        success: false,
-        message: 'something went wong please try again',
-      });
-    });
+    .catch((error) => error5OOHandler(error, res, req));
 });
 
 userOrdersRouter.get('/:userId/parcels/:orderId', async (req, res) => {
@@ -35,23 +32,17 @@ userOrdersRouter.get('/:userId/parcels/:orderId', async (req, res) => {
       if (!results.rows.length) {
         return res.status(404).send({
           success: false,
-          message: 'the delivery order you are looking for does not exist',
+          message: 'The delivery order you are looking for does not exist',
         });
       } else {
         return res.status(200).send({
           success: true,
-          message: 'user delivery orders retrieved successfully',
+          message: 'User delivery orders retrieved successfully',
           order: results.rows[0],
         });
       }
     })
-    .catch((error) => {
-      console.error(error);
-      return res.status(500).send({
-        success: false,
-        message: 'something went wong please try again',
-      });
-    });
+    .catch((error) => error5OOHandler(error, res, req));
 });
 
 export default userOrdersRouter;

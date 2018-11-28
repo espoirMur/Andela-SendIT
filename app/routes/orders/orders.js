@@ -1,3 +1,4 @@
+/* eslint-disable arrow-parens */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable import/no-cycle */
 /* eslint-disable prefer-destructuring */
@@ -7,6 +8,7 @@ import { Router } from 'express';
 import { celebrate } from 'celebrate';
 import { Order } from '../../models/orders';
 import { checkIsAdmin } from '../../middlewares/authentification';
+import { error5OOHandler } from '../../middlewares/errors';
 import { decodeToken } from '../../utils/authentification';
 import { createOrder } from '../../models/orderSchemas';
 import { queryGetAll } from '../../models/orderQueries';
@@ -19,13 +21,7 @@ orderRouter.get('/', checkIsAdmin, async (req, res) => {
     .then((results) => {
       return res.status(200).json(results.rows);
     })
-    .catch((error) => {
-      console.log(error);
-      return res.status(500).send({
-        success: false,
-        message: 'something went wong please try again',
-      });
-    });
+    .catch((error) => error5OOHandler(error, res, req));
 });
 
 orderRouter.post('/', celebrate({ body: createOrder }), async (req, res) => {
@@ -58,13 +54,7 @@ orderRouter.post('/', celebrate({ body: createOrder }), async (req, res) => {
         order: result,
       });
     })
-    .catch((error) => {
-      console.log(error);
-      return res.status(500).send({
-        success: false,
-        message: 'Something went wong please try again',
-      });
-    });
+    .catch((error) => error5OOHandler(error, res, req));
 });
 
 orderRouter.get('/:orderId', checkIsAdmin, getOrder, async (req, res) => {

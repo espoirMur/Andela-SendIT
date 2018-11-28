@@ -1,3 +1,5 @@
+/* eslint-disable import/no-cycle */
+/* eslint-disable arrow-parens */
 import { Router } from 'express';
 import { celebrate } from 'celebrate';
 import { Order } from '../../models/orders';
@@ -9,6 +11,8 @@ import {
   checkCancel,
   checkCreator,
 } from '../../middlewares/getOrder';
+
+import { error5OOHandler } from '../../middlewares/errors';
 
 const destinationRouter = Router();
 
@@ -30,13 +34,7 @@ destinationRouter.put(
           });
         }
       })
-      .catch((error) => {
-        console.error(error);
-        return res.status(500).send({
-          success: false,
-          message: 'Something went wong please try again',
-        });
-      });
+      .catch((error) => error5OOHandler(error, res, req));
   },
 );
 
