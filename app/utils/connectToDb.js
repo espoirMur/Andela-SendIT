@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import { dbConfigObject } from '../server';
+import dbConfigObject from '../../config';
 
 const createDb = `
 CREATE TABLE IF NOT EXISTS users (

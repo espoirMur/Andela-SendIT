@@ -2,7 +2,7 @@
 /* eslint-disable no-underscore-dangle */
 import { Pool } from 'pg';
 
-import { dbConfigObject } from '../server';
+import dbConfigObject from '../../config';
 import { queryCreate } from './orderQueries';
 
 class Order {
