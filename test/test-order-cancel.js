@@ -106,7 +106,7 @@ const canCannotCancelNoExistOrder = (done) => {
 };
 
 const loginUser = (done) => {
-  const user = new User('test', 'test1@test.com', '250788888', '98745236');
+  const user = new User('test', 'test1@test.com', '0781234567', '98745236');
   user
     .save()
     .then((result) => {
