@@ -1,6 +1,8 @@
+/* eslint-disable arrow-parens */
 import { Order } from '../models/orders';
 import { queryGetId } from '../models/orderQueries';
-import { decodeToken } from '../utils/authentification';
+import { decodeToken } from '../utils/authentication';
+import { error5OOHandler } from './errors';
 
 const getOrder = async (req, res, next) => {
   // called before any route where we are retreiving order by id
@@ -9,23 +11,17 @@ const getOrder = async (req, res, next) => {
   const values = [parseInt(id, 10)];
   await Order.queryDb(queryGetId, values)
     .then((results) => {
-      if (results.rows.length === 0) {
+      if (!results.rows.length) {
         return res.status(404).send({
           success: false,
-          message: 'the delivery order you are looking for does not exist',
+          message: 'The delivery order you are looking for does not exist',
         });
       }
       const order = results.rows[0];
       req.order = order;
       next();
     })
-    .catch((error) => {
-      console.error(error);
-      return res.status(500).send({
-        success: false,
-        message: 'something went wong please try again',
-      });
-    });
+    .catch((error) => error5OOHandler(error, res, req));
 };
 
 const checkCancel = (req, res, next) => {
@@ -35,7 +31,7 @@ const checkCancel = (req, res, next) => {
     if (order.status === 'canceled') {
       return res.status(403).send({
         success: false,
-        message: 'order has already been canceled',
+        message: 'The order has already been canceled',
       });
     }
     req.order = order;
@@ -43,7 +39,7 @@ const checkCancel = (req, res, next) => {
   } else {
     return res.status(403).send({
       success: false,
-      message: 'cannot update a delivered order',
+      message: 'Cannot update a delivered order',
     });
   }
 };
@@ -56,7 +52,7 @@ const checkCreator = (req, res, next) => {
   const payload = decodeToken(token);
   if (!payload.isadmin && order.initiatorid !== payload.sub) {
     return res.status(403).json({
-      message: 'you are not authorized to perform this action',
+      message: 'You are not authorized to perform this action',
       success: false,
     });
   }

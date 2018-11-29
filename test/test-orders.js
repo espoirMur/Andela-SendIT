@@ -2,7 +2,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { Order } from '../app/models/orders';
-import { token } from './test-0Initial';
+import { token } from './test-initial';
 import { queryGetAll, queryGetId } from '../app/models/orderQueries';
 
 import { app } from '../app/server';
@@ -58,7 +58,7 @@ const cannotCreateOrderOrigin = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('pickup location is required');
+        .eql('Pickup location is required');
       done();
     });
 };
@@ -86,7 +86,7 @@ const cannotCreateOrderDestination = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('destination is required');
+        .eql('Destination is required');
       done();
     });
 };
@@ -114,7 +114,7 @@ const cannotCreateOrderRecipientPhone = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('recipient phone is required');
+        .eql('Recipient phone is required');
       done();
     });
 };
@@ -140,7 +140,7 @@ const cannotCreateOrderBadContent = (done) => {
       response.should.have.status(406);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql('invalid content type');
+      response.body.should.have.property('message').eql('Invalid content type');
       done();
     });
 };
@@ -150,7 +150,8 @@ const canGetOrderById = (done) => {
    * test if we can get a delivery order by id
    *
    */
-  Order.queryDb(queryGetId, [orderId])
+  const values = [orderId];
+  Order.queryDb(queryGetId, values)
     .then((results) => {
       const order = results.rows[0];
       chai
@@ -164,7 +165,7 @@ const canGetOrderById = (done) => {
           response.body.should.have.property('success').eql(true);
           response.body.should.have
             .property('message')
-            .eql('delivery order  retrieved successfully');
+            .eql('Delivery order  retrieved successfully');
           receivedOrder.origin.should.be.eql(order.origin);
           receivedOrder.destination.should.be.eql(order.destination);
           receivedOrder.recipientphone.should.be.eql(order.recipientphone);
@@ -202,8 +203,12 @@ const createOrder = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql('delivery order successfully created!');
+        .eql('Delivery order successfully created!');
       response.body.should.have.property('order');
+      response.body.order.origin.should.be.eql(order.origin);
+      response.body.order.destination.should.be.eql(order.destination);
+      response.body.order.recipientphone.should.be.eql(order.recipientPhone);
+      response.body.order.comments.should.be.eql(order.comments);
       done();
     });
 };
@@ -224,7 +229,7 @@ const cannotGetOrderById = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('the delivery order you are looking for does not exist');
+        .eql('The delivery order you are looking for does not exist');
       done();
     });
 };
@@ -233,19 +238,19 @@ const cannotGetOrderById = (done) => {
  */
 
 // check if we can update a given order for a given user
-describe('create orders', () => {
+describe('cannot create order if invalid cotent', () => {
   it(
     'cannot create order if  pickup location missing',
-    cannotCreateOrderOrigin
+    cannotCreateOrderOrigin,
   );
   it('return 400 if content type is not json', cannotCreateOrderBadContent);
   it(
     'cannot create order if destination is missing ',
-    cannotCreateOrderDestination
+    cannotCreateOrderDestination,
   );
   it(
     'cannot create order if recipient phone is missing',
-    cannotCreateOrderRecipientPhone
+    cannotCreateOrderRecipientPhone,
   );
 });
 

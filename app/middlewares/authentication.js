@@ -1,12 +1,15 @@
-import { decodeToken } from '../utils/authentification';
+/* eslint-disable arrow-parens */
+import { decodeToken } from '../utils/authentication';
+// eslint-disable-next-line import/no-cycle
 import { User } from '../models/user';
+import { error5OOHandler } from './errors';
 
-const ensureAuthentificated = async (req, res, next) => {
+const ensureAuthenticated = async (req, res, next) => {
   // check if authentificated before handling any request
   if (!(req.headers && req.headers.authorization)) {
     return res.status(401).json({
       success: false,
-      message: 'please provide a token',
+      message: 'Please provide a token',
     });
   }
   const header = req.headers.authorization;
@@ -16,37 +19,31 @@ const ensureAuthentificated = async (req, res, next) => {
     payload = decodeToken(token);
   } catch (error) {
     return res.status(401).json({
-      message: 'the token provided is or expired  invalid',
+      message: 'The token provided is or expired  invalid',
       success: false,
     });
   }
 
   if (!payload) {
     return res.status(401).json({
-      message: 'the token provided is or expired  invalid',
+      message: 'The token provided is or expired  invalid',
       success: false,
     });
   }
   // user authentficated with token
   await User.getById(payload.sub)
     .then((results) => {
-      if (results.rows.length === 0) {
+      if (!results.rows.length) {
         return res.status(404).send({
           success: false,
-          message: 'user cannot be found',
+          message: 'The User cannot be found',
         });
       }
       const user = results.rows[0];
       req.user = user;
       next();
     })
-    .catch((error) => {
-      console.error(error);
-      return res.status(500).send({
-        success: false,
-        message: 'something went wong please try again',
-      });
-    });
+    .catch((error) => error5OOHandler(error, res, req));
 };
 
 const checkIsAdmin = (req, res, next) => {
@@ -54,7 +51,7 @@ const checkIsAdmin = (req, res, next) => {
   if (!(req.headers && req.headers.authorization)) {
     return res.status(401).json({
       success: false,
-      message: 'please provide a token',
+      message: 'Please provide a token',
     });
   }
   const header = req.headers.authorization;
@@ -64,20 +61,20 @@ const checkIsAdmin = (req, res, next) => {
     payload = decodeToken(token);
   } catch (error) {
     return res.status(401).json({
-      message: 'the token provided is or expired  invalid',
+      message: 'The token provided is or expired  invalid',
       success: false,
     });
   }
 
   if (!payload) {
     return res.status(401).json({
-      message: 'the token provided is or expired  invalid',
+      message: 'The token provided is or expired  invalid',
       success: false,
     });
   }
   if (!payload.isadmin) {
     return res.status(403).json({
-      message: 'you are not authorized to perform this action',
+      message: 'You are not authorized to perform this action',
       success: false,
     });
   }
@@ -86,4 +83,4 @@ const checkIsAdmin = (req, res, next) => {
   next();
 };
 
-export { ensureAuthentificated, checkIsAdmin };
+export { ensureAuthenticated, checkIsAdmin };

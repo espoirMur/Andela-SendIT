@@ -1,6 +1,5 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { User, users } from '../app/models/user';
 import { app } from '../app/server';
 
 const cannotLoginIfEmailInvalid = (done) => {
@@ -21,7 +20,7 @@ const cannotLoginIfEmailInvalid = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('please provide a valid email');
+        .eql('Please provide a valid email');
       done();
     });
 };
@@ -41,7 +40,7 @@ const cannotloginIfpasswordInvalid = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('the password should have at least 7 characters');
+        .eql('The password should have at least 7 characters');
       done();
     });
 };

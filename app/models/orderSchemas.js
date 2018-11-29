@@ -3,33 +3,33 @@ import { Joi } from 'celebrate';
 const createOrder = {
   origin: Joi.string()
     .required()
-    .error(new Error('pickup location is required')),
+    .error(new Error('Pickup location is required')),
   destination: Joi.string()
     .required()
-    .error(new Error('destination is required')),
+    .error(new Error('Destination is required')),
   recipientPhone: Joi.string()
     .required()
-    .error(new Error('recipient phone is required')),
+    .error(new Error('Recipient phone is required')),
   comments: Joi.string(),
 };
 
 const updateDestination = {
   destination: Joi.string()
     .required()
-    .error(new Error('destination is required')),
+    .error(new Error('Destination is required')),
 };
 
 const updateStatus = {
   status: Joi.string()
     .required()
-    .error(new Error('new status is required')),
+    .error(new Error('New status is required')),
   weight: Joi.number(),
 };
 
 const updateLocation = {
   location: Joi.string()
     .required()
-    .error(new Error('present location is required')),
+    .error(new Error('Present location is required')),
 };
 
 const orderId = {

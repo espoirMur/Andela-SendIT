@@ -44,7 +44,10 @@ window.onload = function() {
     let statusInput = document.getElementById('order-input-status');
     statusInput.value = status;
   };
+  const allEditButtons = document.getElementsByClassName('edit-order');
 
+  // when a user click on any edit button fire an event
+  Array.from(allEditButtons, (c) => c.addEventListener('click', editOrder));
   const cancelOrder = function() {
     const row = this.closest('tr');
     const status = row.cells[6].innerHTML;

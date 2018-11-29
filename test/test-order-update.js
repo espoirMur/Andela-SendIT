@@ -1,7 +1,7 @@
 /* eslint-disable comma-dangle */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { token } from './test-0Initial';
+import { token } from './test-initial';
 
 import { app } from '../app/server';
 
@@ -17,7 +17,7 @@ const createOrder = (done) => {
    * */
   const order = {
     origin: 'test-somewhere',
-    destination: 'kamembe',
+    destination: 'Kamembe',
     recipientPhone: '25078489848',
     comments: 'call the recipient on reception',
   };
@@ -35,12 +35,15 @@ const createOrder = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql('delivery order successfully created!');
+        .eql('Delivery order successfully created!');
       response.body.should.have.property('order');
+      response.body.order.origin.should.be.eql(order.origin);
+      response.body.order.destination.should.be.eql(order.destination);
+      response.body.order.recipientphone.should.be.eql(order.recipientPhone);
+      response.body.order.comments.should.be.eql(order.comments);
       done();
     });
 };
-
 const canChangeDestination = (done) => {
   const payload = { destination: 'kamembe' };
   chai
@@ -55,7 +58,7 @@ const canChangeDestination = (done) => {
       response.body.should.have
         .property('message')
         .eql(
-          `delivery order destination has been changed to ${
+          `Delivery order destination has been changed to ${
             payload.destination
           }`,
         );
@@ -76,7 +79,7 @@ const canChangeStatus = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql(`delivery order status has been changed to ${payload.status}`);
+        .eql(`Delivery order status has been changed to ${payload.status}`);
       done();
     });
 };
@@ -117,7 +120,7 @@ const canChangePresentLocation = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql(`presentLocation has changed  to ${payload.location}`);
+        .eql(`PresentLocation has changed  to ${payload.location}`);
       done();
     });
 };
@@ -156,16 +159,21 @@ const canCannotCancelOrder = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('cannot update a delivered order');
+        .eql('Cannot update a delivered order');
       done();
     });
 };
 describe('can update an order', () => {
   before('create an order', createOrder);
   it('can get order by id', canChangeDestination);
-  it('can change status and weight', canChangeStatusWeight);
-  it('can change the status of the delivery order', canChangeStatus);
-  it('can change present location', canChangePresentLocation);
-  it('change prsent location  to deliver', canChangePresentLocationDeliver);
+  it('can change status and weight', canChangeStatusWeight).timeout(10000);
+  it('can change the status of the delivery order', canChangeStatus).timeout(
+    10000,
+  );
+  it('can change present location', canChangePresentLocation).timeout(10000);
+  it(
+    'change present location  to deliver',
+    canChangePresentLocationDeliver,
+  ).timeout(10000);
   it('cannot cancel if delivered', canCannotCancelOrder);
 });

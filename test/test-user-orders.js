@@ -3,8 +3,8 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { app } from '../app/server';
-import { token } from './test-0Initial';
-import { decodeToken, encodeToken } from '../app/utils/authentification';
+import { token } from './test-initial';
+import { decodeToken, encodeToken } from '../app/utils/authentication';
 /** setting up the test server */
 
 chai.use(chaiHttp);
@@ -28,7 +28,7 @@ const canGetUserOrders = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql('user delivery orders retrieved successfully');
+        .eql('User delivery orders retrieved successfully');
       response.body.should.have.property('orders');
       done();
     });
@@ -51,7 +51,9 @@ const cannotGetUserOrderById = (done) => {
       response.should.have.status(404);
       response.body.should.be.a('object');
       response.body.should.have.property('success').eql(false);
-      response.body.should.have.property('message').eql('user cannot be found');
+      response.body.should.have
+        .property('message')
+        .eql('The User cannot be found');
       done();
     });
 };
@@ -73,7 +75,7 @@ const canGetUserOrdersByid = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql('user delivery orders retrieved successfully');
+        .eql('User delivery orders retrieved successfully');
       response.body.should.have.property('order');
       done();
     });
@@ -103,7 +105,7 @@ const createOrder = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql('delivery order successfully created!');
+        .eql('Delivery order successfully created!');
       response.body.should.have.property('order');
       done();
     });
@@ -125,7 +127,7 @@ const cannotGetUserOrdersByid = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('the delivery order you are looking for does not exist');
+        .eql('The delivery order you are looking for does not exist');
       done();
     });
 };

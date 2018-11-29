@@ -2,16 +2,16 @@
 /* eslint-disable no-underscore-dangle */
 import { Pool } from 'pg';
 
-import { dbConfigObject } from '../server';
+import dbConfigObject from '../../config';
 import { queryCreate } from './orderQueries';
 
 class Order {
   constructor(origin, destination, recipientPhone, initiatorId, comments) {
-    this._origin = origin;
-    this._destination = destination;
-    this._recipientPhone = recipientPhone;
-    this._initiatorId = initiatorId;
-    this._comments = comments;
+    this.origin = origin;
+    this.destination = destination;
+    this.recipientPhone = recipientPhone;
+    this.initiatorId = initiatorId;
+    this.comments = comments;
   }
 
   get origin() {

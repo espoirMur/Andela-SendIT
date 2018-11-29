@@ -7,7 +7,7 @@ import {
   queryDeleteAll,
 } from './userQueries';
 
-import { dbConfigObject } from '../server';
+import dbConfigObject from '../../config';
 
 /* eslint-disable no-underscore-dangle */
 class User {

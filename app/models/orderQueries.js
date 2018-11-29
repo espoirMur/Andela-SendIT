@@ -39,7 +39,8 @@ const queryUpdateDestination = {
 };
 
 const queryUpdateWeight = {
-  text: 'UPDATE ORDERs set weight= $1, status =$2, price = $3 where id=$4;',
+  text:
+    'UPDATE ORDERs set weight= $1, status =$2, price = $3, trackingnumber=$4 where id=$5;',
   values: [],
 };
 

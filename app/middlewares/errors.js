@@ -1,6 +1,9 @@
 import { isCelebrate } from 'celebrate';
+import { logger } from '../utils/logger';
+
 const error5OOHandler = (err, req, res, next) => {
-  console.error(err.stack);
+  // next need to be here it's failling in productiion
+  logger.error(err.stack);
   res.status(500).send({
     success: false,
     message: 'Something went wrong!!',
@@ -10,7 +13,7 @@ const error5OOHandler = (err, req, res, next) => {
 const error4O4Handler = (req, res) => {
   res.status(404).send({
     success: false,
-    message: 'the page you are looking for cannot be found',
+    message: 'The page you are looking for cannot be found',
   });
 };
 

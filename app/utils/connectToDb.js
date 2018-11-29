@@ -1,5 +1,6 @@
 import { Pool } from 'pg';
-import { dbConfigObject } from '../server';
+import dbConfigObject from '../../config';
+import { logger } from './logger';
 
 const createDb = `
 CREATE TABLE IF NOT EXISTS users (
@@ -26,6 +27,7 @@ CREATE TABLE IF NOT EXISTS orders (
   initiatorid integer,
   weight integer,
   price integer,
+  trackingNumber varchar,
   CONSTRAINT order_initiator_id_fk FOREIGN KEY (initiatorId)
      REFERENCES users (id) MATCH SIMPLE
      ON UPDATE NO ACTION ON DELETE NO ACTION
@@ -48,10 +50,10 @@ const createDatabase = async (query) => {
 
 createDatabase(createDb)
   .then((res) => {
-    console.log(res);
+    logger.error(res);
     exitNode();
   })
   .catch((err) => {
-    console.log(err);
+    logger.error(err);
     exitNode();
   });

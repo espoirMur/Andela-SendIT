@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { app } from '../app/server';
-import { encodeToken, decodeToken } from '../app/utils/authentification';
+import { encodeToken, decodeToken } from '../app/utils/authentication';
 import { before } from 'mocha';
 
 /** setting up the test server */
@@ -43,7 +43,7 @@ const cannotCreateIfEmailInvalid = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('please provide a valid email');
+        .eql('Please provide a valid email');
       done();
     });
 };
@@ -65,7 +65,7 @@ const cannotCreateIfpasswordInvalid = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('the password should have at least 7 characters');
+        .eql('The password should have at least 7 characters');
       done();
     });
 };
@@ -109,7 +109,7 @@ const cannotCreateIfnameInvalid = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('please provide a valid name');
+        .eql('Please provide a valid name');
       done();
     });
 };
@@ -131,7 +131,7 @@ const canRegisterUser = (done) => {
       response.status.should.eql(201);
       response.body.should.include.keys('success', 'token', 'message');
       response.body.success.should.eql(true);
-      response.body.message.should.eql('the new user has been created');
+      response.body.message.should.eql('The new user has been created');
       done();
     });
 };
@@ -154,7 +154,7 @@ const cannotRegisterEmailTaken = (done) => {
       response.status.should.eql(409);
       response.body.should.include.keys('success', 'message');
       response.body.success.should.eql(false);
-      response.body.message.should.eql('the email is already taken, sign in');
+      response.body.message.should.eql('The email is already taken, sign in');
       done();
     });
 };

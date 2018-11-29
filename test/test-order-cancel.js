@@ -1,8 +1,8 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { token } from './test-0Initial';
+import { token } from './test-initial';
 import { app } from '../app/server';
-import { encodeToken } from '../app/utils/authentification';
+import { encodeToken } from '../app/utils/authentication';
 import { User } from '../app/models/user';
 
 chai.use(chaiHttp);
@@ -35,12 +35,15 @@ const createOrder = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql('delivery order successfully created!');
+        .eql('Delivery order successfully created!');
       response.body.should.have.property('order');
+      response.body.order.origin.should.be.eql(order.origin);
+      response.body.order.destination.should.be.eql(order.destination);
+      response.body.order.recipientphone.should.be.eql(order.recipientPhone);
+      response.body.order.comments.should.be.eql(order.comments);
       done();
     });
 };
-
 const canCancelOrder = (done) => {
   /**
    * test if we cancel a delivery order if the status
@@ -57,7 +60,7 @@ const canCancelOrder = (done) => {
       response.body.should.have.property('success').eql(true);
       response.body.should.have
         .property('message')
-        .eql('delivery order has been canceled');
+        .eql('Delivery order has been canceled');
       done();
     });
 };
@@ -77,7 +80,7 @@ const canCannotCancelOrderCanceled = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('order has already been canceled');
+        .eql('The order has already been canceled');
       done();
     });
 };
@@ -97,7 +100,7 @@ const canCannotCancelNoExistOrder = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('the delivery order you are looking for does not exist');
+        .eql('The delivery order you are looking for does not exist');
       done();
     });
 };
@@ -139,14 +142,14 @@ const cannotCancelIfNotInitiator = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('you are not authorized to perform this action');
+        .eql('You are not authorized to perform this action');
       done();
     });
 };
 // test cancel order
 describe('cancel order', () => {
   before('create new order', createOrder);
-  it('can cancel order', canCancelOrder);
+  it('can cancel order', canCancelOrder).timeout(10000);
   it('cannot cancel non existant order', canCannotCancelNoExistOrder);
   it('cannot cancel if already canceled', canCannotCancelOrderCanceled);
 });
