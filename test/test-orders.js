@@ -42,7 +42,7 @@ const cannotCreateOrderOrigin = (done) => {
   const order = {
     origin: '',
     destination: 'Kamembe',
-    recipientPhone: '25078489848',
+    recipientPhone: '0781234567',
     comments: 'call the recipient on reception',
   };
 
@@ -70,7 +70,7 @@ const cannotCreateOrderDestination = (done) => {
   const order = {
     origin: 'espoir',
     destination: '',
-    recipientPhone: '25078489848',
+    recipientPhone: '0781234567',
     comments: 'call the recipient on reception',
   };
 
@@ -98,7 +98,7 @@ const cannotCreateOrderRecipientPhone = (done) => {
   const order = {
     origin: 'kigali',
     destination: 'Kamembe',
-    recipientPhone: '',
+    recipientPhone: '123',
     comments: 'call the recipient on reception',
   };
 
@@ -114,7 +114,9 @@ const cannotCreateOrderRecipientPhone = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('Recipient phone is required');
+        .eql(
+          'Please enter a valid phone number , staring with 078, 072 or 073',
+        );
       done();
     });
 };
@@ -126,7 +128,7 @@ const cannotCreateOrderBadContent = (done) => {
   const order = {
     origin: 'test',
     destination: 'Kamembe',
-    recipientPhone: '25078489848',
+    recipientPhone: '0781234567',
     comments: 'call the recipient on reception',
   };
 
@@ -186,7 +188,7 @@ const createOrder = (done) => {
   const order = {
     origin: 'test-somewhere',
     destination: 'Kamembe',
-    recipientPhone: '25078489848',
+    recipientPhone: '0781234567',
     comments: 'call the recipient on reception',
   };
   chai

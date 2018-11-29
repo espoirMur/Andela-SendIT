@@ -12,11 +12,12 @@ const registerSchema = {
     .required()
     .error(new Error('Please provide a valid email')),
   phone: Joi.string()
-    .min(10)
-    .max(15)
+    .regex(/^[0]{1}[7]{1}[8, 3, 2]{1}[0-9]{7}/)
     .required()
     .error(
-      new Error('Invalid phone number , please put a number staring with +250'),
+      new Error(
+        'Please enter a valid phone number , staring with 078, 072 or 073',
+      ),
     ),
 };
 

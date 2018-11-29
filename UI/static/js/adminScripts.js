@@ -35,7 +35,7 @@ window.onload = function() {
     // change the button to submit
     // put current location
     let currentLocationInput = document.getElementById(
-      'order-input-current-location'
+      'order-input-current-location',
     );
     currentLocationInput.value = currentLocation;
 
@@ -44,10 +44,7 @@ window.onload = function() {
     let statusInput = document.getElementById('order-input-status');
     statusInput.value = status;
   };
-  const allEditButtons = document.getElementsByClassName('edit-order');
 
-  // when a user click on any edit button fire an event
-  Array.from(allEditButtons, (c) => c.addEventListener('click', editOrder));
   const cancelOrder = function() {
     const row = this.closest('tr');
     const status = row.cells[6].innerHTML;
@@ -67,8 +64,8 @@ window.onload = function() {
   const allEditButtons = document.getElementsByClassName('edit-order');
 
   // when a user click on any edit button fire an event
-  Array.from(allEditButtons, c => c.addEventListener('click', editOrder));
+  Array.from(allEditButtons, (c) => c.addEventListener('click', editOrder));
 
   const allDeleteButtons = document.getElementsByClassName('delete-order');
-  Array.from(allDeleteButtons, d => d.addEventListener('click', cancelOrder));
+  Array.from(allDeleteButtons, (d) => d.addEventListener('click', cancelOrder));
 };

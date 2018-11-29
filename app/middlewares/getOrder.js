@@ -50,7 +50,7 @@ const checkCreator = (req, res, next) => {
   const header = req.headers.authorization;
   const token = header.slice(7);
   const payload = decodeToken(token);
-  if (!payload.isadmin && order.initiatorid !== payload.sub) {
+  if (order.initiatorid !== payload.sub) {
     return res.status(403).json({
       message: 'You are not authorized to perform this action',
       success: false,

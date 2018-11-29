@@ -30,7 +30,7 @@ const cannotCreateIfEmailInvalid = (done) => {
   const user = {
     name: 'espoir',
     email: 'aninvalidemail',
-    phone: '+2507000000000',
+    phone: '0781234567',
     password: 'a random passord',
   };
   chai
@@ -52,7 +52,7 @@ const cannotCreateIfpasswordInvalid = (done) => {
   const user = {
     name: 'espoir',
     email: 'aninvalidemail',
-    phone: '+2507000000000',
+    phone: '0781234567',
     password: '',
   };
   chai
@@ -87,7 +87,9 @@ const cannotCreateIfPhoneInvalid = (done) => {
       response.body.should.have.property('success').eql(false);
       response.body.should.have
         .property('message')
-        .eql('Invalid phone number , please put a number staring with +250');
+        .eql(
+          'Please enter a valid phone number , staring with 078, 072 or 073',
+        );
       done();
     });
 };
@@ -96,7 +98,7 @@ const cannotCreateIfnameInvalid = (done) => {
   const user = {
     name: '',
     email: 'aninvalidemail',
-    phone: '+2507000000000',
+    phone: '0781234567',
     password: 'a random passord',
   };
   chai
@@ -118,7 +120,7 @@ const canRegisterUser = (done) => {
   const user = {
     name: 'Espoir',
     email: 'test@test.com',
-    phone: '2507800564444',
+    phone: '0781234567',
     password: '98745236',
   };
   chai
@@ -140,7 +142,7 @@ const cannotRegisterEmailTaken = (done) => {
   const user = {
     name: 'Espoir',
     email: 'test@test.com',
-    phone: '250780077466',
+    phone: '0781234567',
     password: 'a new password',
   };
 

@@ -74,18 +74,25 @@ We will be using Airbnb code style for javascript
 
 | Resource URL                                    | Methods   | Description                                               |
 | ----------------------------------------------- | --------- | --------------------------------------------------------- |
-| `/`                                             | GET       | The index                                                 |
+| `/`                                             | GET       | The index   
+| /api/v1/auth/login         | POST      | Login registered user  |
+| /api/v1/auth/signup        | POST      | Register a new User    |                                              |
 | `/api/v1/parcels`                               | GET, POST | Fetch all delivery orders, create a parcel delivery order |
-| `/api/v1/parcels/<string:id>`                   | GET, PUT  | View, edit a delivery order                               |
+| `/api/v1/parcels/<string:id>`                   | GET | View, edit a delivery order                               |
 | `/api/v1/users/<string:id>/parcels`             | GET       | get all parcel delivery orders by a specific users        |
-| `/api/v1/parcels/<string:id>/cancel`            | PUT       | cancel the specific parcel delivery order                 |
-| `/api/v1/users/<string:id>/parcels/<string:id>` | GET, PUT  | View , edit a specific parcel delivery order for a user   |
+| /api/v1/parcels/`<userId>`/cancel       | PUT      | Update a parcel    |
+| /api/v1/parcels/`<userId>`/status       | PUT      | Update a parcel status    |
+| /api/v1/parcels/`<userId>`/presentLocation       | PUT      | Update a parcel current location    |
+| /api/v1/parcels/`<userId>`/destination       | PUT      | Update a parcel destination    |
+| `/api/v1/users/<string:id>/parcels/<string:id>` | GET | View , edit a specific parcel delivery order for a user   |
+
+The full documentation can be found [here](https://documenter.getpostman.com/view/2725783/RzfcNXj2)
 
 ### Running the APIS
 
 Use postman to run this collection
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/075ef216dc0bdf5584c3)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/2725783/RzfcNXj2)
 
 ## Credits
 
@@ -98,6 +105,11 @@ I used the following tutorials to build this project
 - [Tutorial 2](https://medium.com/@purposenigeria/build-a-restful-api-with-node-js-and-express-js-d7e59c7a3dfb)
 
 - [Tutorial 3](http://dsernst.com/2015/09/02/node-mocha-travis-istanbul-coveralls-unit-tests-coverage-for-your-open-source-project/)
+
+# Acknowledgments
+
+- [Obinna Okwuolisa](https://github.com/andela-ookwuolisa)
+- [Kamara Deo](https://github.com/dkam26)
 
 ## License
 
