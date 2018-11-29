@@ -18,7 +18,7 @@ const createOrder = (done) => {
   const order = {
     origin: 'test-somewhere',
     destination: 'Kamembe',
-    recipientPhone: '25078489848',
+    recipientPhone: '0781234567',
     comments: 'call the recipient on reception',
   };
   chai
