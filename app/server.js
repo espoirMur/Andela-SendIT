@@ -25,7 +25,7 @@ app.get('/', (req, resp) => {
   resp.send({
     success: true,
     message:
-      'Welcome to my apis, check the documenation for more info on how to use',
+      "Welcome to my apis, check the documenation <a href='https://documenter.getpostman.com/view/2725783/RzfcNXj2'>Here</a>",
   });
 });
 
