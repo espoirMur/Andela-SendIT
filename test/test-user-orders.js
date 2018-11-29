@@ -4,7 +4,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { app } from '../app/server';
 import { token } from './test-initial';
-import { decodeToken, encodeToken } from '../app/utils/authentification';
+import { decodeToken, encodeToken } from '../app/utils/authentication';
 /** setting up the test server */
 
 chai.use(chaiHttp);

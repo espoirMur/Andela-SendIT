@@ -3,7 +3,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { app } from '../app/server';
 import { describe } from 'mocha';
-import { encodeToken } from '../app/utils/authentification';
+import { encodeToken } from '../app/utils/authentication';
 import { testUser, token } from './test-initial';
 chai.use(chaiHttp);
 const should = chai.should();

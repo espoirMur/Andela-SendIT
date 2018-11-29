@@ -11,7 +11,7 @@
     "codecov": "codecov",
     "createDb": "NODE_ENV=TEST babel-node app/utils/connectToDb.js",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "startProduction": "NODE_ENV=HEROKU babel-node app/server.js"
+    "startProduction": "NODE_ENV=production babel-node app/server.js"
   },
   "repository": {
     "type": "git",

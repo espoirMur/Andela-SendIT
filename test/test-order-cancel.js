@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { token } from './test-initial';
 import { app } from '../app/server';
-import { encodeToken } from '../app/utils/authentification';
+import { encodeToken } from '../app/utils/authentication';
 import { User } from '../app/models/user';
 
 chai.use(chaiHttp);

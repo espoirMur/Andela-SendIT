@@ -8,14 +8,14 @@ import destinationRouter from './routes/orders/order-change-destination';
 import locationRouter from './routes/orders/order-change-location';
 import statusRouter from './routes/orders/order-change-status';
 import userOrdersRouter from './routes/user-orders';
-import authRouter from './routes/authentification';
+import authRouter from './routes/authentication';
 import {
   error5OOHandler,
   error4O4Handler,
   joiErrors,
 } from './middlewares/errors';
 import jsonReplacer from './utils/jsonReplacer';
-import { ensureAuthenticated } from './middlewares/authentification';
+import { ensureAuthenticated } from './middlewares/authentication';
 
 dotenv.config();
 

@@ -4,7 +4,7 @@ import { Router } from 'express';
 import { celebrate } from 'celebrate';
 import { User } from '../models/user';
 import { registerSchema, loginSchema } from '../models/userSchemas';
-import { encodeToken } from '../utils/authentification';
+import { encodeToken } from '../utils/authentication';
 import { error5OOHandler } from '../middlewares/errors';
 
 const authRouter = Router();

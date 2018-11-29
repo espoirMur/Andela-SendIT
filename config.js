@@ -7,7 +7,7 @@ dotenv.config();
 const env = process.env.NODE_ENV;
 let dbConfigObject;
 
-if (env === 'HEROKU') {
+if (env === 'production') {
   // check if we are in heroku config
   /** The Pool constructor does not support passing a Database URL as the parameter.
    *  To use pg-pool on heroku, for example, you need to parse the URL into a config object.

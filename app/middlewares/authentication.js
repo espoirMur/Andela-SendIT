@@ -1,5 +1,5 @@
 /* eslint-disable arrow-parens */
-import { decodeToken } from '../utils/authentification';
+import { decodeToken } from '../utils/authentication';
 // eslint-disable-next-line import/no-cycle
 import { User } from '../models/user';
 import { error5OOHandler } from './errors';

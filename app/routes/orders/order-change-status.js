@@ -3,7 +3,7 @@ import Router from 'express';
 import { celebrate } from 'celebrate';
 import { getOrder, checkCancel } from '../../middlewares/getOrder';
 import { Order } from '../../models/orders';
-import { checkIsAdmin } from '../../middlewares/authentification';
+import { checkIsAdmin } from '../../middlewares/authentication';
 import { updateStatus } from '../../models/orderSchemas';
 import {
   queryUpdateStatus,

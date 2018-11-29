@@ -1,7 +1,7 @@
 /* eslint-disable arrow-parens */
 import { Order } from '../models/orders';
 import { queryGetId } from '../models/orderQueries';
-import { decodeToken } from '../utils/authentification';
+import { decodeToken } from '../utils/authentication';
 import { error5OOHandler } from './errors';
 
 const getOrder = async (req, res, next) => {

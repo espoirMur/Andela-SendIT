@@ -7,9 +7,9 @@
 import { Router } from 'express';
 import { celebrate } from 'celebrate';
 import { Order } from '../../models/orders';
-import { checkIsAdmin } from '../../middlewares/authentification';
+import { checkIsAdmin } from '../../middlewares/authentication';
 import { error5OOHandler } from '../../middlewares/errors';
-import { decodeToken } from '../../utils/authentification';
+import { decodeToken } from '../../utils/authentication';
 import { createOrder } from '../../models/orderSchemas';
 import { queryGetAll } from '../../models/orderQueries';
 import { getOrder } from '../../middlewares/getOrder';

@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { app } from '../app/server';
-import { encodeToken, decodeToken } from '../app/utils/authentification';
+import { encodeToken, decodeToken } from '../app/utils/authentication';
 import { before } from 'mocha';
 
 /** setting up the test server */
