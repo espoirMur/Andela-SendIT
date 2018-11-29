@@ -30,11 +30,12 @@ window.onload = function() {
     let modalTitle = document.getElementById('edit-order-form-title');
     let submitButton = document.getElementById('edit-order-button');
     submitButton.disabled = false;
-    modalTitle.innerHTML += orderId;
+    modalTitle.innerHTML = '';
+    modalTitle.innerHTML = `Update delivery  ${orderId}`;
     // change the button to submit
     // put current location
     let currentLocationInput = document.getElementById(
-      'order-input-current-location',
+      'order-input-current-location'
     );
     currentLocationInput.value = currentLocation;
 
@@ -43,9 +44,31 @@ window.onload = function() {
     let statusInput = document.getElementById('order-input-status');
     statusInput.value = status;
   };
-
   const allEditButtons = document.getElementsByClassName('edit-order');
 
   // when a user click on any edit button fire an event
   Array.from(allEditButtons, (c) => c.addEventListener('click', editOrder));
+  const cancelOrder = function() {
+    const row = this.closest('tr');
+    const status = row.cells[6].innerHTML;
+    if (status === 'delivered') {
+      alert('cannot delete this order');
+    } else {
+      if (confirm('Are you sure you want to cancel this order')) {
+        console.log('accepted');
+        // do the action delete
+      } else {
+        console.log('declined');
+        // Do nothing!
+      }
+    }
+  };
+
+  const allEditButtons = document.getElementsByClassName('edit-order');
+
+  // when a user click on any edit button fire an event
+  Array.from(allEditButtons, c => c.addEventListener('click', editOrder));
+
+  const allDeleteButtons = document.getElementsByClassName('delete-order');
+  Array.from(allDeleteButtons, d => d.addEventListener('click', cancelOrder));
 };
