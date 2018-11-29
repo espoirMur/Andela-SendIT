@@ -1,5 +1,6 @@
 import { Pool } from 'pg';
 import dbConfigObject from '../../config';
+import { logger } from './logger';
 
 const createDb = `
 CREATE TABLE IF NOT EXISTS users (
@@ -49,10 +50,10 @@ const createDatabase = async (query) => {
 
 createDatabase(createDb)
   .then((res) => {
-    console.log(res);
+    logger.error(res);
     exitNode();
   })
   .catch((err) => {
-    console.log(err);
+    logger.error(err);
     exitNode();
   });

@@ -1,7 +1,9 @@
 import { isCelebrate } from 'celebrate';
+import { logger } from '../utils/logger';
+
 const error5OOHandler = (err, req, res, next) => {
   // next need to be here it's failling in productiion
-  console.error(err.stack);
+  logger.error(err.stack);
   res.status(500).send({
     success: false,
     message: 'Something went wrong!!',

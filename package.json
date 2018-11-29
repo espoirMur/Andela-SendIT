@@ -57,6 +57,7 @@
     "express": "^4.16.4",
     "express-joi": "^0.3.1",
     "express-joi-validator": "^2.0.0",
+    "express-winston": "^3.0.1",
     "joi-phone-number": "^2.0.14",
     "jwt-simple": "^0.5.5",
     "mocha": "^5.2.0",
@@ -69,7 +70,8 @@
     "prettier-eslint": "^8.8.2",
     "request": "^2.88.0",
     "server-destroy": "^1.0.1",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "winston": "^3.1.0"
   },
   "nyc": {
     "all": true,
@@ -86,7 +88,8 @@
       "config.sample.js",
       "app/utils/jsonReplacer.js",
       "test/*",
-      "app/utils/connectToDb.js"
+      "app/utils/connectToDb.js",
+      "app/utils/logger.js"
     ]
   }
 }
