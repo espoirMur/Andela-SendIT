@@ -94,16 +94,16 @@ MAIL_PASSWORD ='password'
 | Resource URL                                    | Methods   | Description                                               |
 | ----------------------------------------------- | --------- | --------------------------------------------------------- |
 | `/`                                             | GET       | The index   
-| /api/v1/auth/login         | POST      | Login registered user  |
-| /api/v1/auth/signup        | POST      | Register a new User    |                                              |
+| `/api/v1/auth/login`         | POST      | Login registered user  |
+| `/api/v1/auth/signup `       | POST      | Register a new User    |                                              |
 | `/api/v1/parcels`                               | GET, POST | Fetch all delivery orders, create a parcel delivery order |
 | `/api/v1/parcels/<string:id>`                   | GET | View, edit a delivery order                               |
 | `/api/v1/users/<string:id>/parcels`             | GET       | get all parcel delivery orders by a specific users        |
-| /api/v1/parcels/`<userId>`/cancel       | PUT      | Update a parcel    |
-| /api/v1/parcels/`<userId>`/status       | PUT      | Update a parcel status    |
-| /api/v1/parcels/`<userId>`/presentLocation       | PUT      | Update a parcel current location    |
-| /api/v1/parcels/`<userId>`/destination       | PUT      | Update a parcel destination    |
-| `/api/v1/users/<string:id>/parcels/<string:id>` | GET | View a specific parcel delivery order for a user   |
+| `/api/v1/parcels/<userId>/cancel`       | PUT      | Update a parcel    |
+| `/api/v1/parcels/<userId>/status`      | PUT      | Update a parcel status    |
+| `/api/v1/parcels/<userId>/presentLocation `      | PUT      | Update a parcel current location    |
+| `/api/v1/parcels/<userId>/destination`       | PUT      | Update a parcel destination    |
+| `/api/v1/users/<id>/parcels/<id>` | GET | View a specific parcel delivery order for a user   |
 
 The full documentation can be found [here](https://documenter.getpostman.com/view/2725783/RzfcNXj2)
 
