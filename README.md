@@ -103,7 +103,7 @@ MAIL_PASSWORD ='password'
 | /api/v1/parcels/`<userId>`/status       | PUT      | Update a parcel status    |
 | /api/v1/parcels/`<userId>`/presentLocation       | PUT      | Update a parcel current location    |
 | /api/v1/parcels/`<userId>`/destination       | PUT      | Update a parcel destination    |
-| `/api/v1/users/<string:id>/parcels/<string:id>` | GET | View , edit a specific parcel delivery order for a user   |
+| `/api/v1/users/<string:id>/parcels/<string:id>` | GET | View a specific parcel delivery order for a user   |
 
 The full documentation can be found [here](https://documenter.getpostman.com/view/2725783/RzfcNXj2)
 
