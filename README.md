@@ -60,6 +60,24 @@ We will be using Airbnb code style for javascript
     $ cd Andela-SendIT
     $ npm install
 
+Create .env file
+create a .env and add the following elements
+```
+SECRET_KEY=''
+PGHOST='localhost'
+PGUSER=postgres
+PGDATABASE_DEV=andelasendit
+PGPASSWORD='your db password'
+PGPORT=5432
+PGDATABASE_TEST=andelasendittest
+MAIL_USERNAME ='your username form stmp porvider'
+MAIL_PASSWORD ='password'
+```
+
+  `$ psql -c 'create database andelasendit;' -U postgres`
+  
+  `$ npm run createDb`
+
 ### Start & watch
 
     $ npm start
@@ -67,6 +85,7 @@ We will be using Airbnb code style for javascript
 ### Run test
 
     $ npm test
+
 
 ## API Reference
 
