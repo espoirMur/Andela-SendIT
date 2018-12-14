@@ -147,14 +147,14 @@ const cannotCancelIfNotInitiator = (done) => {
     });
 };
 // test cancel order
-describe('cancel order', () => {
+describe.skip('cancel order', () => {
   before('create new order', createOrder);
-  it('can cancel order', canCancelOrder).timeout(10000);
+  it.skip('can cancel order', canCancelOrder).timeout(10000);
   it('cannot cancel non existant order', canCannotCancelNoExistOrder);
   it('cannot cancel if already canceled', canCannotCancelOrderCanceled);
 });
 
-describe('cannot cancel if not initiator or admin', () => {
+describe.skip('cannot cancel if not initiator or admin', () => {
   before('login with another email', loginUser);
   it('cannot cancel ', cannotCancelIfNotInitiator);
 });

@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
 import express from 'express';
+import path from 'path';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import orderRouter from './routes/orders/orders';
@@ -21,14 +22,16 @@ dotenv.config();
 
 const app = express();
 
-app.get('/', (req, resp) => {
+app.get('/docs', (req, resp) => {
   resp.send({
     success: true,
     message:
       "Welcome to my apis, check the documenation <a href='https://documenter.getpostman.com/view/2725783/RzfcNXj2'>Here</a>",
   });
 });
+//load static pages html and css
 
+app.use(express.static(path.join(__dirname, '../UI')));
 // allow apis to consume my applciation
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
