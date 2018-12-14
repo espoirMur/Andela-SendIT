@@ -21,6 +21,38 @@ const parseResponse = (response) => {
   return response.json();
 };
 
+const fetchUrl = (url, method, data = []) => {
+  /**
+   * Helper function to handle fetch requests
+   * */
+  const requestData = {
+    method,
+    headers: {
+      'Content-Type': 'Application/JSON',
+    },
+  };
+  if (data) {
+    requestData.body = data;
+  }
+  return new Promise((resolve, reject) => {
+    fetch(url, requestData)
+      .then(checkStatus)
+      .then(parseResponse)
+      .then((successData) => {
+        console.log('Request succeeded with JSON response', successData);
+        resolve(successData);
+      })
+      .catch((error) => {
+        error
+          .json()
+          .then((errorData) => {
+            console.log('Request failed', errorData);
+            reject(errorData);
+          })
+          .catch((errorData) => Promise.reject(errorData));
+      });
+  });
+};
 const login = async (event) => {
   event.preventDefault();
   cleanError();
@@ -29,22 +61,14 @@ const login = async (event) => {
   formData.forEach((value, key) => {
     data[key] = value;
   });
-  fetch(`${baseUrl}/auth/signin`, {
-    method: 'POST',
-    body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'Application/JSON',
-    },
-  })
-    .then(checkStatus)
-    .then(parseResponse)
+  const dataJson = JSON.stringify(data);
+  const url = `${baseUrl}/auth/signin`;
+  fetchUrl(url, 'POST', dataJson)
     .then((successData) => {
-      console.log('Request succeeded with JSON response', successData);
+      console.log(successData);
     })
-    .catch((error) => {
-      error.json().then((errorData) => {
-        console.log('Request failed', errorData);
-      });
+    .catch((errorData) => {
+      console.log(errorData);
     });
 };
 
