@@ -29,9 +29,6 @@ app.get('/docs', (req, resp) => {
       "Welcome to my apis, check the documenation <a href='https://documenter.getpostman.com/view/2725783/RzfcNXj2'>Here</a>",
   });
 });
-//load static pages html and css
-
-app.use(express.static(path.join(__dirname, '../UI')));
 // allow apis to consume my applciation
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -41,6 +38,8 @@ app.use((req, res, next) => {
   );
   next();
 });
+// load static pages html and css
+app.use(express.static(path.join(__dirname, '../UI')));
 // support parsing of application/json type post data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -61,7 +60,7 @@ app.use(joiErrors());
 // for Page not found errors, all route not found should return this error
 
 app.use(error5OOHandler);
-app.get('*', error4O4Handler);
+// app.get('*', error4O4Handler);
 app.listen(process.env.PORT || 3000);
 
 // eslint-disable-next-line import/prefer-default-export

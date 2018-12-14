@@ -21,9 +21,9 @@
         
             <h4 id='login-title'> Create an Account</h4>
               <input type='checkbox' id='form-switch'>
-              <form id='login-form' action="orders.html" method='get'>
-              <input type="email" placeholder="Email" name="email"required>
-                <input type="password" placeholder="Password" name="password"required>
+              <form id='login-form' method='post'>
+              <input type="email" placeholder="Email" name="email" required>
+                <input type="password" placeholder="Password" name="password" required>
                 <button type='submit' id='login-btn'>Login</button>
                 <label for='form-switch' id='register-switch'><span>Register</span></label>
                <!--label for='form-switch'><span>Reset password</span></label-->
@@ -44,5 +44,6 @@
         Copyright &copy; 2018 SendIT
       </p>
     </div>
-    <script src="static/js/authentification.js"></script>
+    <script src="static/js/authentication/main.js"></script>
+    <script src="static/js/authentication/login.js"></script>
 </html>

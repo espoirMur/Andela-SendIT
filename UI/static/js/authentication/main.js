@@ -1,12 +1,12 @@
-window.onload = function() {
+window.onload = () => {
   const loginBtn = document.getElementById('sign-in-switch');
   const registerBtn = document.getElementById('register-switch');
   const title = document.getElementById('login-title');
 
-  registerBtn.onclick = function(event) {
+  registerBtn.onclick = () => {
     title.innerHTML = 'Create an Account';
   };
-  loginBtn.onclick = function(event) {
+  loginBtn.onclick = () => {
     title.innerHTML = 'Sign In';
   };
 };
