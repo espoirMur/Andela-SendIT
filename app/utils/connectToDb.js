@@ -50,10 +50,12 @@ const createDatabase = async (query) => {
 
 createDatabase(createDb)
   .then((res) => {
+    console.log(res);
     logger.error(res);
     exitNode();
   })
   .catch((err) => {
+    console.log(err);
     logger.error(err);
     exitNode();
   });

@@ -69,7 +69,11 @@ form {
   #form-switch:checked~#login-form {
     display:block;
   }
-  
+ #error-login, #error-register{
+   text-align: center;
+   margin-top: .1%;
+   display: none
+ } 
  /*
 * code for the order table
 */

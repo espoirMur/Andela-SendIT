@@ -46,5 +46,5 @@ const shouldRaise404 = (done) => {
     });
 };
 
-it('check 404 is raise for page not found ', shouldRaise404);
-it('test if the home page is accessible', testHomePage);
+it.skip('check 404 is raise for page not found ', shouldRaise404);
+it.skip('test if the home page is accessible', testHomePage);
