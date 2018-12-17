@@ -167,12 +167,11 @@ describe('can update an order', () => {
   before('create an order', createOrder);
   it('can get order by id', canChangeDestination);
   it('can change status and weight', canChangeStatusWeight).timeout(10000);
-  it.skip(
-    'can change the status of the delivery order',
-    canChangeStatus,
-  ).timeout(10000);
+  it('can change the status of the delivery order', canChangeStatus).timeout(
+    10000,
+  );
   it('can change present location', canChangePresentLocation).timeout(10000);
-  it.skip(
+  it(
     'change present location  to deliver',
     canChangePresentLocationDeliver,
   ).timeout(10000);
