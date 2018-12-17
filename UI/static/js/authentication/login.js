@@ -9,7 +9,7 @@ const loginButton = _('login-btn');
 
 const checkStatus = (response) => {
   if (Array.of(201, 200).includes(response.status)) {
-    // is status is different form 200 or 201 the promise shoulf be rejected
+    // is status is different form 200 or 201 the promise should be rejected
     return Promise.resolve(response);
   } else {
     return Promise.reject(response);
@@ -49,11 +49,11 @@ const fetchUrl = (url, method, data = []) => {
             console.log('Request failed', errorData);
             reject(errorData);
           })
-          .catch((errorData) => Promise.reject(errorData));
+          .catch((errorData) => reject(errorData));
       });
   });
 };
-const login = async (event) => {
+const login = (event) => {
   event.preventDefault();
   cleanError();
   const formData = new FormData(loginForm);
@@ -64,11 +64,13 @@ const login = async (event) => {
   const dataJson = JSON.stringify(data);
   const url = `${baseUrl}/auth/signin`;
   fetchUrl(url, 'POST', dataJson)
-    .then((successData) => {
-      console.log(successData);
+    .then(async (successData) => {
+      await localStorage.setItem('token', successData.token);
+      window.location = '/orders.html';
     })
     .catch((errorData) => {
-      console.log(errorData);
+      _('error-login').style.cssText = 'display:block;color:red';
+      _('error-login').innerHTML = errorData.message;
     });
 };
 

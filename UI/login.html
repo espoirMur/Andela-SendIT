@@ -24,6 +24,7 @@
               <form id='login-form' method='post'>
               <input type="email" placeholder="Email" name="email" required>
                 <input type="password" placeholder="Password" name="password" required>
+                <p id='error-login'>Error on login</p>
                 <button type='submit' id='login-btn'>Login</button>
                 <label for='form-switch' id='register-switch'><span>Register</span></label>
                <!--label for='form-switch'><span>Reset password</span></label-->
@@ -34,16 +35,17 @@
                 <input type="phone" name='phone' placeholder="Phone" required>
                 <input name="password" type="password" placeholder="Password" required>
                 <input type="password" placeholder="Re Password" required>
+                <p id='error-register'>error for register </p>
                 <button type='submit' id='register-btn'>Register</button>
                <label for='form-switch' id='sign-in-switch'>Sign In</label>
               </form>
           </div>
     </body>
-    <div class="footer">
+    <!--div class="footer">
       <p>
         Copyright &copy; 2018 SendIT
       </p>
-    </div>
+    </div-->
     <script src="static/js/authentication/main.js"></script>
     <script src="static/js/authentication/login.js"></script>
 </html>
