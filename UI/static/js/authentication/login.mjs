@@ -5,13 +5,13 @@
 import fetchUrl from '../utils/fetch-ressources.mjs';
 
 const _ = (id) => document.getElementById(id);
-const baseUrl = 'http://localhost:3000';
 const loginForm = _('login-form');
 // const authError = _('#auth-error');
 const loginButton = _('login-btn');
 
 const login = (event) => {
   event.preventDefault();
+  event.target.checkValidity();
   cleanError();
   const formData = new FormData(loginForm);
   const data = {};
@@ -19,7 +19,7 @@ const login = (event) => {
     data[key] = value;
   });
   const dataJson = JSON.stringify(data);
-  const url = `${baseUrl}/auth/signin`;
+  const url = '/auth/signin';
   fetchUrl(url, 'POST', dataJson)
     .then(async (successData) => {
       await localStorage.setItem('token', successData.token);
