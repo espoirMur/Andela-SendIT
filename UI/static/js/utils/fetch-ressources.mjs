@@ -14,7 +14,7 @@ const parseResponse = (response) => {
   return response.json();
 };
 
-const fetchUrl = (url, method, data = []) => {
+const fetchUrl = (url, method, data = {}, token = '') => {
   /**
    * Helper function to handle fetch requests
    * */
@@ -25,8 +25,11 @@ const fetchUrl = (url, method, data = []) => {
       'Content-Type': 'Application/JSON',
     },
   };
-  if (data) {
+  if (data && Array.of('PUT', 'POST').includes(method)) {
     requestData.body = data;
+  }
+  if (token) {
+    requestData.headers.Authorization = `Bearer ${token}`;
   }
   return new Promise((resolve, reject) => {
     fetch(`${baseUrl}${url}`, requestData)
@@ -36,12 +39,13 @@ const fetchUrl = (url, method, data = []) => {
         resolve(successData);
       })
       .catch((error) => {
-        error
-          .json()
-          .then((errorData) => {
+        if (error.json) {
+          error.json().then((errorData) => {
             reject(errorData);
-          })
-          .catch((errorData) => reject(errorData));
+          });
+        } else {
+          reject(error);
+        }
       });
   });
 };

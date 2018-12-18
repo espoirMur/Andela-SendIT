@@ -36,6 +36,7 @@ const login = (event) => {
     });
 };
 
+
 loginButton.addEventListener('click', login);
 
 const cleanError = () => {
