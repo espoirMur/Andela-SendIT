@@ -18,6 +18,7 @@ const fetchUrl = (url, method, data = []) => {
   /**
    * Helper function to handle fetch requests
    * */
+  const baseUrl = 'http://localhost:3000';
   const requestData = {
     method,
     headers: {
@@ -28,7 +29,7 @@ const fetchUrl = (url, method, data = []) => {
     requestData.body = data;
   }
   return new Promise((resolve, reject) => {
-    fetch(url, requestData)
+    fetch(`${baseUrl}${url}`, requestData)
       .then(checkStatus)
       .then(parseResponse)
       .then((successData) => {
