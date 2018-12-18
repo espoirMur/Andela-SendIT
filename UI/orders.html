@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
 
-  <title>my orders</title>
+  <title>My orders</title>
   <meta name="description" content="view orders">
   <meta name="author" content="Espoir Mur">
   <link rel="stylesheet" href="static/css/styles.css">
@@ -25,22 +25,22 @@
             <br>
             <section class="columns">
                     <div class="column delivered">
-                        <h2>12 Parcels</h2>
+                        <h2>0 Parcels</h2>
                         <p>Delivered</p>
                     </div>
                     
                     <div class="column pending">
-                        <h2>6 Parcels</h2>
+                        <h2>0 Parcels</h2>
                         <p>In Transit</p>
                     </div>
                   
                   <div class="column canceled">
-                        <h2>3 Parcels</h2>
+                        <h2>0 Parcels</h2>
                         <p> Canceled</p>
                     </div>
                     
                 </section>	
-            <table>
+            <table id='my-orders-tbl'>
                     <caption>My Orders Summary</caption>
                     <thead>
                       <tr>
@@ -48,23 +48,14 @@
                         <th scope="col">Date</th>
                         <th scope="col">Price</th>
                         <th scope="col">origin</th>
+                        <th scope="col">Location</th>
                         <th scope="col">Destination</th>
                         <th scope="col">Tracking</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr data-id="01">
-                        <td data-label="Order Id">Espy-001</td>
-                        <td data-label="Date">04/01/2016</td>
-                        <td data-label="Price">$1,190</td>
-                        <td data-label="origin"> Gisozi </td>
-                        <td data-label="Destination"> Gisenyi </td>
-                        <td data-label="Tracking"> RBOOOO</td>
-                        <td data-label="Status"> Pending</td>
-                        <td data-label="Action"><a class="edit-order">Edit</a> <a class="delete-order">Cancel</a> </td>
-                      </tr>
+                    <tbody id='my-orders-tbl-body'></tbody>
                     <tfoot>
                     </tfoot>
                   </table>
