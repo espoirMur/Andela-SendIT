@@ -13,7 +13,23 @@ const getOrders = async () => {
         if (!data.orders.length) {
           _('my-orders-tbl').style.display = 'none';
         } else {
+          let pending = 0;
+          let canceled = 0;
+          let delivered = 0;
           data.orders.forEach((order) => {
+            switch (order.status) {
+              case 'delivered':
+                delivered += 1;
+                break;
+              case 'canceled':
+                canceled += 1;
+                break;
+              default:
+                pending += 1;
+            }
+            _('delivered-display').innerHTML = `${delivered} Parcels`;
+            _('canceled-display').innerHTML = `${canceled} Parcels`;
+            _('pending-display').innerHTML = `${pending} Parcels`;
             _('my-orders-tbl-body').innerHTML += ` <tr data-id=${order.id}>
         <td data-label="Order Id">${order.id}</td>
         <td data-label="Date">${order.orderdate.split('T')[0]}</td>
