@@ -28,9 +28,6 @@ const getOrders = async () => {
               default:
                 pending += 1;
             }
-            _('delivered-display').innerHTML = `${delivered} Parcels`;
-            _('canceled-display').innerHTML = `${canceled} Parcels`;
-            _('pending-display').innerHTML = `${pending} Parcels`;
             _('my-orders-tbl-body').innerHTML += ` <tr data-id=${order.id}>
         <td data-label="Order Id">${order.id}</td>
         <td data-label="Date">${order.orderdate.split('T')[0]}</td>
@@ -44,6 +41,9 @@ const getOrders = async () => {
         <td data-label="Action"><a class="edit-order">Edit</a> <a class="delete-order">Cancel</a> </td>
       </tr>`;
           });
+          _('delivered-display').innerHTML = `${delivered} Parcels`;
+          _('canceled-display').innerHTML = `${canceled} Parcels`;
+          _('pending-display').innerHTML = `${pending} Parcels`;
         }
       })
       .catch((data) => {
