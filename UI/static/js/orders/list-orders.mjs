@@ -6,15 +6,15 @@ const logoutBtn = _('logout-btn');
 const getOrders = async () => {
   const user = await localStorage.getItem('user');
   const token = await localStorage.getItem('token');
-  const url = `/api/v1/users/${user.id}/parcels`;
-
-  fetchUrl(url, 'GET', undefined, token)
-    .then(async (data) => {
-      if (!data.orders.length) {
-        _('my-orders-tbl').style.display = 'none';
-      } else {
-        data.orders.forEach((order) => {
-          _('my-orders-tbl-body').innerHTML += ` <tr data-id=${order.id}>
+  if (user && token) {
+    const url = `/api/v1/users/${user.id}/parcels`;
+    fetchUrl(url, 'GET', undefined, token)
+      .then(async (data) => {
+        if (!data.orders.length) {
+          _('my-orders-tbl').style.display = 'none';
+        } else {
+          data.orders.forEach((order) => {
+            _('my-orders-tbl-body').innerHTML += ` <tr data-id=${order.id}>
         <td data-label="Order Id">${order.id}</td>
         <td data-label="Date">${order.orderdate.split('T')[0]}</td>
         <td data-label="Price">${order.price || '0'}</td>
@@ -26,12 +26,18 @@ const getOrders = async () => {
         <td data-label="Status"> ${order.status || '...'} </td>
         <td data-label="Action"><a class="edit-order">Edit</a> <a class="delete-order">Cancel</a> </td>
       </tr>`;
-        });
-      }
-    })
-    .catch((data) => {
-      console.log(data);
-    });
+          });
+        }
+      })
+      .catch((data) => {
+        const errorDisplay = _('order-notif');
+        errorDisplay.innerHTML = data.message;
+        errorDisplay.style.cssText = 'padding: 1em;border-top: 0';
+        errorDisplay.classList.add('isa_error');
+      });
+  } else {
+    window.location = '/login.html';
+  }
 };
 
 const logout = async () => {
