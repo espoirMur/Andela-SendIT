@@ -5,7 +5,7 @@ const queryCreate = {
 }; // create and return the value cre
 
 const queryGetAll = {
-  text: `select * from orders;
+  text: `select orders.*, users.email from orders, users where orders.initiatorId = users.id;
   `,
 };
 

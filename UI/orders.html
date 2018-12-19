@@ -4,43 +4,45 @@
 <head>
   <meta charset="utf-8">
 
-  <title>my orders</title>
+  <title>My orders</title>
   <meta name="description" content="view orders">
   <meta name="author" content="Espoir Mur">
   <link rel="stylesheet" href="static/css/styles.css">
 
 </head>
 
+
 <body>
+    <div id='order-notif'></div>
     <div class="wrapper" >
         <nav class="topnav">
             <a class="active" href="../index.html">Home</a>
             <div class="topnav-right">
                 <a href="#">Profile</a></li>
                 <a href="#">Help</li>
-              <a href="../index.html">Logout</a>
+              <a id = 'logout-btn' href="../index.html">Logout</a>
             </div>
           </nav>
             <h1 class="title-center"> My Dashboard </h1>
             <br>
             <section class="columns">
                     <div class="column delivered">
-                        <h2>12 Parcels</h2>
+                        <h2 id='delivered-display'>0 Parcels</h2>
                         <p>Delivered</p>
                     </div>
                     
                     <div class="column pending">
-                        <h2>6 Parcels</h2>
-                        <p>In Transit</p>
+                        <h2 id='pending-display'>0 Parcels</h2>
+                        <p>Not Delivered yet</p>
                     </div>
                   
                   <div class="column canceled">
-                        <h2>3 Parcels</h2>
+                        <h2 id='canceled-display'> 0 Parcels</h2>
                         <p> Canceled</p>
                     </div>
                     
                 </section>	
-            <table>
+            <table id='my-orders-tbl'>
                     <caption>My Orders Summary</caption>
                     <thead>
                       <tr>
@@ -48,23 +50,14 @@
                         <th scope="col">Date</th>
                         <th scope="col">Price</th>
                         <th scope="col">origin</th>
+                        <th scope="col">Location</th>
                         <th scope="col">Destination</th>
                         <th scope="col">Tracking</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr data-id="01">
-                        <td data-label="Order Id">Espy-001</td>
-                        <td data-label="Date">04/01/2016</td>
-                        <td data-label="Price">$1,190</td>
-                        <td data-label="origin"> Gisozi </td>
-                        <td data-label="Destination"> Gisenyi </td>
-                        <td data-label="Tracking"> RBOOOO</td>
-                        <td data-label="Status"> Pending</td>
-                        <td data-label="Action"><a class="edit-order">Edit</a> <a class="delete-order">Cancel</a> </td>
-                      </tr>
+                    <tbody id='my-orders-tbl-body'></tbody>
                     <tfoot>
                     </tfoot>
                   </table>
@@ -93,9 +86,7 @@
             <button id='new-order-button' class="action-button" type='submit'>Submit</button>
         </form>
 </div>
-
 </div>
-      
       </div>
       <div class="footer">
         <p>
@@ -103,5 +94,6 @@
         </p>
       </div>
   <script src="static/js/scripts.js"></script>
+  <script type='module' src="static/js/orders/list-my-orders.mjs"></script>
 </body>
 </html>

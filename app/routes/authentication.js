@@ -58,10 +58,12 @@ authRouter.post(
       .then((results) => {
         if (results) {
           if (User.verifyPassword(results.passwordhash, password)) {
+            delete results.passwordhash;
             const token = encodeToken(results);
             res.status(200).send({
               token,
               success: true,
+              user: results,
             });
           } else {
             res.status(401).send({

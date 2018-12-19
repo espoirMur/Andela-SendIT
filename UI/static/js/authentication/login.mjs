@@ -23,13 +23,19 @@ const login = (event) => {
   fetchUrl(url, 'POST', dataJson)
     .then(async (successData) => {
       await localStorage.setItem('token', successData.token);
-      window.location = '/orders.html';
+      await localStorage.setItem('user', successData.user);
+      if (successData.user.isadmin) {
+        window.location = '/admin.html';
+      } else {
+        window.location = '/orders.html';
+      }
     })
     .catch((errorData) => {
       _('error-login').style.cssText = 'display:block;color:red';
       _('error-login').innerHTML = errorData.message;
     });
 };
+
 
 loginButton.addEventListener('click', login);
 
