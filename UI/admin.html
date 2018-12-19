@@ -11,66 +11,53 @@
 </head>
 
 <body>
-  
+  <div id='order-notif'></div>
     <div class="wrapper" >
         <nav class="topnav">
             <a class="active" href="../index.html">Home</a>
             <div class="topnav-right">
                 <a href="#">Profile</a></li>
                 <a href="#">Help</li>
-              <a href="../index.html">Logout</a>
+              <a id = 'logout-btn' href="../index.html">Logout</a>
             </div>
           </nav>
             <h1 class="title-center"> Admin Dashboard </h1>
             <br>
             <section class="columns">
-                    <div class="column delivered">
-                        <h2>12 Parcels</h2>
-                        <p>Delivered</p>
-                    </div>
-                    
-                    <div class="column pending">
-                        <h2>6 Parcels</h2>
-                        <p>In Transit</p>
-                    </div>
-                  
-                  <div class="column canceled">
-                        <h2>3 Parcels</h2>
-                        <p> Canceled</p>
-                    </div>
-                    
-                </section>	
+              <div class="column delivered">
+                  <h2 id='delivered-display'>0 Parcels</h2>
+                  <p>Delivered</p>
+              </div>
+              
+              <div class="column pending">
+                  <h2 id='pending-display'>0 Parcels</h2>
+                  <p>Not Delivered yet</p>
+              </div>
+            
+            <div class="column canceled">
+                  <h2 id='canceled-display'> 0 Parcels</h2>
+                  <p> Canceled</p>
+              </div>
+              
+          </section>	
             <table id="admin-order-table">
                     <caption>Customers Orders Summary</caption>
                     <thead>
                       <tr>
-                        <th scope="col">Order Id</th>
+                        <th scope="col">Id</th>
                         <th scope="col">Date</th>
-                        <th scope="col">Client Email</th>
+                        <th scope="col">Email</th>
                         <th scope="col">Phone</th>
                         <th scope="col">Price</th>
                         <th scope="col">origin</th>
-                        <th scope="col">Destination</th>
                         <th scope="col">Location</th>
+                        <th scope="col">Destination</th>
                         <th scope="col">Tracking</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                       </tr>
                     </thead>
-                    
-                    <tr data-id="02">
-                        <td data-label="Order Id">Espy-001</td>
-                        <td data-label="Date">04/01/2016</td>
-                        <td data-label="Client Name">an@email.com</td>
-                        <td data-label="Client phone">25088898889</td>
-                        <td data-label="Price">$1,190</td>
-                        <td data-label="origin"> Gisozi </td>
-                        <td data-label="Destination"> Gisenyi </td>
-                        <td data-label="Current Location">Musanze</td>
-                        <td data-label="Tracking"> RBOOOO</td>
-                        <td data-label="Status"> Pending</td>
-                        <td data-label="Action"><a class="edit-order">Edit</a> <a class="delete-order">Cancel</a> </td>
-                      </tr>
+                  <tbody id = 'orders-tbl-body'>
                     </tbody>
                     <tfoot>
                     </tfoot>
@@ -99,9 +86,7 @@
             <button id='edit-order-button' class="action-button" type='submit'>Submit</button>
         </form>
 </div>
-
 </div>
-      
       </div>
       <div class="footer">
         <p>
@@ -109,5 +94,6 @@
         </p>
       </div>
   <script src="static/js/adminScripts.js"></script>
+  <script type='module' src="static/js/orders/list-orders.mjs"></script>
 </body>
 </html>

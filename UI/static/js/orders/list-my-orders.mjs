@@ -7,17 +7,16 @@ const getOrders = async () => {
   const user = await localStorage.getItem('user');
   const token = await localStorage.getItem('token');
   if (user && token) {
-    const url = '/api/v1/parcels';
+    const url = `/api/v1/users/${user.id}/parcels`;
     fetchUrl(url, 'GET', undefined, token)
-      .then(async (orders) => {
-        if (!orders.length) {
-          _('admin-order-table').style.display = 'none';
+      .then(async (data) => {
+        if (!data.orders.length) {
+          _('my-orders-tbl').style.display = 'none';
         } else {
           let pending = 0;
           let canceled = 0;
           let delivered = 0;
-          orders.forEach((order) => {
-            console.log(order);
+          data.orders.forEach((order) => {
             // could be replace with reduce returning  a object with count for diffrents status
             switch (order.status) {
               case 'delivered':
@@ -32,11 +31,9 @@ const getOrders = async () => {
             _('delivered-display').innerHTML = `${delivered} Parcels`;
             _('canceled-display').innerHTML = `${canceled} Parcels`;
             _('pending-display').innerHTML = `${pending} Parcels`;
-            _('orders-tbl-body').innerHTML += ` <tr data-id=${order.id}>
+            _('my-orders-tbl-body').innerHTML += ` <tr data-id=${order.id}>
         <td data-label="Order Id">${order.id}</td>
         <td data-label="Date">${order.orderdate.split('T')[0]}</td>
-        <td data-label="Email"> ${order.email} </td>
-        <td data-label="Phone"> ${order.recipientphone} </td>
         <td data-label="Price">${order.price || '0'}</td>
         <td data-label="Origin"> ${order.origin} </td>
         <td data-label="Location"> ${order.presentlocation ||

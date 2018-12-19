@@ -98,8 +98,7 @@ form {
     background-color: #f8f8f8;
     border: 1px solid #ddd;
     padding: .35em;
-    /*break content in the cell width*/
-    word-break: break-all;
+    word-break: break-word;
   }
   
   table th,
@@ -113,8 +112,7 @@ form {
     font-size: 12px;
     letter-spacing: .1em;
     text-transform: uppercase;
-    /*break content in the cell width*/
-    word-break: break-all;
+    word-break: keep-all ;
   }
   
   @media screen and (max-width: 600px) {
