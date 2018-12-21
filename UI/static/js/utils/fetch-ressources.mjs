@@ -22,7 +22,7 @@ const fetchUrl = (url, method, data = {}, token = '') => {
   const requestData = {
     method,
     headers: {
-      'Content-Type': 'Application/JSON',
+      'content-type': 'application/json',
     },
   };
   if (data && Array.of('PUT', 'POST').includes(method)) {

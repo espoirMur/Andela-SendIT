@@ -1,44 +1,4 @@
-window.onload = function() {
-  // Get the modal for the modal
-  const modal = document.getElementById('new-order');
-
-  // Get the button that opens the modal
-  const btn = document.getElementById('button-new-order');
-
-  // Get the <span> element that closes the modal
-  const span = document.getElementsByClassName('close')[0];
-
-  // When the user clicks the button, open the modal
-  btn.onclick = function() {
-    modal.style.display = 'block';
-    let modalTitle = document.getElementById('new-order-form-title');
-    modalTitle.innerHTML = 'Create a new delivery order';
-    // reset evrything in the form
-    theForm = document.getElementById('new-order-form');
-    theForm.reset();
-
-    // renable the origin and destination
-    let originInput = document.getElementById('new-order-input-origin');
-    let destinationInput = document.getElementById(
-      'new-order-input-destination'
-    );
-    let submitButton = document.getElementById('new-order-button');
-    originInput.disabled = false;
-    destinationInput.disabled = false;
-    submitButton.disabled = false;
-  };
-
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function() {
-    modal.style.display = 'none';
-  };
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = 'none';
-    }
-  };
+window.onload = () => {
   // edit order function should come here
   const editOrder = function() {
     // get the closest row for an element
@@ -69,7 +29,7 @@ window.onload = function() {
     // disable destination if the status is delivered
     console.log(status);
     let destinationInput = document.getElementById(
-      'new-order-input-destination'
+      'new-order-input-destination',
     );
     destinationInput.disabled = false;
 
@@ -102,9 +62,9 @@ window.onload = function() {
   const allEditButtons = document.getElementsByClassName('edit-order');
 
   // when a user click on any edit button fire an event
-  Array.from(allEditButtons, c => c.addEventListener('click', editOrder));
+  Array.from(allEditButtons, (c) => c.addEventListener('click', editOrder));
 
   // delete an order
   const allDeleteButtons = document.getElementsByClassName('delete-order');
-  Array.from(allDeleteButtons, d => d.addEventListener('click', cancelOrder));
+  Array.from(allDeleteButtons, (d) => d.addEventListener('click', cancelOrder));
 };
