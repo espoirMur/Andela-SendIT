@@ -38,7 +38,7 @@ const getOrders = async () => {
         <td data-label="Destination"> ${order.destination}</td>
         <td data-label="Tracking"> ${order.trackingnumber || '...'}</td>
         <td data-label="Status"> ${order.status || '...'} </td>
-        <td data-label="Action"><a class="edit-order">Edit</a> <a class="delete-order">Cancel</a> </td>
+        <td data-label="Action"><span class="cancel-order">Cancel</span> </td>
       </tr>`;
           });
           _('delivered-display').innerHTML = `${delivered} Parcels`;

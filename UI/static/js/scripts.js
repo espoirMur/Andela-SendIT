@@ -43,28 +43,10 @@ window.onload = () => {
     }
   };
 
-  const cancelOrder = function() {
-    const row = this.closest('tr');
-    const status = row.cells[6].innerHTML;
-    if (status === 'delivered') {
-      alert('cannot delete this order');
-    } else {
-      if (confirm('Are you sure you want to cancel this order')) {
-        console.log('accepted');
-        // do the action delete
-      } else {
-        console.log('declined');
-        // Do nothing!
-      }
-    }
-  };
-
   const allEditButtons = document.getElementsByClassName('edit-order');
 
   // when a user click on any edit button fire an event
   Array.from(allEditButtons, (c) => c.addEventListener('click', editOrder));
 
   // delete an order
-  const allDeleteButtons = document.getElementsByClassName('delete-order');
-  Array.from(allDeleteButtons, (d) => d.addEventListener('click', cancelOrder));
 };

@@ -197,8 +197,9 @@ form {
     background-color: indianred;
   }
 
-.delete-order{
+.cancel-order{
   color: indianred;
+  cursor: pointer
 }
 
 /**
