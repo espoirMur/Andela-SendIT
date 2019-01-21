@@ -33,7 +33,7 @@ const orderRecieved = async (user, order) => {
   return transporter.sendMail({
     from: 'espoir.mur@gmail.com',
     to: user.email,
-    subject: 'Send It Order Recieved',
+    subject: 'Send It Order Received',
     html: mailBody,
   });
 };

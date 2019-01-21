@@ -37,6 +37,13 @@ const cancelOrder = async () => {
   }
 };
 
-const allCancelButtons = document.getElementsByClassName('cancel-order');
-console.log(Array.from(allCancelButtons));
-allCancelButtons.addEventListener('click', cancelOrder);
+window.onload = () => {
+  const allCancelButtons = document.getElementsByClassName('cancel-order');
+  console.log('first running ', allCancelButtons);
+  [...allCancelButtons].forEach((el) => {
+    el.addEventListener('click', cancelOrder);
+  });
+};
+
+//console.log('second running ', Array.from(allCancelButtons));
+//Array.from(allCancelButtoaddEventListener('click', cancelOrder);
