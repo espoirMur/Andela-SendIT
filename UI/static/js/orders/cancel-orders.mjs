@@ -1,13 +1,16 @@
+/* eslint-disable import/extensions */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable function-paren-newline */
 /* eslint-disable arrow-parens */
 import fetchUrl from '../utils/fetch-ressources.mjs';
-import { getById, formTOJson } from '../utils/utils-functions.mjs';
+import { getById } from '../utils/utils-functions.mjs';
 
-const cancelOrder = async () => {
+const cancelOrder = async (event) => {
   const user = await localStorage.getItem('user');
   const token = await localStorage.getItem('token');
-  const row = this.closest('tr');
+  const row = event.target.closest('tr');
   const id = row.cells[0].innerHTML;
-  const status = row.cells[6].innerHTML;
+  const status = row.cells[7].innerHTML;
   if (status === 'delivered') {
     alert('cannot delete this order');
   } else if (confirm('Are you sure you want to cancel this order')) {
@@ -27,7 +30,7 @@ const cancelOrder = async () => {
         errorDisplay.classList.add('isa_success');
       })
       .catch((data) => {
-        const errorDisplay = _('order-notif');
+        const errorDisplay = getById('order-notif');
         errorDisplay.innerHTML = data.message;
         errorDisplay.style.cssText = 'padding: 1em;border-top: 0';
         errorDisplay.classList.add('isa_error');
@@ -39,11 +42,7 @@ const cancelOrder = async () => {
 
 window.onload = () => {
   const allCancelButtons = document.getElementsByClassName('cancel-order');
-  console.log('first running ', allCancelButtons);
-  [...allCancelButtons].forEach((el) => {
-    el.addEventListener('click', cancelOrder);
-  });
+  Array.from(allCancelButtons, (el) =>
+    el.addEventListener('click', cancelOrder),
+  );
 };
-
-//console.log('second running ', Array.from(allCancelButtons));
-//Array.from(allCancelButtoaddEventListener('click', cancelOrder);

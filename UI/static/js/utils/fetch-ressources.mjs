@@ -25,12 +25,16 @@ const fetchUrl = (url, method, data = {}, token = '') => {
       'content-type': 'application/json',
     },
   };
-  if (data && Array.of('PUT', 'POST').includes(method)) {
+  if (
+    Object.keys(data).length !== 0 &&
+    Array.of('PUT', 'POST').includes(method)
+  ) {
     requestData.body = data;
   }
   if (token) {
     requestData.headers.Authorization = `Bearer ${token}`;
   }
+  console.log(requestData);
   return new Promise((resolve, reject) => {
     fetch(`${baseUrl}${url}`, requestData)
       .then(checkStatus)
