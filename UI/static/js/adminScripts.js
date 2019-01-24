@@ -1,21 +1,6 @@
 window.onload = function() {
   // Get the modal for the modal
-  const modal = document.getElementById('edit-order-modal');
 
-  // Get the <span> element that closes the modal
-  const span = document.getElementsByClassName('close')[0];
-
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function() {
-    modal.style.display = 'none';
-  };
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = 'none';
-    }
-  };
   // edit order function should come here
   const editOrder = function() {
     // get the closest row for an element
@@ -63,9 +48,8 @@ window.onload = function() {
 
   const allEditButtons = document.getElementsByClassName('edit-order');
 
-  // when a user click on any edit button fire an event
+  Array.from(allDeleteButtons, (d) => d.addEventListener('click', cancelOrder)); // when a user click on any edit button fire an event
   Array.from(allEditButtons, (c) => c.addEventListener('click', editOrder));
 
   const allDeleteButtons = document.getElementsByClassName('delete-order');
-  Array.from(allDeleteButtons, (d) => d.addEventListener('click', cancelOrder));
 };

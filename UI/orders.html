@@ -88,6 +88,22 @@
 </div>
 </div>
       </div>
+
+      <div id="edit-order-modal" class="modal">
+        <!-- content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div class="wrapper">
+            <h1> Change Order Destination </h1>
+            <form id='edit-order-form' method='POST'>
+              <label for="destination">Destination </label>
+              <input name="destination" type="text" id="edit-order-input-destination" class="edit-order-input" required>
+              <button id='edit-order-button' class="action-button" type='submit'>Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
       <div class="footer">
         <p>
           Copyright &copy; 2018 SendIT
@@ -96,6 +112,6 @@
   <script src="static/js/scripts.js"></script>
   <script type='module' src="static/js/orders/list-my-orders.mjs"></script>
   <script type='module' src="static/js/orders/create-orders.mjs"></script>
-  <script type='module' src="static/js/orders/cancel-orders.mjs"></script>
+  <script type='module' src="static/js/orders/update-my-orders.mjs"></script>
 </body>
 </html>

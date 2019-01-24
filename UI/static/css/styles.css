@@ -201,7 +201,10 @@ form {
   color: indianred;
   cursor: pointer
 }
-
+.edit-order{
+  color: darkseagreen;
+  cursor: pointer
+}
 /**
 css for button create order
 **/
