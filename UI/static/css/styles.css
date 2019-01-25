@@ -201,9 +201,13 @@ form {
   color: indianred;
   cursor: pointer
 }
-.edit-order{
-  color: darkseagreen;
+.edit-order, .edit-order-status, .edit-order-location{
+  color: blue;
   cursor: pointer
+}
+
+#edit-order-weight-input{
+  display: none;
 }
 /**
 css for button create order

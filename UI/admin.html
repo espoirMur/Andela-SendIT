@@ -54,7 +54,6 @@
                         <th scope="col">Destination</th>
                         <th scope="col">Tracking</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Action</th>
                       </tr>
                     </thead>
                   <tbody id = 'orders-tbl-body'>
@@ -63,37 +62,46 @@
                     </tfoot>
                   </table>
     </div>
-    <!-- The new order modal -->
-<div id="edit-order-modal" class="modal">
-        <!-- content -->
-<div class="modal-content">
-<span class="close">&times;</span>
-<div class="wrapper" >
-        <h1 id="edit-order-form-title"> Update delivery Order </h1>
-        <form id='edit-order-form' action="admin.html" method='get'>
-            <label for="origin">Current Location</label>
-            <input type="text" name='current-location' id ="order-input-current-location" class="new-order-input" required>
-            <span class=" location-picker" id="current-location-picker"></span>
-            <label for="status"> Status</label>
-            <select name="status" form="edit-order-form" id ="order-input-status" class="new-order-input">
-                <option value="pending">Pending</option>
-                <option value="delivered">Delivered</option>
-              </select>
-              <label for="comment">Comments</label>
-            <textarea id ="order-input-comments" rows="4" class="new-order-input" cols="41" name="comment" form="new-order-form" placeholder="Additionals notes">
-                    Additionals notes
-            </textarea>
-            <button id='edit-order-button' class="action-button" type='submit'>Submit</button>
-        </form>
-</div>
-</div>
-      </div>
+            <div id="edit-order-location-modal" class="modal">
+              <!-- content -->
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="wrapper">
+                  <h1> Change Order Location </h1>
+                  <form id='edit-order-location-form' method='POST'>
+                    <label for="location">Location </label>
+                    <input name="location" type="text" id="edit-order-location-input" class="edit-order-location-input" required>
+                    <button id='edit-order-location-button' class="action-button" type='submit'>Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            
+            <div id="edit-order-status" class="modal">
+              <!-- content -->
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="wrapper">
+                  <h1> Change Order Status </h1>
+                  <form id='edit-order-status-form' method='POST'>
+                    <label for="status">Status </label>
+                    <input name="status" type="text" id="edit-order-status-input" class="edit-order-status-input" required>
+                    <div class="" id="edit-order-weight-input">
+                      <label for="weight">Weight </label>
+                      <input name="weight" type="text" class="edit-order-weight-input">
+                    </div>
+                    <button id='edit-order-status-button' class="action-button" type='submit'>Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
       <div class="footer">
         <p>
           Copyright &copy; 2018 SendIT
         </p>
       </div>
-  <script src="static/js/adminScripts.js"></script>
   <script type='module' src="static/js/orders/list-orders.mjs"></script>
+  <script type='module' src="static/js/orders/update-orders.mjs"></script>
 </body>
 </html>

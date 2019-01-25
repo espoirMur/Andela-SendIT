@@ -36,12 +36,12 @@ const getOrders = async () => {
         <td data-label="Phone"> ${order.recipientphone} </td>
         <td data-label="Price">${order.price || '0'}</td>
         <td data-label="Origin"> ${order.origin} </td>
-        <td data-label="Location"> ${order.presentlocation ||
-          order.origin} </td>
+        <td data-label="Location"> <a class="edit-order-location">${order.presentlocation ||
+          order.origin} </a></td>
         <td data-label="Destination"> ${order.destination}</td>
         <td data-label="Tracking"> ${order.trackingnumber || '...'}</td>
-        <td data-label="Status"> ${order.status || '...'} </td>
-        <td data-label="Action"><a class="edit-order">Edit</a> <a class="delete-order">Cancel</a> </td>
+        <td data-label="Status">  <a class="edit-order-status">${order.status ||
+          '...'}</a> </td>
       </tr>`;
           });
           _('delivered-display').innerHTML = `${delivered} Parcels`;
