@@ -1,0 +1,99 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Admin dashboard</title>
+  <meta name="description" content="view orders">
+  <meta name="author" content="Espoir Mur">
+  <link rel="stylesheet" href="static/css/styles.css">
+</head>
+
+<body>
+  <div id='order-notif'></div>
+    <div class="wrapper" >
+        <nav class="topnav">
+            <a class="active" href="../index.html">Home</a>
+            <div class="topnav-right">
+                <a href="#">Profile</a></li>
+                <a href="#">Help</li>
+              <a id = 'logout-btn' href="../index.html">Logout</a>
+            </div>
+          </nav>
+            <h1 class="title-center"> Admin Dashboard </h1>
+            <br>
+            <section class="columns">
+              <div class="column delivered">
+                  <h2 id='delivered-display'>0 Parcels</h2>
+                  <p>Delivered</p>
+              </div>
+              
+              <div class="column pending">
+                  <h2 id='pending-display'>0 Parcels</h2>
+                  <p>Not Delivered yet</p>
+              </div>
+            
+            <div class="column canceled">
+                  <h2 id='canceled-display'> 0 Parcels</h2>
+                  <p> Canceled</p>
+              </div>
+              
+          </section>	
+            <table id="admin-order-table">
+                    <caption>Customers Orders Summary</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">origin</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Destination</th>
+                        <th scope="col">Tracking</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                  <tbody id = 'orders-tbl-body'>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                  </table>
+    </div>
+    <!-- The new order modal -->
+<div id="edit-order-modal" class="modal">
+        <!-- content -->
+<div class="modal-content">
+<span class="close">&times;</span>
+<div class="wrapper" >
+        <h1 id="edit-order-form-title"> Update delivery Order </h1>
+        <form id='edit-order-form' action="admin.html" method='get'>
+            <label for="origin">Current Location</label>
+            <input type="text" name='current-location' id ="order-input-current-location" class="new-order-input" required>
+            <span class=" location-picker" id="current-location-picker"></span>
+            <label for="status"> Status</label>
+            <select name="status" form="edit-order-form" id ="order-input-status" class="new-order-input">
+                <option value="pending">Pending</option>
+                <option value="delivered">Delivered</option>
+              </select>
+              <label for="comment">Comments</label>
+            <textarea id ="order-input-comments" rows="4" class="new-order-input" cols="41" name="comment" form="new-order-form" placeholder="Additionals notes">
+                    Additionals notes
+            </textarea>
+            <button id='edit-order-button' class="action-button" type='submit'>Submit</button>
+        </form>
+</div>
+</div>
+      </div>
+      <div class="footer">
+        <p>
+          Copyright &copy; 2018 SendIT
+        </p>
+      </div>
+  <script src="static/js/adminScripts.js"></script>
+  <script type='module' src="static/js/orders/list-orders.mjs"></script>
+</body>
+</html>

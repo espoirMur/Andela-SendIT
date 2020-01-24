@@ -16,7 +16,7 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
-
+*coveralls.yml
 # nyc test coverage
 .nyc_output
 
@@ -59,3 +59,5 @@ typings/
 
 # next.js build output
 .next
+.vscode/
+*package-lock.json

@@ -1,0 +1,52 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Register to SendIt</title>
+  <meta name="description" content="code for sign-up and sign-in pages">
+  <meta name="author" content="Espoir Mur">
+
+  <link rel="stylesheet" href="static/css/styles.css">
+
+</head>
+
+    <body>
+        <div class="wrapper">
+            <nav class="topnav">
+                <a class="active" href="../index.html">Home</a>
+                </div>
+              </nav>
+        
+            <h4 id='login-title'> Create an Account</h4>
+              <input type='checkbox' id='form-switch'>
+              <form id='login-form' method='post'>
+              <input type="email" placeholder="Email" name="email" required>
+                <input type="password" placeholder="Password" name="password" required>
+                <p id='error-login'>Error on login</p>
+                <button type='submit' id='login-btn'>Login</button>
+                <label for='form-switch' id='register-switch'><span>Register</span></label>
+               <!--label for='form-switch'><span>Reset password</span></label-->
+              </form>
+              <form id='register-form' method='POST'>
+                <input name='name' type="text" placeholder="Names" required>
+                <input name='email' type="email" placeholder="Email" required>
+                <input type="phone" name='phone' placeholder="Phone" required>
+                <input name="password" type="password" placeholder="Password"  id ='register-password' required>
+                <input type="password" placeholder="Re Password" id ='register-password-confirmation' required>
+                <p id='error-register'>error for register </p>
+                <button type='submit' id='register-btn'>Register</button>
+               <label for='form-switch' id='sign-in-switch'>Sign In</label>
+              </form>
+          </div>
+    </body>
+    <!--div class="footer">
+      <p>
+        Copyright &copy; 2018 SendIT
+      </p>
+    </div-->
+    <script src="static/js/authentication/main.js"></script>
+    <script type='module' src="static/js/authentication/login.mjs"></script>
+    <script type='module' src="static/js/authentication/register.mjs"></script>
+</html>
